@@ -1,7 +1,7 @@
 import React from 'react';
 import {createMaterialBottomTabNavigator} from "react-navigation-material-bottom-tabs";
 import {FeedNavigation} from "./Feed/FeedScreen";
-import {ChallengeNav, ChallengeViewsNav} from "./Challenges/ChallengeScreen";
+import {ChallengeNav} from "./Challenges/ChallengeScreen";
 import ProfileScreen from "./Profile/ProfileScreen";
 import NotificationsScreen from "./Notifications/NotificationsScreen";
 import TeamsNav from "./Competitve"
@@ -28,7 +28,7 @@ export const AppNav = createMaterialBottomTabNavigator({
         activeTintColor: material.tabBarActiveTextColor,
         inactiveTintColor: material.tabBarTextColor,
         barStyle: {backgroundColor: material.tabDefaultBg},
-        labeled: false,
+    labeled: true,
         navigationOptions: {
             headerMode: 'screen'
         }

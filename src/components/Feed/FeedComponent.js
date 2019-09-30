@@ -1,10 +1,9 @@
-import React, {Component, Fragment} from 'react';
-import {StatusBar} from 'react-native';
+import React, {Component} from 'react';
+import {FlatList, RefreshControl, StatusBar, StyleSheet} from 'react-native';
 
 import {Body, Button, Container, Content, Fab, Header, Icon, Left, Right, Text, Title} from "native-base";
 import {Query} from "react-apollo";
 import {LOAD_FEED} from "../../network/Feed.gql";
-import {FlatList, RefreshControl, StyleSheet} from "react-native";
 import material from '../../../native-base-theme/variables/material';
 import PostComponent from "./PostComponent";
 import {LocalizationProvider as L} from "../../localization/LocalizationProvider";
@@ -23,6 +22,28 @@ export default class FeedComponent extends Component {
             contentSize.height - paddingToBottom;
     };
 
+    getMore = (data, fetchMore) => {
+        const lastCursor = data.paginatedPosts.page.edges[data.paginatedPosts.page.edges.length - 1].cursor;
+        console.log(lastCursor)
+        fetchMore({
+            variables: {
+                page: {
+                    first: this.pageSize,
+                    after: lastCursor
+                }
+            },
+            updateQuery: (prev, {fetchMoreResult}) => {
+                if (!fetchMoreResult) return prev;
+                if (fetchMoreResult.paginatedPosts.page.edges.length === 0) {
+                    console.log("no more data");
+                    this.setState({endReached: true})
+                }
+                return Object.assign(data.paginatedPosts.page, prev, {
+                    edges: [...prev.paginatedPosts.page.edges, ...fetchMoreResult.paginatedPosts.page.edges]
+                });
+            }
+        })
+    }
 
     render() {
         return (
@@ -51,17 +72,17 @@ export default class FeedComponent extends Component {
                             if (error) return <Text>{L.get("error_gql", {error})}</Text>;
                             return (
 
-                                <Content refreshControl={<RefreshControl
+                                <Content
+                                    refreshControl={<RefreshControl
                                     refreshing={this.state.refreshing || loading}
                                     onRefresh={() => refetch()}
+                                    />}
                                     onScroll={({nativeEvent}) => {
                                         if (this.isCloseToBottom(nativeEvent)) {
                                             console.log("end reached");
                                         }
                                     }}
-
-                                />
-                                }>
+                                >
                                     <FlatList
                                         data={data.paginatedPosts ? data.paginatedPosts.page.edges : []}
                                         keyExtractor={(item, index) => item.node.id.toString()}
@@ -99,7 +120,7 @@ export default class FeedComponent extends Component {
                                                     if (fetchMoreResult.paginatedPosts.page.edges.length === 0) {
                                                         console.log("no more data");
                                                         this.setState({endReached: true})
-                                                    }
+                                                    }   
                                                     return Object.assign(data.paginatedPosts.page, prev, {
                                                         edges: [...prev.paginatedPosts.page.edges, ...fetchMoreResult.paginatedPosts.page.edges]
                                                     });

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {AsyncStorage, SafeAreaView, StatusBar, StyleSheet, Text, View} from 'react-native';
+import {AsyncStorage, SafeAreaView, StyleSheet, View} from 'react-native';
 import {createAppContainer, createStackNavigator, createSwitchNavigator} from "react-navigation";
 import {Root, Spinner, StyleProvider} from 'native-base';
 import LoginScreen from "./src/components/PreLogin/LoginScreen";
@@ -51,7 +51,9 @@ export default class AppRoot extends Component {
     render() {
         if (this.state.loading) {
             return (
-                <Spinner/>
+                <View style={styles.container}>
+                    <Spinner/>
+                </View>
             )
         }
         return (
@@ -100,8 +102,7 @@ class AuthLoadingScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text>AuthLoadingScreen</Text>
-                <StatusBar barStyle="default"/>
+                <Spinner/>
             </View>
         )
     }
