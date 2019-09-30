@@ -18,7 +18,7 @@
     "apollo-link-http": "^1.5.9",
     "apollo-link-retry": "^2.2.8",
     "apollo-upload-client": "^10.0.0",
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "color": "latest",
     "expo": "^32.0.0",
     "graphql": "^14.1.1",
