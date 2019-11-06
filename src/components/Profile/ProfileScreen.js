@@ -38,7 +38,7 @@ import {LocalizationProvider as L} from "../../localization/LocalizationProvider
 class ProfileScreen extends Component {
 
     static navigationOptions = {
-        title: 'Profile',
+        title: 'Profil',
         tabBarIcon: ({focused, tintColor}) => (
             <Icon name='md-person' style={{fontSize: 20, color: tintColor}}/>
         ),

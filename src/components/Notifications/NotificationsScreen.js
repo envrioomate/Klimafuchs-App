@@ -12,7 +12,7 @@ import {LocalizationProvider as L} from "../../localization/LocalizationProvider
 
 class NotificationsScreen extends Component {
     static navigationOptions = {
-        title: 'Feed',
+        title: 'Benachr.',
         tabBarIcon: ({focused, tintColor}) => (
             <Icon name='md-notifications' style={{fontSize: 20, color: tintColor}}/>
         ),

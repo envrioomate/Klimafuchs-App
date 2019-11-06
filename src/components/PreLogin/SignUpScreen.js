@@ -54,6 +54,7 @@ class SignUpScreen extends Component {
                             }
                         },
                         (err) => {
+                            //TODO show the error to the user, don't swallow it
                             console.log(err);
                         });
                 }

@@ -65,6 +65,7 @@ export const MY_MEMBERSHIPS = gql`
             team {
                 id,
                 name,
+                description,
                 avatar {
                     filename,
                 }

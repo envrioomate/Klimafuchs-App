@@ -1,4 +1,5 @@
 import React from 'react';
+import {View} from 'react-native';
 import {createStackNavigator} from "react-navigation";
 import {Icon,} from "native-base";
 import FeedComponent from './FeedComponent';
@@ -19,6 +20,8 @@ export const FeedNavigation = createStackNavigator({
     }
 }, {
     navigationOptions: {
+        title: 'News',
+
         tabBarIcon: ({focused, tintColor}) => (
             <Icon name='md-home' style={{fontSize: 20, color: tintColor}}/>
         ),
