@@ -21,7 +21,7 @@ import {MY_MEMBERSHIPS} from "../../network/Teams.gql";
 import {Query} from "react-apollo";
 import material from "../../../native-base-theme/variables/material";
 import {CreateTeamScreen} from "./CreateTeamScreen";
-import env from "../../env";
+import env from "../../../env";
 import {FSModal} from "../Common/FSModal";
 import {TeamDetailsModalContent} from "./TeamDetailsModalContent";
 

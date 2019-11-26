@@ -1,7 +1,4 @@
-import {dev, prod} from '../../env';
-
-let env = process.env.NODE_ENV !== "production" ? dev : prod;
-
+import {Env} from '../../util.js'
 export const constraints = {
     teamName: {
         presence: {
@@ -22,8 +19,8 @@ export const constraints = {
     },
     password: {
         length: {
-            minimum: env.MIN_PASSWORD_LEN,
-            message: `Bitte gib ein mindestens ${env.MIN_PASSWORD_LEN} Zeichen langes Passwort ein`
+            minimum: Env.MIN_PASSWORD_LEN,
+            message: `Bitte gib ein mindestens ${Env.MIN_PASSWORD_LEN} Zeichen langes Passwort ein`
         },
     },
 

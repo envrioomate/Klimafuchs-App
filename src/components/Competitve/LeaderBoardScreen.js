@@ -3,9 +3,9 @@ import {RefreshControl, Text, View, ImageBackground} from 'react-native';
 import {Body, Button, Container, Content, Form, Icon, List, ListItem, Picker, Right, Left, Spinner} from "native-base";
 import {Mutation, Query} from "react-apollo";
 import {CURRENT_USER_ID, LEADERBOARD, REQUEST_JOIN_TEAM, TeamSize} from "../../network/Teams.gql";
-import * as env from "../../env"
+import * as env from "../../../env"
 import {MaterialDialog} from 'react-native-material-dialog';
-import { BlurView } from 'expo';
+import { BlurView } from 'expo-blur';
 import material from "../../../native-base-theme/variables/material";
 import {TeamDetailsModalContent} from "./TeamDetailsModalContent";
 import {FSModal} from "../Common/FSModal";

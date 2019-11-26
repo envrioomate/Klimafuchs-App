@@ -1,5 +1,5 @@
 
-import {dev, prod} from '../env';
+import {dev, prod} from '../../env';
 import * as localization from '../localization/locale.gen'
 let env = process.env.NODE_ENV !== "production" ? dev : prod;
 let lang = env.LANG || "default";

@@ -8,7 +8,7 @@ import {CONFIRM_MEMBER, DEL_USER, GET_MY_TEAM, GET_TEAM, MOD_USER, TeamSize, UNM
 import {Util} from "../../util";
 import {MaterialDialog} from "react-native-material-dialog";
 import {BlurView, LinearGradient} from "expo";
-import * as env from "../../env";
+import * as env from "../../../env";
 
 export class TeamDetailsModalContent extends FSModalContentBase {
 

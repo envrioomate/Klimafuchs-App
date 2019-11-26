@@ -13,12 +13,12 @@ import {PersistGate} from 'redux-persist/integration/react'
 
 import {AppNav} from "./src/components/LoggedInScreen";
 import {ForgotPasswordScreen} from "./src/components/PreLogin/ForgotPasswordScreen";
-import {Font, Notifications} from "expo";
+import {Notifications} from "expo";
 import ApolloProvider from "react-apollo/ApolloProvider";
 import client from "./src/network/client"
 import Api from "./src/network/api";
 
-const prefix = Expo.Linking.makeUrl('/');
+//const prefix = Expo.Linking.makeUrl('/');
 
 export default class AppRoot extends Component {
 
@@ -40,11 +40,11 @@ export default class AppRoot extends Component {
     }
 
     async componentWillMount() {
-        await Font.loadAsync({
-            Roboto: require("native-base/Fonts/Roboto.ttf"),
-            Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
-            Ionicons: require("@expo/vector-icons/fonts/Ionicons.ttf")
-        });
+//        await Font.loadAsync({
+//            Roboto: require("native-base/Fonts/Roboto.ttf"),
+//            Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
+//            Ionicons: require("react-native-vector-icons/Fonts/Ionicons.ttf")
+//       });
         this.setState({loading: false})
     }
 
@@ -63,7 +63,7 @@ export default class AppRoot extends Component {
                     <StyleProvider style={getTheme(material)}>
                         <Root>
                             <SafeAreaView style={styles.safeArea}>
-                                <RootContainer uriPrefix={prefix}/>
+                                <RootContainer uriPrefix='/app'/>
                             </SafeAreaView>
                         </Root>
                     </StyleProvider>

@@ -32,7 +32,8 @@ import {Util} from "../../util";
 import {ValidatingTextField} from "../Common/ValidatingTextInput";
 import client from "../../network/client"
 import material from "../../../native-base-theme/variables/material";
-import {Permissions, Notifications} from 'expo';
+import {Notifications} from 'expo';
+import * as Permissions from 'expo-permissions';
 import {LocalizationProvider as L} from "../../localization/LocalizationProvider";
 
 class ProfileScreen extends Component {

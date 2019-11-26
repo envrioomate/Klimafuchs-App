@@ -4,7 +4,7 @@ import FadeIn from 'react-native-fade-in-image';
 import {Text as NBText, Icon, Body, Container, Content, Spinner} from "native-base";
 import Draggable from "react-native-draggable";
 import * as PropTypes from "prop-types";
-import {BlurView} from "expo";
+import {BlurView} from "expo-blur";
 import {MaterialDialog} from "react-native-material-dialog";
 import {LocalizationProvider as L} from "../../localization/LocalizationProvider";
 import material from "../../../native-base-theme/variables/material";
@@ -349,7 +349,7 @@ class Leaf extends React.Component {
         const {w, h} = scale;
         const x = loc.x - w / 2;
         const y = loc.y - h / 2;
-        if (false) return (
+        if (false) return ( // FIXME
             <Draggable
                 renderShape='image'
                 imageSource={require('../../../assets/vector/Blaetter_Baum_und_Fortschritt/Blatt1.png')}

@@ -25,7 +25,7 @@ import {ADD_COMMENT, LIKE_COMMENT, LIKE_POST, LOAD_POST, UNLIKE_COMMENT, UNLIKE_
 import moment from 'moment/min/moment-with-locales';
 import de from 'moment/locale/de';
 import material from '../../../native-base-theme/variables/material';
-import env from '../../env';
+import env from '../../../env';
 import {Util} from "../../util";
 import {LocalizationProvider as L} from "../../localization/LocalizationProvider";
 import * as PropTypes from "prop-types";

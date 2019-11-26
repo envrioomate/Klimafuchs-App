@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {Button, Container, Form, Input, Item as FormItem, Label, Text,} from 'native-base';
-import Expo, {Constants} from "expo";
 import Api from "../../network/api";
 
 class CheckUserExistsScreen extends Component {
@@ -18,11 +17,11 @@ class CheckUserExistsScreen extends Component {
     }
 
     componentWillMount = async () => {
-        await Expo.Font.loadAsync({
-            Roboto: require("native-base/Fonts/Roboto.ttf"),
-            Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
-            Ionicons: require("@expo/vector-icons/fonts/Ionicons.ttf")
-        });
+//        await Font.loadAsync({
+//            Roboto: require("native-base/Fonts/Roboto.ttf"),
+//            Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
+//            Ionicons: require("react-native-vector-icons/Fonts/Ionicons.ttf")
+//       });
         this.setState({loading: false})
     };
 

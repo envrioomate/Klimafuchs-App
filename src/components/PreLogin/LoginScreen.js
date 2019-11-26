@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {AsyncStorage, Image, KeyboardAvoidingView, StyleSheet, View} from 'react-native'
 import {Button, Card, CardItem, Container, Content, Form, H1, H3, Input, Item, Text, Toast} from "native-base";
-import {LinearGradient} from "expo";
-import Api from "../../network/api";
+import {LinearGradient} from "expo-linear-gradient";
+import Api  from "../../network/api";
 import {LocalizationProvider as L} from "../../localization/LocalizationProvider";
 
 import material from '../../../native-base-theme/variables/material';
