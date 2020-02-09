@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Klimafuchs",
-    "slug": "klimafuchs-app",
+    "name": "K4allApp",
+    "slug": "k4all-app",
     "privacy": "public",
     "sdkVersion": "34.0.0",
     "platforms": [
@@ -26,7 +26,7 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "org.klimafuchs",
+      "package": "com.klimaschutz4all.app",
       "googleServicesFile": "./google-services.json"
     },
     "androidStatusBar": {

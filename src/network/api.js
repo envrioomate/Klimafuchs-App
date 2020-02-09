@@ -1,11 +1,9 @@
 import axios from 'axios'
 
-import {Env} from '../util.js'
-
-
-//const verbose = ENV.dev.LOGLEVEL === "VERBOSE";
 const verbose = false;
-const baseUrl = Env.API_BASE_URL;
+var appContext = null;
+
+const baseUrl = "https://k4all.dastreibendewerk.de.org/app/"// works on android emulator ONLY!!
 
 function doPostAuthorized(url, token, data, onSuccess, onError) {
     axios.post(baseUrl + url,data,{

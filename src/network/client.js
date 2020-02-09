@@ -7,7 +7,7 @@ import {InMemoryCache} from "apollo-cache-inmemory";
 import {persistCache} from 'apollo-cache-persist';
 import {onError} from "apollo-link-error";
 
-const uri = "https://klimafuchs.org/app-dev/api/gql";
+const uri = "https://k4all.dastreibendewerk.de/app/api/gql";
 
 const uploadLink = createUploadLink({
     uri: uri,
