@@ -1,7 +1,6 @@
-import React, {Component, Fragment} from 'react';
-import {ImageBackground, StyleSheet, View, Switch, TouchableOpacity} from 'react-native'
-import Modal from "react-native-modal";
-import {Button, Content, Container, Card, CardItem, H1, H3, Icon, Right, Body, Left, Text} from "native-base";
+import React, {Fragment} from 'react';
+import {ImageBackground, StyleSheet, Switch, TouchableOpacity, View} from 'react-native'
+import {Button, Card, CardItem, Container, Content, H3, Icon, Left, Right, Text} from "native-base";
 import material from "../../../native-base-theme/variables/material";
 import {Mutation} from "react-apollo";
 import PropTypes from 'prop-types';
@@ -31,13 +30,15 @@ export class ChallengeDetailsModalContent extends FSModalContentBase {
         return {optimisticResult: !!challengeCompletion};
     }
 
-    getCompletionActionButton = (challengeTitle, challengeCompletion, targetId, refetch, modalNotify) => {
+    getCompletionActionButton = (challengeGoals, challengeCompletion, targetId, refetch, modalNotify) => {
+        console.log("ChallengeCompletion:", challengeGoals)
         if (challengeCompletion) {
             return (
                 <Mutation mutation={UNCOMPLETE_CHALLENGE}>
                     {(uncompleteChallenge, {loading, error}) => (
 
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
+                            <Text>{challengeCompletion.challengeGoalCompletionLevel}</Text>
                             <Switch
                                 value={this.state.optimisticResult}
                                 disabled={loading}
@@ -96,24 +97,96 @@ export class ChallengeDetailsModalContent extends FSModalContentBase {
             return (
                 <Mutation mutation={COMPLETE_CHALLENGE}>
                     {(completeChallenge, {loading, error}) => (
+                        <View style={{flex: 1, flexDirection: 'column', justifyContent: 'space-evenly'}}>
+                            <CardItem style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly'}}>
+                                <Right style={{flex: 1}}>
+                                    <Switch
+                                        value={this.state.optimisticResult}
+                                        disabled={loading}
+                                        onValueChange={async () => {
+                                            this.setState({loading: true, optimisticResult: true});
+                                            await completeChallenge({
+                                                variables: {
+                                                    challengeId: targetId,
+                                                    challengeGoalCompletionLevel: 0,
+                                                    challengeCompletionQuantity: 0.0
+                                                },
+                                            });
+                                            refetch()
+                                        }}/>
+                                </Right>
+                                <Left style={{flex: 3}}>
+                                    <Text>{challengeGoals.minCompletion || "Challenge.MinCompletion missing!"}</Text>
+                                </Left>
+                            </CardItem>
 
-                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
-                            <Switch
+                            <CardItem style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly'}}>
+                                <Right style={{flex: 1}}>
+                                    <Switch
+                                        value={this.state.optimisticResult}
+                                        disabled={loading}
+                                        onValueChange={async () => {
+                                            this.setState({loading: true, optimisticResult: true});
+                                            await completeChallenge({
+                                                variables: {
+                                                    challengeId: targetId,
+                                                    challengeGoalCompletionLevel: 1,
+                                                    challengeCompletionQuantity: 0.0
+                                                },
+                                            });
+                                            refetch()
+                                        }}/>
+                                </Right>
+                                <Left style={{flex: 3}}>
+                                    <Text>{challengeGoals.medCompletion || "Challenge.medCompletion missing!"}</Text>
+                                </Left>
+                            </CardItem>
 
-                                value={this.state.optimisticResult}
-                                disabled={loading}
+                            <CardItem style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly'}}>
+                                <Right style={{flex: 1}}>
+                                    <Switch
+                                        value={this.state.optimisticResult}
+                                        disabled={loading}
+                                        onValueChange={async () => {
+                                            this.setState({loading: true, optimisticResult: true});
+                                            await completeChallenge({
+                                                variables: {
+                                                    challengeId: targetId,
+                                                    challengeGoalCompletionLevel: 2,
+                                                    challengeCompletionQuantity: 0.0
+                                                },
+                                            });
+                                            refetch()
+                                        }}/>
+                                </Right>
+                                <Left style={{flex: 3}}>
+                                    <Text>{challengeGoals.goodCompletion || "Challenge.goodCompletion missing!"}</Text>
+                                </Left>
+                            </CardItem>
 
-                                onValueChange={async () => {
-                                    console.log("?")
-                                    this.setState({loading: true, optimisticResult: true})
+                            <CardItem style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly'}}>
+                                <Right style={{flex: 1}}>
+                                    <Switch
+                                        value={this.state.optimisticResult}
+                                        disabled={loading}
+                                        onValueChange={async () => {
+                                            this.setState({loading: true, optimisticResult: true});
+                                            await completeChallenge({
+                                                variables: {
+                                                    challengeId: targetId,
+                                                    challengeGoalCompletionLevel: 3,
+                                                    challengeCompletionQuantity: 0.0
+                                                },
+                                            });
+                                            refetch()
+                                        }}/>
+                                </Right>
+                                <Left style={{flex: 3}}>
+                                    <Text>{challengeGoals.maxCompletion || "Challenge.maxCompletion missing!"}</Text>
+                                </Left>
+                            </CardItem>
 
-                                    await completeChallenge({
-                                        variables: {
-                                            challengeId: targetId
-                                        },
-                                    });
-                                    refetch()
-                                }}/>
+
                             <View>
                                 <TouchableOpacity style={{
                                     flex: 1,
@@ -184,9 +257,12 @@ export class ChallengeDetailsModalContent extends FSModalContentBase {
                     </ImageBackground>
                 </View>
                 <CardItem style={{flex: 3, flexDirection: 'column', alignItems: 'stretch'}}>
-                    <View style={{flex: 1, flexDirection: 'column', alignItems: 'flex-end'}}>
-                        {this.getCompletionActionButton(challenge.title, challengeCompletion, targetId, refetch, modalNotify)}
+                    <View style={{flex: 1, flexDirection: 'column', alignItems: 'stretch'}}>
+                        {this.getCompletionActionButton(userChallenge.challenge.challengeGoals, challengeCompletion, targetId, refetch, modalNotify)}
                     </View>
+
+                </CardItem>
+                <CardItem style={{flex: 3, flexDirection: 'column', alignItems: 'stretch'}}>
                     <H3 style={{flex: 2}}>
                         {challenge.title}
                     </H3>

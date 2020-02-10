@@ -22,9 +22,24 @@ export const CURRENT_CHALLENGES = gql`
                 headerImage {
                     url
                 },
+                challengeGoals {
+                    challengeGoalType,
+                    minCompletion,
+                    minQuantity,
+                    medCompletion,
+                    medQuantity,
+                    goodCompletion,
+                    goodQuantity,
+                    maxCompletion,
+                    maxQuantity
+                }
             },
             replaceable,
-            challengeCompletion {id}
+            challengeCompletion {
+                id,
+                challengeGoalCompletionLevel,
+                challengeCompletionQuantity
+            }
         }
     }
 `;
@@ -75,10 +90,9 @@ export const CURRENT_SEASONPLAN = gql`
 `;
 
 export const COMPLETE_CHALLENGE = gql`
-    mutation completeChallenge($challengeId: Int!) {
-        completeChallenge(challengeId:$challengeId) {
+    mutation completeChallenge($challengeId: Int!, $challengeGoalCompletionLevel: Int, $challengeCompletionQuantity: Float) {
+        completeChallenge(challengeId:$challengeId, challengeGoalCompletionLevel:$challengeGoalCompletionLevel, challengeCompletionQuantity:$challengeCompletionQuantity) {
             id
-            
         }
     }
 `;
