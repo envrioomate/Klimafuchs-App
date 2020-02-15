@@ -21,7 +21,7 @@ import {ValidatingTextField} from "../Common/ValidatingTextInput";
 import {Mutation} from "react-apollo";
 import {CREATE_TEAM, MOD_TEAM} from "../../network/Teams.gql";
 import {Util} from "../../util";
-import {SafeAreaView} from "react-native-safe-area-context";
+import SafeAreaView from 'react-native-safe-area-view';
 
 export class EditTeamScreen extends Component {
     static navigationOptions = {

@@ -20,7 +20,7 @@ import {
 import {Mutation} from "react-apollo";
 import {ADD_POST} from "../../network/Feed.gql";
 import UploadImage from "../Common/UploadImage";
-import {SafeAreaView} from "react-native-safe-area-context";
+import SafeAreaView from 'react-native-safe-area-view';
 import material from "../../../native-base-theme/variables/material";
 
 export default class NewPostComponent extends Component {

@@ -17,7 +17,7 @@ import {
 } from 'native-base';
 
 
-export class BadgeCollectionComponent extends Component {
+export default class BadgeCollectionComponent extends Component {
     static navigationOptions = {
         title: 'Abzeichen',
         tabBarIcon: ({focused, tintColor}) => (

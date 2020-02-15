@@ -22,7 +22,7 @@ import {ValidatingTextField} from "../Common/ValidatingTextInput";
 import PropTypes from 'prop-types';
 import {StyleSheet, View, Switch} from "react-native";
 import {LocalizationProvider as L} from "../../localization/LocalizationProvider";
-import {SafeAreaView} from "react-native-safe-area-context";
+import SafeAreaView from 'react-native-safe-area-view';
 import {createStackNavigator} from "@react-navigation/stack";
 
 export class CreateTeamScreen extends Component {

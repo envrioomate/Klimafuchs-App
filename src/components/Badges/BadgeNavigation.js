@@ -1,49 +1,27 @@
 import React, {Fragment} from 'react';
-import {Body, Header, Icon, Left, Right, Title} from "native-base";
+import {Body, Header, Icon, Left, Right, Title, Text} from "native-base";
 import material from "../../../native-base-theme/variables/material";
 import {createStackNavigator} from '@react-navigation/stack';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs'
-import {AchievementComponent} from "./AchievementComponent";
-import {CurrentBadgesComponent} from "./CurrentBadgesComponent";
-import {BadgeCollectionComponent} from "./BadgeCollectionComponent";
+import AchievementComponent from "./AchievementComponent";
+import CurrentBadgesComponent from "./CurrentBadgesComponent";
+import BadgeCollectionComponent from "./BadgeCollectionComponent";
+
 
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
 
-export const BadgeNavigation = () => {
-    return (
-        <Tab.Naviagtor
-            tabBarOptions={{
-                style: {
-                    backgroundColor: material.brandInfo,
-                },
-                indicatorStyle: {
-                    backgroundColor: material.brandLight,
-                }
-            }}
 
-            options={{
-                header: ({scene, previous, navigation}) => {
-                    return (
-                        <Fragment>
-                            <Header transparent style={{backgroundColor: material.brandInfo}}>
-                                <Left/>
-                                <Body>
-                                    <Title>Persistent Score Placeholder</Title>
-                                </Body>
-                                <Right/>
-                            </Header>
-                        </Fragment>
-                    )
-                }
-            }}
-        >
+function BadgeNavigation() {
+    return (
+        <Tab.Navigator>
             <Tab.Screen name="Achievements" component={AchievementComponent}/>
             <Tab.Screen name="CurrentTopic" component={CurrentBadgesComponent}/>
             <Tab.Screen name="BadgeCollection" component={BadgeCollectionComponent}/>
-        </Tab.Naviagtor>
+
+        </Tab.Navigator>
     )
-};
+}
 
 export const BadgeScreen = () => {
     return (

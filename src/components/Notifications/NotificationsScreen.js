@@ -8,7 +8,7 @@ import {store} from "../../persistence/store";
 import {Notifications} from "expo";
 import {MaterialDialog} from "react-native-material-dialog";
 import {LocalizationProvider as L} from "../../localization/LocalizationProvider";
-import {SafeAreaView} from "react-native-safe-area-context";
+import SafeAreaView from 'react-native-safe-area-view';
 
 class NotificationsScreen extends Component {
     static navigationOptions = {

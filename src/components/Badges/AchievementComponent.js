@@ -17,7 +17,7 @@ import {
 } from 'native-base';
 
 
-export class AchievementComponent extends Component {
+export default class AchievementComponent extends Component {
     static navigationOptions = {
         title: 'Achievments',
         tabBarIcon: ({focused, tintColor}) => (

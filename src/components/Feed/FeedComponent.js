@@ -7,7 +7,7 @@ import {LOAD_FEED} from "../../network/Feed.gql";
 import material from '../../../native-base-theme/variables/material';
 import PostComponent from "./PostComponent";
 import {LocalizationProvider as L} from "../../localization/LocalizationProvider";
-import {SafeAreaView} from "react-native-safe-area-context";
+import SafeAreaView from 'react-native-safe-area-view';
 
 export default class FeedComponent extends Component {
     constructor(props) {

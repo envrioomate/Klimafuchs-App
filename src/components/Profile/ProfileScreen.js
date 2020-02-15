@@ -34,8 +34,7 @@ import material from "../../../native-base-theme/variables/material";
 import {Notifications} from 'expo';
 import * as Permissions from 'expo-permissions';
 import {LocalizationProvider as L} from "../../localization/LocalizationProvider";
-import {SafeAreaView} from "react-native-safe-area-context";
-
+import SafeAreaView from 'react-native-safe-area-view';
 class ProfileScreen extends Component {
 
     static navigationOptions = {
@@ -553,5 +552,5 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: material.brandInfo
     }
-})
+});
 export default ProfileScreen;
