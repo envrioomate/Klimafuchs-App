@@ -296,7 +296,9 @@ export class InviteUsersScreen extends Component {
 const Stack = createStackNavigator();
 export default () => {
     return(
-        <Stack.Navigator options={{
+        <Stack.Navigator
+            headerMode="none"
+            options={{
             headerMode: "none",
             mode: 'modal',
         }}>

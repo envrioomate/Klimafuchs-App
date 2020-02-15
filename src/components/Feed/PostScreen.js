@@ -4,14 +4,22 @@ import {Query} from "react-apollo";
 import {LOAD_POST} from "../../network/Feed.gql";
 import {AppLoading} from "expo";
 import PostCard from "./PostComponent"
-import SafeAreaView from 'react-native-safe-area-view';import {StyleSheet} from "react-native";
+import SafeAreaView from 'react-native-safe-area-view';
+import {StyleSheet} from "react-native";
 import material from "../../../native-base-theme/variables/material";
 
 
 export default class PostScreen extends Component {
 
     render() {
-        let {navigation} = this.props;
+        let {params} = this.props.route.params; // Yes, this is getting this.props.route.params.params, this is intentional
+        let navigation = this.props.navigation;
+        console.log(params);
+
+        const postTitle = params ? params.postTite : null;
+        const postId = params ? params.postId : 0;
+
+
         return (
             <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
                 <Header>
@@ -22,13 +30,13 @@ export default class PostScreen extends Component {
                         </Button>
                     </Left>
                     <Body>
-                        <Title>{navigation.getParam('postTitle')}</Title>
+                        <Title>{postTitle}</Title>
                     </Body>
                     <Right/>
                 </Header>
 
             <Container>
-                <Query query={LOAD_POST} variables={{postId: this.props.navigation.getParam('postId')}}>
+                <Query query={LOAD_POST} variables={{postId: postId}}>
                     {({loading, error, data, refetch}) => {
                         if (loading) return <AppLoading/>;
                         if (error) {

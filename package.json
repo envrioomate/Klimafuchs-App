@@ -69,7 +69,8 @@
     "redux-saga": "^1.0.2",
     "redux-thunk": "^2.3.0",
     "validate.js": "^0.12.0",
-    "react-native-safe-area-view": "latest"
+    "react-native-safe-area-view": "latest",
+    "expo-constants": "latest"
   },
   "devDependencies": {
     "babel-preset-expo": "^7.0.0",

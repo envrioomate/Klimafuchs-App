@@ -12,9 +12,10 @@ const Stack = createStackNavigator();
 
 export const FeedNavigation = () => {
     return (
-        <Stack.Navigator options={{
+        <Stack.Navigator
+            headerMode="none"
+            options={{
             title: 'News',
-
             tabBarIcon: ({focused, tintColor}) => (
                 <Icon name='md-home' style={{fontSize: 20, color: tintColor}}/>
             ),

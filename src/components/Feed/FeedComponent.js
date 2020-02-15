@@ -49,7 +49,7 @@ export default class FeedComponent extends Component {
         return (
             <SafeAreaView style={styles.container} forceInset={{top: 'always', bottom: 'never'}}>
                 <StatusBar backgroundColor={'transparent'} translucent/>
-                <Container>
+                <Container style={{flex:1, width:"100%"}}>
                     <Header>
                         <Left/>
                         <Body>
@@ -90,15 +90,18 @@ export default class FeedComponent extends Component {
                                             console.log(post.title);
                                             return (
                                                 <PostComponent key={post.id} post={post}
-                                                               navigateToDetailedView={function () {
-                                                                   this.props.navigation.navigate('Post', {
-                                                                       postId: post.id,
-                                                                       postTitle: post.title
+                                                               navigateToDetailedView={function (url) {
+                                                                   this.props.navigation.navigate("Post", {
+                                                                       type: "Navigate",
+                                                                       routeName: "Post",
+                                                                       params: {
+                                                                           postId: post.id,
+                                                                           postTitle: post.title
+                                                                       }
                                                                    })
                                                                }.bind(this)}/>
                                             )
-                                        }
-                                        }
+                                        }}
                                     />
                                     {data.paginatedPosts && this.state.endReached
                                         ? <Button full light disabled>
@@ -146,6 +149,7 @@ export default class FeedComponent extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        width: '100%',
         backgroundColor: material.brandInfo,
         alignItems: 'center',
         justifyContent: 'center',

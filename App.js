@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {AsyncStorage, StyleSheet, View} from 'react-native';
-import {NavigationContainer} from "@react-navigation/native";
+import {NavigationContainer, DefaultTheme} from "@react-navigation/native";
 import {createMaterialBottomTabNavigator} from "@react-navigation/material-bottom-tabs";
 import {createStackNavigator} from "@react-navigation/stack";
 import {Root, Spinner, StyleProvider} from 'native-base';
@@ -19,7 +19,8 @@ import {Notifications, Screen} from "expo";
 import ApolloProvider from "react-apollo/ApolloProvider";
 import client from "./src/network/client"
 import Api from "./src/network/api";
-import {SafeAreaProvider, SafeAreaView} from "react-native-safe-area-context";
+import {SafeAreaProvider} from "react-native-safe-area-context";
+import SafeAreaView from "react-native-safe-area-view";
 
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -123,9 +124,20 @@ const AuthNav = () => {
     )
 };
 
+const MyTheme = {
+    dark: false,
+    colors: {
+        primary: material.brandLight,
+        background: material.brandLight,
+        card: material.brandInfo,
+        text: material.brandLight,
+        border: material.brandInfo,
+    },
+};
+
 const RootContainer = () => {
     return (
-        <NavigationContainer>
+        <NavigationContainer theme={MyTheme}>
             <Stack.Navigator initialRouteName="AuthLoading" headerMode="none">
                 <Stack.Screen name="AuthLoading" component={AuthLoadingScreen}/>
                 <Stack.Screen name="App" component={AppNav}/>

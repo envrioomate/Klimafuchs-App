@@ -8,23 +8,46 @@ import CreateTeamScreen from "./CreateTeamScreen";
 import {EditTeamScreen} from "./EditTeamScreen";
 import {createMaterialTopTabNavigator} from "@react-navigation/material-top-tabs";
 import {createStackNavigator} from "@react-navigation/stack";
+import SafeAreaView from "react-native-safe-area-view";
+import {StyleSheet} from "react-native";
+import Constants from "expo-constants";
 
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
 
 const TeamsNav = () => {
     return (
-        <Stack.Navigator>
-            <Stack.Screen name="Main" component={LeaderBoardNav}/>
-            <Stack.Screen name="CreateTeam" component={CreateTeamScreen}/>
-            <Stack.Screen name="EditTeam" component={EditTeamScreen}/>
-        </Stack.Navigator>
+            <Stack.Navigator
+                headerMode="none"
+            >
+                <Stack.Screen name="Main" component={LeaderBoardNav}/>
+                <Stack.Screen name="CreateTeam" component={CreateTeamScreen}/>
+                <Stack.Screen name="EditTeam" component={EditTeamScreen}/>
+            </Stack.Navigator>
     )
 };
 
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        width: '100%',
+        backgroundColor: material.brandInfo,
+        alignItems: 'center',
+        justifyContent: 'center',
+
+    }
+});
+
+
 const LeaderBoardNav = () => {
     return (
-        <Tab.Navigator>
+        <Tab.Navigator
+            tabBarOptions={{
+                style: {
+                    paddingTop: Constants.statusBarHeight,
+                }
+            }}
+        >
             <Tab.Screen name="Teams" component={LeaderBoardScreen}/>
             <Tab.Screen name="MyTeams" component={TeamsScreen}/>
         </Tab.Navigator>

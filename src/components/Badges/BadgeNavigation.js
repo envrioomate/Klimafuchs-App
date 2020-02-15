@@ -1,11 +1,10 @@
-import React, {Fragment} from 'react';
-import {Body, Header, Icon, Left, Right, Title, Text} from "native-base";
-import material from "../../../native-base-theme/variables/material";
+import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs'
 import AchievementComponent from "./AchievementComponent";
 import CurrentBadgesComponent from "./CurrentBadgesComponent";
 import BadgeCollectionComponent from "./BadgeCollectionComponent";
+import {PersistentScoreHeader} from "./PersistentScoreHeader";
 
 
 const Tab = createMaterialTopTabNavigator();
@@ -14,7 +13,9 @@ const Stack = createStackNavigator();
 
 function BadgeNavigation() {
     return (
-        <Tab.Navigator>
+        <Tab.Navigator
+            initialRouteName="CurrentTopic"
+        >
             <Tab.Screen name="Achievements" component={AchievementComponent}/>
             <Tab.Screen name="CurrentTopic" component={CurrentBadgesComponent}/>
             <Tab.Screen name="BadgeCollection" component={BadgeCollectionComponent}/>
@@ -26,15 +27,26 @@ function BadgeNavigation() {
 export const BadgeScreen = () => {
     return (
         <Stack.Navigator
-            options={{
-                title: 'Thema',
-                tabBarIcon: ({focused, tintColor}) => (
-                    <Icon name='star' style={{fontSize: 20, color: tintColor}}/>
-                ),
-                headerMode: 'screen'
+            headerMode="screen"
+            screenOptions={{
+                header: ({ scene, previous, navigation }) => {
+                    const { options } = scene.descriptor;
+                    const title =
+                        options.headerTitle !== undefined
+                            ? options.headerTitle
+                            : options.title !== undefined
+                            ? options.title
+                            : scene.route.name;
+
+                    return (
+                        <PersistentScoreHeader options={options} navigation={navigation}/>
+                    );
+                }
             }}
         >
-            <Stack.Screen name="Main" component={BadgeNavigation}/>
+            <Stack.Screen name="Foo" component={BadgeNavigation}
+
+            />
         </Stack.Navigator>
     )
 };
@@ -78,25 +90,6 @@ export const BadgeNavigation = createMaterialTopTabNavigator(
                 backgroundColor: material.brandLight,
             }
         },
-    }
-);
-
-export const BadgeScreen = createStackNavigator(
-    {
-        Main: {
-            screen: BadgeNavigation,
-        },
-
-    }, {
-        navigationOptions: {
-            title: 'Challenges',
-            tabBarIcon: ({focused, tintColor}) => (
-                <Icon name='star' style={{fontSize: 20, color: tintColor}}/>
-            ),
-            headerMode: 'screen'
-
-        },
-
     }
 );
 */

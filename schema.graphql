@@ -26,6 +26,7 @@ type Achievement {
 }
 
 type Badge {
+    achievements: [Achievement!]
     badgeGoals: BadgeGoals
     createdAt: DateTime!
     headerImage: WikiImage
@@ -66,7 +67,6 @@ type ChallengeRejection {
     createdAt: DateTime!
     id: Int!
     owner: User!
-    seasonPlanChallenge: SeasonPlanChallenge!
     updatedAt: DateTime!
 }
 
@@ -279,12 +279,8 @@ type Query {
     getTeam(teamId: Int!): Team!
     globalCurrentChallenges: SeasonPlan
     isSubscribed: Subscription
-    kategorie(kategorieId: String!): Kategorie
-    kategories: [Kategorie!]
     myMedia: [Media!]!
     myMemberships: [Membership!]!
-    oberthema(oberthemaId: String!): Oberthema
-    oberthemas: [Oberthema!]
     paginatedPosts(connectionArgs: ConnectionArgs!): FeedPostPage!
     post(postId: Int!): FeedPost
     posts: [FeedPost!]!
@@ -315,7 +311,7 @@ type SeasonPlan {
     id: Int!
     position: Int!
     season: Season!
-    themenwoche: Thema!
+    thema: Thema!
     updatedAt: DateTime!
 }
 
@@ -325,7 +321,6 @@ type SeasonPlanChallenge implements IUserChallenge {
     completions: ChallengeCompletion!
     id: Int!
     plan: SeasonPlan!
-    rejections: ChallengeRejection!
     replaceable: Boolean
 }
 
