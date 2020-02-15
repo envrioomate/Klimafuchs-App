@@ -1,6 +1,5 @@
 import React, {Component, Fragment} from 'react';
 import {Body, Button, Container, Fab, H1, Header, Icon, Left, List, ListItem, Right, Text, Title} from "native-base";
-import {SafeAreaView} from "react-navigation";
 import {ListView, StyleSheet} from "react-native";
 import material from "../../../native-base-theme/variables/material";
 import {connect} from "react-redux";
@@ -9,6 +8,7 @@ import {store} from "../../persistence/store";
 import {Notifications} from "expo";
 import {MaterialDialog} from "react-native-material-dialog";
 import {LocalizationProvider as L} from "../../localization/LocalizationProvider";
+import {SafeAreaView} from "react-native-safe-area-context";
 
 class NotificationsScreen extends Component {
     static navigationOptions = {

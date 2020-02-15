@@ -1,6 +1,5 @@
 import React, {Component, Fragment} from 'react';
 import {AsyncStorage, Switch, View, StyleSheet} from 'react-native';
-import {SafeAreaView} from 'react-navigation'
 import {
     ActionSheet,
     Body,
@@ -35,6 +34,7 @@ import material from "../../../native-base-theme/variables/material";
 import {Notifications} from 'expo';
 import * as Permissions from 'expo-permissions';
 import {LocalizationProvider as L} from "../../localization/LocalizationProvider";
+import {SafeAreaView} from "react-native-safe-area-context";
 
 class ProfileScreen extends Component {
 

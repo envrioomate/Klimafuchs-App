@@ -7,30 +7,53 @@ schema {
 }
 
 interface IUserChallenge {
-    challenge: Challenge!
+    challenge: Badge!
     challengeCompletion: ChallengeCompletion
     id: Int!
     plan: SeasonPlan!
     replaceable: Boolean
 }
 
-type Challenge {
-    content: String!
+type Achievement {
+    badge: Badge!
     createdAt: DateTime!
-    headerImage: WikiImage
-    id: Int!
-    isSpare: Boolean!
-    kategorie: Kategorie!
-    oberthema: Oberthema!
+    name: String!
     props: Props!
     score: Int
-    themenWoche: Themenwoche!
-    tip: String
+    text: String!
     title: String!
     updatedAt: DateTime!
 }
 
+type Badge {
+    badgeGoals: BadgeGoals
+    createdAt: DateTime!
+    headerImage: WikiImage
+    icon: WikiImage
+    name: String!
+    props: Props!
+    score: Int
+    text: String!
+    thema: Thema!
+    title: String!
+    updatedAt: DateTime!
+}
+
+type BadgeGoals {
+    badgeGoalType: BadgeGoalType!
+    goodCompletion: String!
+    goodQuantity: Int
+    maxCompletion: String!
+    maxQuantity: Int
+    medCompletion: String!
+    medQuantity: Int
+    minCompletion: String!
+    minQuantity: Int
+}
+
 type ChallengeCompletion {
+    challengeCompletionQuantity: Float
+    challengeGoalCompletionLevel: ChallengeGoalCompletionLevel
     createdAt: DateTime!
     id: Int
     owner: User!
@@ -49,7 +72,7 @@ type ChallengeRejection {
 
 type ChallengeReplacement implements IUserChallenge {
     async: ChallengeCompletion
-    challenge: Challenge!
+    challenge: Badge!
     challengeCompletion: ChallengeCompletion
     completion: ChallengeCompletion
     createdAt: DateTime!
@@ -104,12 +127,11 @@ type FeedPostPage {
 }
 
 type Kategorie {
-    challenges: [Challenge!]!
+    challenges: [Badge!]!
     createdAt: DateTime!
     name: String!
     oberthemen: [Oberthema!]!
     props: Props!
-    themenWochen: [Themenwoche!]!
     updatedAt: DateTime!
 }
 
@@ -161,7 +183,7 @@ type Mutation {
     addPost(post: FeedPostInput!): FeedPost!
     changePassword(newPassword: String!, oldPassword: String!): User!
     changeUser(user: UserInput!): User
-    completeChallenge(challengeId: Int!): ChallengeCompletion
+    completeChallenge(challengeCompletionQuantity: Float, challengeGoalCompletionLevel: Int, challengeId: Int!): ChallengeCompletion
     confirmMember(membershipId: Int!): Membership!
     createTeam(team: TeamInput!): Team!
     delMember(membershipId: Int!): Membership!
@@ -171,7 +193,6 @@ type Mutation {
     likeComment(commentId: Int!): FeedComment!
     likePost(postId: Int!): FeedPost!
     modMember(membershipId: Int!): Membership!
-    rejectChallenge(challengeId: Int!): ChallengeRejection
     removeComment(CommentId: Int!): FeedComment!
     removeOwnComment(CommentId: Int!): Boolean!
     removeOwnPost(postId: Int!): Boolean!
@@ -196,13 +217,21 @@ type Mutation {
     upload(file: Upload!, height: Int!, width: Int!): Media!
 }
 
+type Notification {
+    body: String!
+    icon: String!
+    id: Int!
+    status: String!
+    ticketId: Int!
+    title: String!
+    user: User!
+}
+
 type Oberthema {
-    challenges: [Challenge!]!
     createdAt: DateTime!
     kategorie: Kategorie!
     name: String!
     props: Props!
-    themenWochen: [Themenwoche!]!
     updatedAt: DateTime!
 }
 
@@ -210,6 +239,13 @@ type PageData {
     count: Int!
     limit: Int!
     offset: Int!
+}
+
+type PasswordResetToken {
+    createdAt: DateTime!
+    id: Int!
+    resetToken: String!
+    user: User!
 }
 
 type Props {
@@ -257,8 +293,8 @@ type Query {
     seasonPlan(seasonId: Int!): SeasonPlan
     seasonPlans: [SeasonPlan!]
     seasons: [Season!]
-    themenwoche(themenwocheId: String!): Themenwoche
-    themenwoches: [Themenwoche!]
+    themenwoche(themenwocheId: String!): Thema
+    themenwoches: [Thema!]
     user(userId: Int!): User
     users: [User!]
 }
@@ -279,12 +315,12 @@ type SeasonPlan {
     id: Int!
     position: Int!
     season: Season!
-    themenwoche: Themenwoche!
+    themenwoche: Thema!
     updatedAt: DateTime!
 }
 
 type SeasonPlanChallenge implements IUserChallenge {
-    challenge: Challenge!
+    challenge: Badge!
     challengeCompletion: ChallengeCompletion
     completions: ChallengeCompletion!
     id: Int!
@@ -312,15 +348,13 @@ type Team {
     teamSize: TeamSize!
 }
 
-type Themenwoche {
-    challenges: [Challenge!]
-    content: String!
+type Thema {
+    badges: [Badge!]
     createdAt: DateTime!
     headerImage: WikiImage
-    kategorie: Kategorie
-    oberthema: Oberthema
+    name: String!
     props: Props!
-    quellen: Quelle
+    text: String!
     title: String!
     updatedAt: DateTime!
     usages: [SeasonPlan!]
@@ -337,9 +371,12 @@ type User {
     id: Int!
     isBanned: Boolean!
     media: [Media!]
+    notifications: [Notification!]
+    passwordResetToken: PasswordResetToken
     posts: [FeedPost!]
     role: Int!
     screenName: String!
+    subscription: Subscription
     userName: String!
 }
 
@@ -361,6 +398,21 @@ type WikiWarning {
     props: Props!
     updatedAt: DateTime!
     warnings: String!
+}
+
+"Defines how BadgeGoals are ordered by their quantity."
+enum BadgeGoalType {
+    QUALITATIVE
+    QUANTITY_ASC
+    QUANTITY_DSC
+}
+
+"Stores the achieved ChallengeGoal. If null assume MIN"
+enum ChallengeGoalCompletionLevel {
+    GOOD
+    MAX
+    MED
+    MIN
 }
 
 "team size brackets"
@@ -410,7 +462,7 @@ input SeasonPlanInput {
     id: Int
     position: Int
     seasonId: Int
-    themenwocheId: String
+    themaName: String
 }
 
 input TeamInput {

@@ -1,15 +1,36 @@
 import React, {Fragment} from 'react';
 
-import {createMaterialTopTabNavigator, createStackNavigator} from 'react-navigation';
 import {Body, Header, Icon, Left, Right, Title} from "native-base";
 import material from "../../../native-base-theme/variables/material";
 import {TeamsScreen} from "./TeamsScreen";
 import {LeaderBoardScreen} from "./LeaderBoardScreen";
 import CreateTeamScreen from "./CreateTeamScreen";
 import {EditTeamScreen} from "./EditTeamScreen";
+import {createMaterialTopTabNavigator} from "@react-navigation/material-top-tabs";
+import {createStackNavigator} from "@react-navigation/stack";
 
+const Tab = createMaterialTopTabNavigator();
+const Stack = createStackNavigator();
 
+const TeamsNav = () => {
+    return (
+        <Stack.Navigator>
+            <Stack.Screen name="Main" component={LeaderBoardNav}/>
+            <Stack.Screen name="CreateTeam" component={CreateTeamScreen}/>
+            <Stack.Screen name="EditTeam" component={EditTeamScreen}/>
+        </Stack.Navigator>
+    )
+};
 
+const LeaderBoardNav = () => {
+    return (
+        <Tab.Navigator>
+            <Tab.Screen name="Teams" component={LeaderBoardScreen}/>
+            <Tab.Screen name="MyTeams" component={TeamsScreen}/>
+        </Tab.Navigator>
+    )
+};
+/*
 const TeamsNav = createStackNavigator(
     {
         Main: {
@@ -70,4 +91,5 @@ const TeamsNav = createStackNavigator(
 
     }
 );
+*/
 export default TeamsNav;

@@ -21,8 +21,9 @@ import UploadImage from "../Common/UploadImage";
 import {ValidatingTextField} from "../Common/ValidatingTextInput";
 import PropTypes from 'prop-types';
 import {StyleSheet, View, Switch} from "react-native";
-import {createStackNavigator, SafeAreaView} from "react-navigation";
 import {LocalizationProvider as L} from "../../localization/LocalizationProvider";
+import {SafeAreaView} from "react-native-safe-area-context";
+import {createStackNavigator} from "@react-navigation/stack";
 
 export class CreateTeamScreen extends Component {
 
@@ -292,7 +293,19 @@ export class InviteUsersScreen extends Component {
     };
 }
 
-
+const Stack = createStackNavigator();
+export default () => {
+    return(
+        <Stack.Navigator options={{
+            headerMode: "none",
+            mode: 'modal',
+        }}>
+            <Stack.Screen name="MakeTeam" component={CreateTeamScreen}/>
+            <Stack.Screen name="InviteUsers" component={InviteUsersScreen}/>
+        </Stack.Navigator>
+    )
+};
+/*
 export default createStackNavigator(
     {
         MakeTeam: {
@@ -313,10 +326,10 @@ export default createStackNavigator(
         headerMode: "none",
         mode: 'modal',
     });
-
+*/
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: material.brandInfo
     }
-})
+});

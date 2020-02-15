@@ -4,7 +4,9 @@ import {ReactNativeFile} from 'apollo-upload-client';
 import React from 'react';
 import {ImageBackground, TouchableWithoutFeedback, View} from 'react-native';
 import {Button, Icon, Spinner, Text} from 'native-base';
-import {ImagePicker, Permissions} from 'expo';
+import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
+
 import PropTypes from 'prop-types'
 
 class UploadImage extends React.Component {

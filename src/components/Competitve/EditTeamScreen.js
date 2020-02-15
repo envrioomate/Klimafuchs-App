@@ -14,7 +14,6 @@ import {
     Form,
     Textarea, Label, Right
 } from "native-base";
-import {SafeAreaView} from "react-navigation";
 import {StyleSheet, Switch, View} from "react-native";
 import material from "../../../native-base-theme/variables/material";
 import UploadImage from "../Common/UploadImage";
@@ -22,6 +21,7 @@ import {ValidatingTextField} from "../Common/ValidatingTextInput";
 import {Mutation} from "react-apollo";
 import {CREATE_TEAM, MOD_TEAM} from "../../network/Teams.gql";
 import {Util} from "../../util";
+import {SafeAreaView} from "react-native-safe-area-context";
 
 export class EditTeamScreen extends Component {
     static navigationOptions = {

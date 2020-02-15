@@ -7,7 +7,7 @@ import {LOAD_FEED} from "../../network/Feed.gql";
 import material from '../../../native-base-theme/variables/material';
 import PostComponent from "./PostComponent";
 import {LocalizationProvider as L} from "../../localization/LocalizationProvider";
-import {SafeAreaView} from "react-navigation";
+import {SafeAreaView} from "react-native-safe-area-context";
 
 export default class FeedComponent extends Component {
     constructor(props) {
@@ -47,9 +47,8 @@ export default class FeedComponent extends Component {
 
     render() {
         return (
-            <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
-                <StatusBar>
-                </StatusBar>
+            <SafeAreaView style={styles.container} forceInset={{top: 'always', bottom: 'never'}}>
+                <StatusBar backgroundColor={'transparent'} translucent/>
                 <Container>
                     <Header>
                         <Left/>
@@ -147,7 +146,10 @@ export default class FeedComponent extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: material.brandInfo
+        backgroundColor: material.brandInfo,
+        alignItems: 'center',
+        justifyContent: 'center',
+
     }
 });
 

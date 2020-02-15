@@ -4,8 +4,7 @@ import {Query} from "react-apollo";
 import {LOAD_POST} from "../../network/Feed.gql";
 import {AppLoading} from "expo";
 import PostCard from "./PostComponent"
-import {SafeAreaView} from "react-navigation";
-import {StyleSheet} from "react-native";
+import {SafeAreaView} from "react-native-safe-area-context";import {StyleSheet} from "react-native";
 import material from "../../../native-base-theme/variables/material";
 
 

@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import {AsyncStorage, SafeAreaView, StyleSheet, View} from 'react-native';
-import {createAppContainer, createStackNavigator, createSwitchNavigator} from "react-navigation";
+import {AsyncStorage, StyleSheet, View} from 'react-native';
+import {NavigationContainer} from "@react-navigation/native";
+import {createMaterialBottomTabNavigator} from "@react-navigation/material-bottom-tabs";
+import {createStackNavigator} from "@react-navigation/stack";
 import {Root, Spinner, StyleProvider} from 'native-base';
 import LoginScreen from "./src/components/PreLogin/LoginScreen";
 import SignUpScreen from "./src/components/PreLogin/SignUpScreen";
@@ -13,12 +15,14 @@ import {PersistGate} from 'redux-persist/integration/react'
 
 import {AppNav} from "./src/components/LoggedInScreen";
 import {ForgotPasswordScreen} from "./src/components/PreLogin/ForgotPasswordScreen";
-import {Notifications} from "expo";
+import {Notifications, Screen} from "expo";
 import ApolloProvider from "react-apollo/ApolloProvider";
 import client from "./src/network/client"
 import Api from "./src/network/api";
+import {SafeAreaProvider, SafeAreaView} from "react-native-safe-area-context";
 
-//const prefix = Expo.Linking.makeUrl('/');
+const Tab = createMaterialBottomTabNavigator();
+const Stack = createStackNavigator();
 
 export default class AppRoot extends Component {
 
@@ -61,11 +65,11 @@ export default class AppRoot extends Component {
                 <PersistGate loading={<Spinner/>} persistor={persistor}>
                 <ApolloProvider client={client}>
                     <StyleProvider style={getTheme(material)}>
-                        <Root>
-                            <SafeAreaView style={styles.safeArea}>
-                                <RootContainer uriPrefix='/app'/>
-                            </SafeAreaView>
-                        </Root>
+                        <SafeAreaProvider forceInset={{ bottom: 'never' }} style={styles.safeArea}>
+                            <Root style={styles.container}>
+                                    <RootContainer uriPrefix='/app'/>
+                            </Root>
+                        </SafeAreaProvider>
                     </StyleProvider>
                 </ApolloProvider>
                 </PersistGate>
@@ -109,7 +113,29 @@ class AuthLoadingScreen extends Component {
 
 }
 
+const AuthNav = () => {
+    return (
+        <Stack.Navigator initialRouteName="LoginScreen" headerMode="none">
+            <Stack.Screen name="LoginScreen" component={LoginScreen}/>
+            <Stack.Screen name="SignUpScreen" component={SignUpScreen}/>
+            <Stack.Screen name="ForgotPasswordScreen" component={ForgotPasswordScreen}/>
+        </Stack.Navigator>
+    )
+};
 
+const RootContainer = () => {
+    return (
+        <NavigationContainer>
+            <Stack.Navigator initialRouteName="AuthLoading" headerMode="none">
+                <Stack.Screen name="AuthLoading" component={AuthLoadingScreen}/>
+                <Stack.Screen name="App" component={AppNav}/>
+                <Stack.Screen name="Auth" component={AuthNav}/>
+            </Stack.Navigator>
+        </NavigationContainer>
+    )
+};
+
+/*
 const AuthNav = createStackNavigator({
         CheckUserExistsScreen: {
             screen: CheckUserExistsScreen
@@ -140,7 +166,7 @@ const RootNavigation = createSwitchNavigator({
     initialRouteName: 'AuthLoading'
 });
 const RootContainer = createAppContainer(RootNavigation);
-
+*/
 const styles = StyleSheet.create({
     container: {
         flex: 1,

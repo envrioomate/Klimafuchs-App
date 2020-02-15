@@ -7,7 +7,9 @@ import {Mutation, Query} from "react-apollo";
 import {CONFIRM_MEMBER, DEL_USER, GET_MY_TEAM, GET_TEAM, MOD_USER, TeamSize, UNMOD_USER} from "../../network/Teams.gql";
 import {Util} from "../../util";
 import {MaterialDialog} from "react-native-material-dialog";
-import {BlurView, LinearGradient} from "expo";
+import BlurView from "expo-blur";
+
+import {LinearGradient} from "expo-linear-gradient";
 import * as env from "../../../env";
 
 export class TeamDetailsModalContent extends FSModalContentBase {
