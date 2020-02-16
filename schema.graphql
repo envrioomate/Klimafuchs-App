@@ -29,6 +29,7 @@ type Badge {
     achievements: [Achievement!]
     badgeGoals: BadgeGoals
     createdAt: DateTime!
+    externalLink: String
     headerImage: WikiImage
     icon: WikiImage
     name: String!
@@ -378,7 +379,7 @@ type User {
 type WikiImage {
     canonicalName: String!
     createdAt: DateTime!
-    details: String!
+    details: String
     mimetype: String!
     props: Props!
     timestamp: DateTime!

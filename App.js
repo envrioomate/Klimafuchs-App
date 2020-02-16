@@ -50,6 +50,7 @@ export default class AppRoot extends Component {
 //            Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
 //            Ionicons: require("react-native-vector-icons/Fonts/Ionicons.ttf")
 //       });
+        await client.resetStore();
         this.setState({loading: false})
     }
 

@@ -22,6 +22,9 @@ export const CURRENT_BADGES = gql`
                 headerImage {
                     url
                 },
+                icon {
+                    url
+                },
                 badgeGoals {
                     badgeGoalType,
                     minCompletion,
@@ -32,14 +35,21 @@ export const CURRENT_BADGES = gql`
                     goodQuantity,
                     maxCompletion,
                     maxQuantity
+                },
+                achievements {
+                    name,
+                    title,
+                    text,
+                    score
                 }
+                externalLink
             },
             replaceable,
             challengeCompletion {
                 id,
                 challengeGoalCompletionLevel,
                 challengeCompletionQuantity
-            }
+            },
         }
     }
 `;

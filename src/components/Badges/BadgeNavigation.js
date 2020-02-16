@@ -5,6 +5,7 @@ import AchievementComponent from "./AchievementComponent";
 import CurrentBadgesComponent from "./CurrentBadgesComponent";
 import BadgeCollectionComponent from "./BadgeCollectionComponent";
 import {PersistentScoreHeader} from "./PersistentScoreHeader";
+import BadgeDetailsScreen from "./BadgeDetailsFlow/BadgeDetailsScreen";
 
 
 const Tab = createMaterialTopTabNavigator();
@@ -28,25 +29,29 @@ export const BadgeScreen = () => {
     return (
         <Stack.Navigator
             headerMode="screen"
-            screenOptions={{
-                header: ({ scene, previous, navigation }) => {
-                    const { options } = scene.descriptor;
-                    const title =
-                        options.headerTitle !== undefined
-                            ? options.headerTitle
-                            : options.title !== undefined
-                            ? options.title
-                            : scene.route.name;
-
-                    return (
-                        <PersistentScoreHeader options={options} navigation={navigation}/>
-                    );
-                }
-            }}
         >
-            <Stack.Screen name="Foo" component={BadgeNavigation}
+            <Stack.Screen name="Main" component={BadgeNavigation}
+                          options={{
+                              header: ({ scene, previous, navigation }) => {
+                                  const { options } = scene.descriptor;
+                                  const title =
+                                      options.headerTitle !== undefined
+                                          ? options.headerTitle
+                                          : options.title !== undefined
+                                          ? options.title
+                                          : scene.route.name;
 
+                                  return (
+                                      <PersistentScoreHeader options={options} navigation={navigation}/>
+                                  );
+                              }
+                          }}
             />
+            <Stack.Screen name="BadgeDetails"
+                          options={{
+                              header: ({ scene, previous, navigation }) => {return null},
+                          }}
+                          component={BadgeDetailsScreen}/>
         </Stack.Navigator>
     )
 };

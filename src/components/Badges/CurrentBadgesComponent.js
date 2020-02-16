@@ -21,6 +21,8 @@ import {CURRENT_BADGES, CURRENT_SEASONPLAN} from "../../network/Badges.gql";
 import {Query} from "react-apollo";
 import {LocalizationProvider as L} from "../../localization/LocalizationProvider";
 import ThemaProgressIndicator from "./ThemaProgressIndicator";
+import {ThemaComponent} from "./ThemaComponent";
+import BadgePreviewListComponent from "./BadgePreviewListComponent";
 
 
 export default class CurrentBadgesComponent extends Component {
@@ -40,6 +42,41 @@ export default class CurrentBadgesComponent extends Component {
         this.setState({refreshing: false});
 
     };
+
+    renderCurrentTopic = () => {
+        return (
+            <Query query={CURRENT_SEASONPLAN}>
+                {({loading, error, data, refetch}) => {
+                    this.state.refetchers.push(refetch);
+                    if (loading) return (
+                        <Container>
+                            <Spinner/>
+                        </Container>
+                    );
+                    if (error) return <Text>Error {error.message}</Text>;
+                    if (data.globalCurrentChallenges) {
+                        const thema = data.globalCurrentChallenges.thema;
+                        return (
+                            <Content
+                                refreshControl={
+                                    <RefreshControl
+                                        refreshing={this.state.refreshing || loading}
+                                        onRefresh={() => this.reload()}
+                                    />
+                                }
+                            >
+                                <ThemaComponent thema={thema}/>
+                            </Content>
+                        )
+                    }
+                    return (
+                        <Text>no current challenges!</Text>
+                    )
+                }}
+            </Query>
+        )
+    };
+
 
     render() {
         return (
@@ -71,13 +108,13 @@ export default class CurrentBadgesComponent extends Component {
                                             flex: 1,
                                             margin: 10,
                                         }}>
-
+                                            {this.renderCurrentTopic()}
                                         </View>
                                         <View style={{
                                             flex: 3,
                                             margin: 10,
                                         }}>
-
+                                            <BadgePreviewListComponent badges={challenges} refetch={refetch}/>
                                         </View>
                                     </Fragment>
                                 )

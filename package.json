@@ -70,7 +70,8 @@
     "redux-thunk": "^2.3.0",
     "validate.js": "^0.12.0",
     "react-native-safe-area-view": "latest",
-    "expo-constants": "latest"
+    "expo-constants": "latest",
+    "expo-web-browser": "~7.0.1"
   },
   "devDependencies": {
     "babel-preset-expo": "^7.0.0",
