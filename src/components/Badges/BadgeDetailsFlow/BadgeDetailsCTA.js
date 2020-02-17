@@ -1,35 +1,78 @@
-import React, {Component, Fragment} from "react";
-import {Image, TextInput, View} from "react-native";
-import {Body, Button, Container, Content, Left, Right, Icon, Text, Card, CardItem, Header} from "native-base";
+import React, {Component} from "react";
+import {Image, StyleSheet, TextInput, View} from "react-native";
+import {Body, Button, Card, CardItem, Container, Content, Icon, Footer, Left, Right, Spinner, Text} from "native-base";
 import material from "../../../../native-base-theme/variables/material";
+import {ChallengeGoalCompletionLevel} from "../BadgePreviewListComponent";
+import {Mutation} from "react-apollo";
+import {COMPLETE_CHALLENGE} from "../../../network/Badges.gql";
+import {LocalizationProvider as L} from "../../../localization/LocalizationProvider";
 
 const inRange = (x, min, max) => {
-    return x >= min && x <= max;
-}
+    return x > min && x <= max;
+};
 
-const levelCompleted = (badgeGoalType, AscLowerBound, AscUpperBound,DscLowerBound, DSCUpperBound, quantity) => {
-    return badgeGoalType === "QUANTITATIVE_ASC" ?
+const levelCompleted = (badgeGoalType, AscLowerBound, AscUpperBound, DscLowerBound, DSCUpperBound, quantity) => {
+    if (quantity == "") return false; // expected coersion to check for "" in input box
+    let result = badgeGoalType === "QUANTITY_ASC" ?
         inRange(quantity, AscLowerBound, AscUpperBound)
         : inRange(quantity, DscLowerBound, DSCUpperBound);
-
-}
-
+    return result;
+};
 
 
 export class BadgeDetailsCTA extends Component {
     state = {
+        loading: false,
         completionLevel: null,
-        enteredQuantity: null
+        completionState: {
+            minCompleted: false, medCompleted: false, goodCompleted: false, maxCompleted: false
+        },
+        enteredQuantity: null,
+        inputFocused: false
     };
 
-    RenderCompletionOption = ({optionText, optionQuantity, autoCompleted, icon, iconTint}) => {
+    iconMinColor = material.completionMin;
+    iconMedColor = material.completionMed;
+    iconGoodColor = material.completionGood;
+    iconMaxColor = material.completionMax;
+
+    RenderCompletionOption = ({optionText, optionQuantity, autoCompleted, icon, iconTint, quantityName, orderASC, completionLevel}) => {
+        quantityName = quantityName || "Punkte";
+        let isCompleted = completionLevel === this.state.completionLevel;
         return (
-            <Card style={{flex:1}}>
-                <CardItem style={{backgroundColor: autoCompleted ? '#0f0' : material.brandLight}}>
-                    <Text>{optionText}{optionQuantity ? optionQuantity : ""}</Text>
+            <Card transparent>
+                <CardItem style={autoCompleted ? {backgroundColor: '#0f0'} : {}}
+                          button={!optionQuantity}
+                          onPress={() => {
+                              if (this.state.completionLevel !== completionLevel)
+                                  this.setState({completionLevel});
+                              else this.setState({completionLevel: null});
+                          }}
+                >
+                    <Left>
+                        <Icon name='md-checkmark' style={isCompleted ? {
+                            color: material.brandLight,
+                            backgroundColor: material.brandSuccess, ...styles.checkmark
+                        } : styles.checkmark}/>
+                    </Left>
+                    <Body style={{
+                        flex: 4,
+                        flexDirection: "column", justifyContent: "flex-start", alignItems: "stretch"
+                    }}>
+                        <Text
+                            style={{flex: 1, flexDirection: "column", justifyContent: "center", alignItems: "stretch"}}>
+                            {optionText}
+                            {optionQuantity ? <Text style={{
+                                flex: 1,
+                                flexDirection: "row",
+                                justifyContent: "flex-end"
+                            }}>{` (${orderASC ? 'bis' : 'ab'} ${optionQuantity} ${quantityName})`}</Text> : null}
+                        </Text>
+
+                    </Body>
                     <Right>
-                        <Image style={{width: 32, height: 32}}
-                               source={icon ? {uri: icon.url} : require('../../../../assets/image_select.png')}/>
+                        <Image style={{width: 32, height: 32, tintColor: isCompleted ? iconTint : 'grey'}}
+                               source={icon ? {uri: icon.url + '?date=' + (new Date()).getHours()} : require('../../../../assets/image_select.png')}/>
 
                     </Right>
                 </CardItem>
@@ -37,11 +80,36 @@ export class BadgeDetailsCTA extends Component {
         )
     };
 
-    onChangeQuantity = (quantity) => {
-        console.log("New quantity: ", quantity)
+    onChangeQuantity = (badgeGoals, quantity) => {
+        let {
+            minQuantity,
+            medQuantity,
+            goodQuantity,
+            maxQuantity,
+            badgeGoalType,
+        } = badgeGoals;
+
+        let minCompleted = levelCompleted(badgeGoalType, Number.NEGATIVE_INFINITY, minQuantity, Number.POSITIVE_INFINITY, minQuantity, quantity);
+        let medCompleted = levelCompleted(badgeGoalType, minQuantity, medQuantity, minQuantity, medQuantity, quantity);
+        let goodCompleted = levelCompleted(badgeGoalType, medQuantity, goodQuantity, medQuantity, goodQuantity, quantity);
+        let maxCompleted = levelCompleted(badgeGoalType, goodQuantity, Number.POSITIVE_INFINITY, goodQuantity, maxQuantity, quantity);
+
+        let completionLevel =
+            minCompleted ? ChallengeGoalCompletionLevel.MIN :
+                medCompleted ? ChallengeGoalCompletionLevel.MED :
+                    goodCompleted ? ChallengeGoalCompletionLevel.GOOD :
+                        maxCompleted ? ChallengeGoalCompletionLevel.MAX : null;
+
+        this.setState({
+            enteredQuantity: quantity,
+            completionState: {
+                minCompleted, medCompleted, goodCompleted, maxCompleted
+            },
+            completionLevel: completionLevel
+        });
     };
 
-    renderQuatitative = (challenge) => {
+    renderQuatitative = (challenge, quantity) => {
         let {
             minCompletion,
             minQuantity,
@@ -51,33 +119,55 @@ export class BadgeDetailsCTA extends Component {
             goodQuantity,
             maxCompletion,
             maxQuantity,
-            badgeGoalType
+            badgeGoalType,
         } = challenge.badgeGoals;
-        let quantity = this.state.enteredQuantity ||
-            (badgeGoalType === "QUANTITATIVE_ASC" ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY);
-
-        let minCompleted = levelCompleted(badgeGoalType,minQuantity, medQuantity, Number.POSITIVE_INFINITY, minQuantity, quantity);
-        let medCompleted = levelCompleted(badgeGoalType,medQuantity, goodQuantity, minQuantity, medQuantity, quantity);
-        let goodCompleted = levelCompleted(badgeGoalType,goodQuantity, maxQuantity, medQuantity, goodQuantity, quantity);
-        let maxCompleted = levelCompleted(badgeGoalType,maxQuantity, Number.POSITIVE_INFINITY, goodQuantity, maxQuantity, quantity);
-
+        let {quantityName} = challenge;
+        let {minCompleted, medCompleted, goodCompleted, maxCompleted} = this.state.completionState;
+        quantity = quantity ||
+            (badgeGoalType === "QUANTITY_ASC" ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY);
+        let orderASC = badgeGoalType === "QUANTITY_ASC";
         return (
-            <Content>
+            <Content style={{flex: 1, width: "100%"}}>
                 <Card>
                     <CardItem>
-
-                <TextInput
-                    style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-                    onChangeText={text => this.onChangeQuantity(text)}
-                    value={this.state.enteredQuantity}
-                />
+                        <TextInput
+                            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+                            onChangeText={text => this.onChangeQuantity(challenge.badgeGoals, text)}
+                            onFocus={e => this.setState({inputFocused: true})}
+                            onBlur={e => this.setState({inputFocused: false})}
+                            value={this.state.enteredQuantity}
+                        />
+                        <Text>{quantityName}</Text>
                     </CardItem>
                 </Card>
-                <this.RenderCompletionOption optionText={minCompletion} optionQuantity={minQuantity} autoCompleted={minCompleted}/>
-                <this.RenderCompletionOption optionText={medCompletion} optionQuantity={medQuantity} autoCompleted={medCompleted}/>
-                <this.RenderCompletionOption optionText={goodCompletion} optionQuantity={goodQuantity} autoCompleted={goodCompleted}/>
-                <this.RenderCompletionOption optionText={maxCompletion} optionQuantity={maxQuantity} autoCompleted={maxCompleted}/>
+                <this.RenderCompletionOption optionText={minCompletion} optionQuantity={minQuantity}
+                                             autoCompleted={minCompleted} icon={challenge.icon}
+                                             iconTint={this.iconMinColor}
+                                             quantityName={quantityName}
+                                             orderASC={orderASC}
+                                             completionLevel={ChallengeGoalCompletionLevel.MIN}
+                />
+                <this.RenderCompletionOption optionText={medCompletion} optionQuantity={medQuantity}
+                                             autoCompleted={medCompleted} icon={challenge.icon}
+                                             iconTint={this.iconMedColor} quantityName={quantityName}
+                                             orderASC={orderASC}
 
+                                             completionLevel={ChallengeGoalCompletionLevel.MED}
+                />
+                <this.RenderCompletionOption optionText={goodCompletion} optionQuantity={goodQuantity}
+                                             autoCompleted={goodCompleted} icon={challenge.icon}
+                                             iconTint={this.iconGoodColor} quantityName={quantityName}
+                                             orderASC={orderASC}
+
+                                             completionLevel={ChallengeGoalCompletionLevel.GOOD}
+                />
+                <this.RenderCompletionOption optionText={maxCompletion} optionQuantity={maxQuantity}
+                                             autoCompleted={maxCompleted} icon={challenge.icon}
+                                             iconTint={this.iconMaxColor} quantityName={quantityName}
+                                             orderASC={orderASC}
+
+                                             completionLevel={ChallengeGoalCompletionLevel.MAX}
+                />
             </Content>
 
         )
@@ -86,45 +176,122 @@ export class BadgeDetailsCTA extends Component {
     renderQualitative = (challenge) => {
         let {
             minCompletion,
-            minQuantity,
             medCompletion,
-            medQuantity,
             goodCompletion,
-            goodQuantity,
             maxCompletion,
-            maxQuantity
         } = challenge.badgeGoals;
 
         return (
-            <Fragment>
-                <Text>Qualitative</Text>
-                <this.RenderCompletionOption optionText={minCompletion} />
-                <this.RenderCompletionOption optionText={medCompletion} />
-                <this.RenderCompletionOption optionText={goodCompletion} />
-                <this.RenderCompletionOption optionText={maxCompletion}/>
-            </Fragment>
+            <Content style={{flex: 1, width: "100%"}}>
+                <this.RenderCompletionOption optionText={minCompletion}
+                                             icon={challenge.icon}
+                                             iconTint={this.iconMinColor}
+                                             completionLevel={ChallengeGoalCompletionLevel.MIN}
+
+                />
+
+                <this.RenderCompletionOption optionText={medCompletion}
+                                             icon={challenge.icon}
+                                             iconTint={this.iconMedColor}
+                                             completionLevel={ChallengeGoalCompletionLevel.MED}
+                />
+
+                <this.RenderCompletionOption optionText={goodCompletion}
+                                             icon={challenge.icon}
+                                             iconTint={this.iconGoodColor}
+                                             completionLevel={ChallengeGoalCompletionLevel.GOOD}
+                />
+
+                <this.RenderCompletionOption optionText={maxCompletion}
+                                             icon={challenge.icon}
+                                             iconTint={this.iconMaxColor}
+                                             completionLevel={ChallengeGoalCompletionLevel.MAX}
+                />
+
+            </Content>
         )
     };
+
+
+    componentDidMount() {
+        let {badge} = this.props.route.params; //
+        if (!badge.challengeCompletion) return;
+        let currentLevel = badge.challengeCompletion.challengeGoalCompletionLevel;
+        let currentQuantity = badge.challengeCompletion.challengeCompletionQuantity;+
+
+        this.setState({
+            completionLevel: ChallengeGoalCompletionLevel[currentLevel], //type shenanigans
+            enteredQuantity: currentQuantity + ""                        // even worse
+        })
+    }
 
 
     render() {
         let {options, navigation, route} = this.props;
         let {badge} = route.params; //
+        let {completionLevel, enteredQuantity} = this.state;
+        let isFilledOut = completionLevel !== null;
+        console.log(this.state)
         return (
-                <Container transparent style={{flex:1}}>
-                    <Body style={{flex:1}}>
-                        <Text>CTA</Text>
-                        {badge.challenge.badgeGoals.badgeGoalType === "QUALITATIVE" ? this.renderQualitative(badge.challenge) : this.renderQuatitative(badge.challenge)}
+            <Container transparent style={{flex: 1, justifyContent: 'space-between'}}>
+                <Body style={{flex: 1, width: "100%", justifyContent: 'space-between', alignItems: 'center'}}>
+                    <Text>{L.get("cta_header_text")}</Text>
+                    {badge.challenge.badgeGoals.badgeGoalType === "QUALITATIVE" ?
+                        this.renderQualitative(badge.challenge)
+                        : this.renderQuatitative(badge.challenge, this.state.enteredQuantity)}
 
-                        <Button onPress={() => {
-                            navigation.navigate("BadgeDetailsCompletion", {badge: badge})
+                </Body>
+                <View style={{backgroundColor: '#fff', width: "100%", height: 64}}>
+                    <Mutation mutation={COMPLETE_CHALLENGE}>
+                        {(completeChallenge, {loading, error, refetch}) => (
 
-                        }}>
-                            <Text>Click Me!</Text>
+                            <Button disabled={!isFilledOut}
+                                    style={{
+                                        flex: 1,
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        margin: 10,
+                                        width: "95%",
+                                        height: 200
+                                    }}
+                                    onPress={async () => {
 
-                        </Button>
-                    </Body>
-                </Container>
+                                        this.setState({loading: true});
+                                        if(badge.challengeCompletion &&
+                                            completionLevel === badge.challengeCompletion.challengeGoalCompletionLevel) {
+                                            navigation.navigate("BadgeDetailsCompletion", {badge: badge, completion: badge.challengeCompletion});
+                                        }
+                                        let completion = await completeChallenge({
+                                            variables: {
+                                                challengeId: badge.id,
+                                                challengeGoalCompletionLevel: completionLevel,
+                                                challengeCompletionQuantity: enteredQuantity
+                                            },
+                                        }).catch(err => {
+                                            this.setState({loading: false});
+
+                                            console.log(err)
+                                        });
+                                        this.setState({loading: false});
+
+                                        navigation.navigate("BadgeDetailsCompletion", {badge: badge, completion: completion.data.completeChallenge})
+
+
+                                    }}>
+                                {this.state.loading ? <Spinner/> : <Text>Bestätigen!</Text>}
+
+                            </Button>
+                        )}
+                    </Mutation>
+                </View>
+            </Container>
         )
     }
 }
+
+const styles = StyleSheet.create({
+    checkmark: {
+        padding: 10,
+        borderRadius: 5
+    }
+});

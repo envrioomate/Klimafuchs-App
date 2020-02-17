@@ -40,7 +40,6 @@ export default class AppRoot extends Component {
     };
 
     componentDidMount() {
-        console.log(this.props)
         this._notificationSubscription = Notifications.addListener(this.handleNotification);
     }
 

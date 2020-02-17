@@ -111,6 +111,12 @@ export default {
     brandDark: "#00080D",
     brandLight: "#fafafa",
 
+    completionNone: "#333",
+    completionMin: "#aaa",
+    completionMed: "#f00",
+    completionGood: "#ff0",
+    completionMax: "#0f0",
+
     //Container
     containerBgColor: "#ffffff",
 

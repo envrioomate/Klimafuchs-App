@@ -159,6 +159,30 @@
     "default": "Challenge erledigt?",
     "de": "Challenge erledigt?"
   },
+  "has_completed_text": {
+    "default": "has_completed_text",
+    "de": "has_completed_text"
+  },
+  "cta_header_text": {
+    "default": "cta_header_text",
+    "de": "cta_header_text"
+  },
+  "select_achievements": {
+    "default": "select_achievements",
+    "de": "Achievements auswählen"
+  },
+  "select_achievements_hint": {
+    "default": "select_achievements_hint",
+    "de": "select_achievements_hint"
+  },
+  "badge_acquired": {
+    "default": "badge_acquired",
+    "de": "badge_acquired"
+  },
+  "badge_acquired_hint": {
+    "default": "badge_acquired_hint",
+    "de": "badge_acquired_hint"
+  },
   "notifications_list_empty": {
     "default": "Keine Benachrichtigungen",
     "de": "Keine Benachrichtigungen"

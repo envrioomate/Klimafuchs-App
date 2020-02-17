@@ -15,13 +15,34 @@ interface IUserChallenge {
 }
 
 type Achievement {
+    achievementCompletions: [AchievementCompletion!]
+    achievementSelections: [AchievementSelection!]
     badge: Badge!
     createdAt: DateTime!
     name: String!
     props: Props!
+    recurring: Boolean!
     score: Int
     text: String!
     title: String!
+    updatedAt: DateTime!
+}
+
+type AchievementCompletion {
+    achievement: Achievement!
+    achievementSelection: AchievementSelection!
+    createdAt: DateTime!
+    id: Int
+    owner: User!
+    updatedAt: DateTime!
+}
+
+type AchievementSelection {
+    achievement: Achievement!
+    achievementCompletions: [AchievementCompletion!]
+    createdAt: DateTime!
+    id: Int
+    owner: User!
     updatedAt: DateTime!
 }
 
@@ -34,6 +55,7 @@ type Badge {
     icon: WikiImage
     name: String!
     props: Props!
+    quantityName: String
     score: Int
     text: String!
     thema: Thema!
@@ -184,6 +206,7 @@ type Mutation {
     addPost(post: FeedPostInput!): FeedPost!
     changePassword(newPassword: String!, oldPassword: String!): User!
     changeUser(user: UserInput!): User
+    completeAchievement(achievementSelectionId: Int!): AchievementCompletion
     completeChallenge(challengeCompletionQuantity: Float, challengeGoalCompletionLevel: Int, challengeId: Int!): ChallengeCompletion
     confirmMember(membershipId: Int!): Membership!
     createTeam(team: TeamInput!): Team!
@@ -202,6 +225,7 @@ type Mutation {
     removeSeasonPlan(seasonPlanId: Int!): SeasonPlan
     requestJoinTeam(teamId: Int!): Membership!
     resetLeaderBoard: [Team!]!
+    selectAchievement(achievementName: String!): AchievementSelection
     subscribe(pushToken: String!): Subscription
     syncWikiData: String!
     syncWikiPage(pageId: Float!): String!
@@ -273,6 +297,7 @@ type Query {
     commentsOfPost(postId: Int!): [FeedComment!]
     currentChallenges: [IUserChallenge!]
     currentSeason: Season
+    currentlySelectedAchievements: [AchievementSelection!]
     getCurrentUser: User!
     getLeaderBoard(connectionArgs: ConnectionArgs!, teamSize: TeamSize!): LeaderBoardEntryPage
     getMyTeam(teamId: Int!): Team!
@@ -357,6 +382,8 @@ type Thema {
 }
 
 type User {
+    achievementCompletions: [AchievementCompletion!]
+    achievementSelections: [AchievementSelection!]
     avatar: Media
     challengeCompletions: [ChallengeCompletion!]
     challengeRejections: [ChallengeRejection!]

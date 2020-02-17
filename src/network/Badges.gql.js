@@ -11,7 +11,7 @@ export const CURRENT_BADGES = gql`
                         url
                     },
                     text,
-                    
+
                 },
                 position
             },
@@ -19,6 +19,7 @@ export const CURRENT_BADGES = gql`
                 name,
                 title,
                 text,
+                quantityName,
                 headerImage {
                     url
                 },
@@ -40,6 +41,7 @@ export const CURRENT_BADGES = gql`
                     name,
                     title,
                     text,
+                    recurring,
                     score
                 }
                 externalLink
@@ -101,7 +103,9 @@ export const CURRENT_SEASONPLAN = gql`
 export const COMPLETE_CHALLENGE = gql`
     mutation completeChallenge($challengeId: Int!, $challengeGoalCompletionLevel: Int, $challengeCompletionQuantity: Float) {
         completeChallenge(challengeId:$challengeId, challengeGoalCompletionLevel:$challengeGoalCompletionLevel, challengeCompletionQuantity:$challengeCompletionQuantity) {
-            id
+            id,
+            challengeGoalCompletionLevel,
+            challengeCompletionQuantity
         }
     }
 `;
@@ -110,6 +114,25 @@ export const UNCOMPLETE_CHALLENGE = gql`
     mutation uncompleteChallenge($challengeCompletionId: Int!) {
         uncompleteChallenge(challengeCompletionId:$challengeCompletionId) {
             createdAt
+        }
+    }
+`;
+
+export const SELECT_ACHIEVEMENT = gql`
+    mutation selectAchievement($achievementName: String!) {
+    selectAchievement(achievementName:$achievementName) {
+        id
+
+    }
+    }
+`;
+
+
+export const COMPLETE_ACHIEVEMENT = gql`
+    mutation completeAchievement($achievementSelectionId: Int!) {
+        completeAchievement(achievementSelectionId: $achievementSelectionId) {
+            id
+
         }
     }
 `;

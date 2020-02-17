@@ -1,7 +1,8 @@
 import React, {Component, Fragment} from "react";
-import {Body, Button, Container, Text} from "native-base";
-import material from "../../../../native-base-theme/variables/material";
+import {Body, Button, Card, CardItem, Container, Icon, Text} from "native-base";
 import * as WebBrowser from "expo-web-browser";
+import material from "../../../../native-base-theme/variables/material";
+import {LocalizationProvider as L} from "../../../localization/LocalizationProvider";
 
 export class BadgeDetailsText extends Component {
     render() {
@@ -9,20 +10,35 @@ export class BadgeDetailsText extends Component {
         let {badge} = route.params; //
         return (
             <Fragment>
-                <Container transparent style={{backgroundColor: material.brandInfo}}>
-                    <Body>
-                        <Text>{badge.challenge.text}</Text>
-                        <Button onPress={async () => {
-                            let result = await WebBrowser.openBrowserAsync(badge.challenge.externalLink);
-                        }}>
-                            <Text>{badge.challenge.externalLink}</Text>
-                        </Button>
-                        <Button onPress={() => {
-                            navigation.navigate("BadgeDetailsCTA", {badge: badge})
+                <Container>
+                    <Body style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+                        <Card transparent>
 
-                        }}>
-                            <Text>Click Me!</Text>
-                        </Button>
+                            <CardItem>
+                                <Text>{badge.challenge.text}</Text>
+                            </CardItem>
+                            <CardItem style={{flex: 1, flexDirection: "row", justifyContent: "flex-end", alignItems: "stretch"}}>
+                                <Button onPress={async () => {
+                                    let result = await WebBrowser.openBrowserAsync(badge.challenge.externalLink);
+                                }}>
+                                    <Text>{badge.challenge.externalLink}</Text>
+                                    <Icon name='md-open' style={{color: material.brandLight}}/>
+
+                                </Button>
+                            </CardItem>
+                            <CardItem>
+                                <Text>{L.get("has_completed_text")}</Text>
+                            </CardItem>
+                            <CardItem>
+                                <Button style={{flex: 1, justifyContent: "center", alignItems: "center"}}
+                                        onPress={() => {
+                                            navigation.navigate("BadgeDetailsCTA", {badge: badge})
+
+                                        }}>
+                                    <Icon name='md-checkmark' style={{color: material.brandLight}}/>
+                                </Button>
+                            </CardItem>
+                        </Card>
                     </Body>
                 </Container>
             </Fragment>

@@ -97,7 +97,6 @@ export default class CurrentBadgesComponent extends Component {
                                 </Container>
                             );
                             if (error) return <Text>Error {error.message}</Text>;
-                            console.log(data)
                             if (data.currentChallenges) {
                                 const challenges = data.currentChallenges;
                                 console.log(challenges.map(c => {return c.replaceable}));

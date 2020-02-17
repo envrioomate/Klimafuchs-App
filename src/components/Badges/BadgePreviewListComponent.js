@@ -3,6 +3,7 @@ import {Body, Card, CardItem, H3, Icon, Right, Text} from 'native-base';
 import {FlatList, Image, StyleSheet, View} from 'react-native'
 import material from "../../../native-base-theme/variables/material";
 import {useNavigation} from '@react-navigation/native';
+import {completionLevelToColor} from "./BadgeUtils";
 
 export default class BadgePreviewListComponent extends Component {
     render() {
@@ -24,20 +25,6 @@ export default class BadgePreviewListComponent extends Component {
 export const ChallengeGoalCompletionLevel = Object.freeze({
     MIN: 0, MED: 1, GOOD: 2, MAX: 3
 });
-
-const getIconStyle= (challengeCompletion) => {
-    if (!challengeCompletion) {
-        console.log("challengeCompletion was null!");
-        return {tintColor: "#aaa", ...styles.icon};
-    }
-    switch (challengeCompletion.challengeGoalCompletionLevel) {
-        case(ChallengeGoalCompletionLevel.MIN): return {color: "red", ...styles.icon};
-        case(ChallengeGoalCompletionLevel.MED): return {color: "yellow", ...styles.icon};
-        case(ChallengeGoalCompletionLevel.GOOD): return {color: "green", ...styles.icon};
-        case(ChallengeGoalCompletionLevel.MAX): return {color: "blue", ...styles.icon};
-        default: return {color: "pink", ...styles.icon}; // should not be reached
-    }
-};
 
 function BadgePreview(props) {
     let {badge, refetch} = props;
@@ -72,13 +59,12 @@ function BadgePreview(props) {
                         </Body>
                     </Body>
                     <Right>
-                        {badge.challengeCompletion ?
-                            <Image style={{width: 50, height: 50}}
-                                   source={badge.challenge.icon ? {uri: badge.challenge.icon.url} : require('../../../assets/image_select.png')}/>
-                            :
-                            <Image style={getIconStyle(badge.challengeCompletion)}
-                                   source={badge.challenge.icon ? {uri: badge.challenge.icon.url} : require('../../../assets/image_select.png')}/>
-                        }
+                        <Image style={{
+                            width: 50,
+                            height: 50,
+                            tintColor: completionLevelToColor(badge.challengeCompletion)
+                        }}
+                               source={badge.challenge.icon ? {uri: badge.challenge.icon.url+ '?date=' + (new Date()).getHours()} : require('../../../assets/image_select.png')}/>
                     </Right>
                 </CardItem>
             </Card>
@@ -94,10 +80,8 @@ const styles = StyleSheet.create({
     title: {
         marginBottom: 3
     },
-    text: {
-
-    },
+    text: {},
     icon: {
- width: 50, height: 50
+        width: 50, height: 50
     }
 });

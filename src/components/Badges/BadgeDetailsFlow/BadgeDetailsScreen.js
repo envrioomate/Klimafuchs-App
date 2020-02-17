@@ -7,18 +7,19 @@ import {BadgeDetailsSelectAchievements} from "./BadgeDetailsSelectAchievements";
 import {BadgeDetailsCompletion} from "./BadgeDetailsCompletion";
 import {BadgeDetailsText} from "./BadgeDetailsText";
 import {BadgeDetailsCTA} from "./BadgeDetailsCTA";
+import {completionLevelToColor} from "../BadgeUtils";
 
 const Stack = createStackNavigator();
 
 const BadgeDetailsScreen = () => {
-    console.log(Constants.statusBarHeight);
 
     return (
         <Stack.Navigator
             screenOptions={{
                 header: ({scene, previous, navigation}) => {
                     const {options} = scene.descriptor;
-                    const {badge} = scene.route.params
+                    let {badge, completion} = scene.route.params;
+                    completion = completion || badge.challengeCompletion;
                     const title =
                         options.headerTitle !== undefined
                             ? options.headerTitle
@@ -42,8 +43,8 @@ const BadgeDetailsScreen = () => {
                                 <Title>{badge.challenge.title}</Title>
                             </Body>
                             <Right>
-                                <Image style={{width: 32, height: 32}}
-                                       source={badge.challenge.icon ? {uri: badge.challenge.icon.url} : require('../../../../assets/image_select.png')}/>
+                                <Image style={{width: 32, height: 32, tintColor: completionLevelToColor(completion)}}
+                                       source={badge.challenge.icon ? {uri: badge.challenge.icon.url + '?date=' + (new Date()).getHours()} : require('../../../../assets/image_select.png')}/>
 
                             </Right>
                         </Header>
@@ -54,7 +55,7 @@ const BadgeDetailsScreen = () => {
             <Stack.Screen name="BadgeDetailsText" component={BadgeDetailsText}/>
             <Stack.Screen name="BadgeDetailsCTA" component={BadgeDetailsCTA}/>
             <Stack.Screen name="BadgeDetailsCompletion" component={BadgeDetailsCompletion}/>
-            <Stack.Screen name="BadgeDetailsSelectAchievments" component={BadgeDetailsSelectAchievements}/>
+            <Stack.Screen name="BadgeDetailsSelectAchievements" component={BadgeDetailsSelectAchievements}/>
 
         </Stack.Navigator>
     )
