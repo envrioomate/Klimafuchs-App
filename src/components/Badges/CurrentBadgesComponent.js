@@ -100,9 +100,9 @@ export default class CurrentBadgesComponent extends Component {
                             if (data.currentChallenges) {
                                 const challenges = data.currentChallenges;
                                 console.log(challenges.map(c => {return c.replaceable}));
+                                //                                         <ThemaProgressIndicator badges={challenges} shouldUpdate={!this.state.modalOpen}/>
                                 return (
                                     <Fragment>
-                                        <ThemaProgressIndicator badges={challenges} shouldUpdate={!this.state.modalOpen}/>
                                         <View style={{
                                             flex: 1,
                                             margin: 10,

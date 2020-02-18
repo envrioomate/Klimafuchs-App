@@ -3,6 +3,7 @@ import {Body, Button, Card, CardItem, Container, Icon, Text} from "native-base";
 import * as WebBrowser from "expo-web-browser";
 import material from "../../../../native-base-theme/variables/material";
 import {LocalizationProvider as L} from "../../../localization/LocalizationProvider";
+import {ExternalLinkButton} from "../ExternalLinkButton";
 
 export class BadgeDetailsText extends Component {
     render() {
@@ -18,13 +19,7 @@ export class BadgeDetailsText extends Component {
                                 <Text>{badge.challenge.text}</Text>
                             </CardItem>
                             <CardItem style={{flex: 1, flexDirection: "row", justifyContent: "flex-end", alignItems: "stretch"}}>
-                                <Button onPress={async () => {
-                                    let result = await WebBrowser.openBrowserAsync(badge.challenge.externalLink);
-                                }}>
-                                    <Text>{badge.challenge.externalLink}</Text>
-                                    <Icon name='md-open' style={{color: material.brandLight}}/>
-
-                                </Button>
+                                <ExternalLinkButton url={badge.challenge.externalLink}/>
                             </CardItem>
                             <CardItem>
                                 <Text>{L.get("has_completed_text")}</Text>

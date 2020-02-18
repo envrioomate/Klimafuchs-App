@@ -1,65 +1,118 @@
 import React, {Component, Fragment} from "react";
-import {Body, Card, CardItem, Button, Container, Text, Spinner} from "native-base";
+import {Body, Button, Card, CardItem, Container, Icon, Left, Right, Spinner, Text} from "native-base";
+import {FlatList, StyleSheet, View} from "react-native";
+import {Mutation, Query} from "react-apollo";
+import {CURRENTLY_SELECTED_ACHIEVEMENTS, SELECT_ACHIEVEMENT} from "../../../network/Badges.gql";
 import material from "../../../../native-base-theme/variables/material";
-import {FlatList, View} from "react-native";
-import {LocalizationProvider as L} from "../../../localization/LocalizationProvider";
-import {Mutation} from "react-apollo";
-import {SELECT_ACHIEVEMENT} from "../../../network/Badges.gql";
 
 export class BadgeDetailsSelectAchievements extends Component {
-    AchievementPreview = ({achievement}) => {
+    state = {
+        selectedAchievements: new Set()
+    };
+    styles = {
+        completed: StyleSheet.create({
+            achievementCardItem: {
+                backgroundColor: material.brandSuccess
+            },
+            achievementCard: {
+                backgroundColor: material.brandSuccess
+
+            }
+
+        }),
+        selected: StyleSheet.create({
+            achievementCardItem: {
+                backgroundColor: '#b5b5b5'
+            },
+            achievementCard: {
+                backgroundColor: '#b5b5b5'
+            }
+
+        }),
+        default: StyleSheet.create({
+            achievementCardItem: {
+            },
+            achievementCard: {
+            }
+        })
+    };
+
+    AchievementPreview = ({achievement, previousSelectedAchievements}) => {
+
+        const achievementSelecton = previousSelectedAchievements ? previousSelectedAchievements.filter(a => a.achievement.name === achievement.name) : null;
+        const achievementWasSelected = achievementSelecton.length > 0;
+        const achievementWasCompleted = achievementWasSelected ? achievementSelecton[0].achievementCompletions ? achievementSelecton[0].achievementCompletions.length > 0 : false : false; //TODO consider failed achievements
+
+        let cardStyle = achievementWasCompleted ?
+            this.styles.completed
+            : achievementWasSelected ?
+                this.styles.selected
+                : this.styles.default;
         return (
-            <Card>
-                <CardItem>
-                <Text>
-                    {achievement.title}
-                </Text>
+            <Card transparent={achievementWasCompleted || achievementWasSelected} style={this.styles.achievementCard}
+            >
+                <CardItem header style={cardStyle.achievementCardItem}>
+                    <Text>
+                        {achievement.title}
+                    </Text>
                 </CardItem>
-                <CardItem>
-                <Text>
-                    {achievement.text}
-                </Text>
+                <CardItem style={cardStyle.achievementCardItem}>
+                    <Body>
+                        <Text>
+                            {achievement.text}
+                        </Text>
+                    </Body>
                 </CardItem>
-                <CardItem>
-                <Text>
-                    {achievement.score}
-                </Text>
-                </CardItem>
-                <CardItem>
-                    <Mutation mutation={SELECT_ACHIEVEMENT}>
-                        {(selectAchievement, {loading, error, refetch}) => (
-
-                            <Button
-                                    style={{
-                                        flex: 1,
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        margin: 10,
-                                        width: "95%",
-                                        height: 200
-                                    }}
-                                    onPress={async () => {
-
-                                        this.setState({loading: true});
-
-                                        let completion = await selectAchievement({
-                                            variables: {
-                                                achievementName: "temp"
-                                            },
-                                        }).catch(err => {
-                                            this.setState({loading: false});
-
-                                            console.log(err)
-                                        });
-                                        this.setState({loading: false});
-
-                                    }}>
-                                <Text>Wählen!</Text>
-
+                <CardItem footer style={cardStyle.achievementCardItem}>
+                    <Left>
+                        <Text>
+                            {achievement.score} Punkte
+                        </Text>
+                    </Left>
+                    <Right>
+                        {this.state.selectedAchievements.has(achievement) || achievementWasSelected ?
+                            <Button disabled>
+                                <Text><Icon name="md-checkmark" style={{color: '#fff', fontSize: 18}}/> Ausgewählt</Text>
                             </Button>
-                        )}
-                    </Mutation>
+                            :
+                            <Mutation
+                                mutation={SELECT_ACHIEVEMENT}
+                                refetchQueries={[{
+                                    query: CURRENTLY_SELECTED_ACHIEVEMENTS
+                                }]}
+                            >
+                                {(selectAchievement, {loading, error, refetch}) => (
+
+                                    <Button
+                                        onPress={async () => {
+
+                                            this.setState({loading: true});
+                                            console.log(achievement.name)
+                                            let completion = await selectAchievement({
+                                                variables: {
+                                                    achievementName: achievement.name,
+                                                },
+                                            }).catch(err => {
+                                                this.setState({loading: false});
+
+                                                console.log(err)
+                                            });
+                                            this.setState({
+                                                loading: false,
+                                                selectAchievements: this.state.selectedAchievements.add(achievement)
+                                            });
+
+
+                                        }}>
+                                        <Text>Wählen!</Text>
+
+                                    </Button>
+                                )}
+                            </Mutation>
+                        }
+                    </Right>
                 </CardItem>
+
             </Card>
         )
     }
@@ -68,22 +121,31 @@ export class BadgeDetailsSelectAchievements extends Component {
         let {options, navigation, route} = this.props;
         let {badge} = route.params; //
         let achievements = badge.challenge.achievements;
-        console.log("badge, achievments: ", badge, achievements);
         return (
             <Fragment>
-                <Container transparent style={{backgroundColor: material.brandInfo}}>
-                    <Body>
-                        <Text>Achievments</Text>
-
-                        <FlatList style={{flex: 1}}
-                                  data={achievements}
-                                  keyExtractor={(item, index) => item.name.toString()}
-                                  renderItem={({item}) => {
-                                      return <this.AchievementPreview key={item.name} achievement={item}/>
-                                  }
-                                  }
-                        />
-                    </Body>
+                <Container transparent>
+                    <Text>Achievments</Text>
+                    <Query query={CURRENTLY_SELECTED_ACHIEVEMENTS}>
+                        {({loading, error, data, refetch}) => {
+                            if (loading) return (
+                                <Container>
+                                    <Spinner/>
+                                </Container>
+                            );
+                            if (error) return <Text>Error {error.message}</Text>;
+                            return (
+                                <FlatList style={{flex: 1}}
+                                          data={achievements}
+                                          keyExtractor={(item, index) => item.name.toString()}
+                                          renderItem={({item}) => {
+                                              return <this.AchievementPreview key={item.name} achievement={item}
+                                                                              previousSelectedAchievements={data.currentlySelectedAchievements}/>
+                                          }
+                                          }
+                                />
+                            )
+                        }}
+                    </Query>
                     <View style={{backgroundColor: '#fff', width: "100%", height: 64}}>
 
                         <Button
@@ -99,7 +161,7 @@ export class BadgeDetailsSelectAchievements extends Component {
                                 navigation.navigate("Main", {badge: badge})
 
                             }}>
-                            <Text>{L.get("select_achievements")}</Text>
+                            <Text>Fertig</Text>
 
                         </Button>
 

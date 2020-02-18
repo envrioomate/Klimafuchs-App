@@ -15,7 +15,7 @@ export class BadgeDetailsCompletion extends Component {
                 <Container transparent >
                     <Body style={{flex:1}}>
                         <Text>{L.get("badge_acquired")}</Text>
-                        <Image style={{width: 400, height: 400, tintColor: completionLevelToColor(completion)}}
+                        <Image style={{width: 400, height: 400, backgroundColor: completionLevelToColor(completion)}}
                                source={badge.challenge.icon ? {uri: badge.challenge.icon.url + '?date=' + (new Date()).getHours()} : require('../../../../assets/image_select.png')}/>
                         <Text>{L.get("badge_acquired_hint")}</Text>
 

@@ -7,7 +7,7 @@ import {BadgeDetailsSelectAchievements} from "./BadgeDetailsSelectAchievements";
 import {BadgeDetailsCompletion} from "./BadgeDetailsCompletion";
 import {BadgeDetailsText} from "./BadgeDetailsText";
 import {BadgeDetailsCTA} from "./BadgeDetailsCTA";
-import {completionLevelToColor} from "../BadgeUtils";
+import {badgeScreenStyles, completionLevelToColor} from "../BadgeUtils";
 
 const Stack = createStackNavigator();
 
@@ -43,9 +43,8 @@ const BadgeDetailsScreen = () => {
                                 <Title>{badge.challenge.title}</Title>
                             </Body>
                             <Right>
-                                <Image style={{width: 32, height: 32, tintColor: completionLevelToColor(completion)}}
+                                <Image style={{backgroundColor: completionLevelToColor(completion), ...badgeScreenStyles.iconPreview}}
                                        source={badge.challenge.icon ? {uri: badge.challenge.icon.url + '?date=' + (new Date()).getHours()} : require('../../../../assets/image_select.png')}/>
-
                             </Right>
                         </Header>
                     );

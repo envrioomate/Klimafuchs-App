@@ -6,6 +6,7 @@ import {ChallengeGoalCompletionLevel} from "../BadgePreviewListComponent";
 import {Mutation} from "react-apollo";
 import {COMPLETE_CHALLENGE} from "../../../network/Badges.gql";
 import {LocalizationProvider as L} from "../../../localization/LocalizationProvider";
+import {badgeScreenStyles} from "../BadgeUtils";
 
 const inRange = (x, min, max) => {
     return x > min && x <= max;
@@ -52,8 +53,8 @@ export class BadgeDetailsCTA extends Component {
                     <Left>
                         <Icon name='md-checkmark' style={isCompleted ? {
                             color: material.brandLight,
-                            backgroundColor: material.brandSuccess, ...styles.checkmark
-                        } : styles.checkmark}/>
+                            backgroundColor: material.brandSuccess, ...badgeScreenStyles.checkmark
+                        } : badgeScreenStyles.checkmark}/>
                     </Left>
                     <Body style={{
                         flex: 4,
@@ -71,7 +72,7 @@ export class BadgeDetailsCTA extends Component {
 
                     </Body>
                     <Right>
-                        <Image style={{width: 32, height: 32, tintColor: isCompleted ? iconTint : 'grey'}}
+                        <Image style={isCompleted ? {backgroundColor: iconTint, ...badgeScreenStyles.iconPreview} : {backgroundColor: '#aaa', ...badgeScreenStyles.iconPreview}}
                                source={icon ? {uri: icon.url + '?date=' + (new Date()).getHours()} : require('../../../../assets/image_select.png')}/>
 
                     </Right>
@@ -127,17 +128,25 @@ export class BadgeDetailsCTA extends Component {
             (badgeGoalType === "QUANTITY_ASC" ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY);
         let orderASC = badgeGoalType === "QUANTITY_ASC";
         return (
-            <Content style={{flex: 1, width: "100%"}}>
-                <Card>
+            <Content style={{flex: 2, width: "100%"}}>
+                <Card transparent style={{flex:2}}>
                     <CardItem>
+                        <Body>
                         <TextInput
-                            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+                            style={{height: 40, width: "100%", borderColor: 'gray', borderWidth: 1, flex:1}}
                             onChangeText={text => this.onChangeQuantity(challenge.badgeGoals, text)}
                             onFocus={e => this.setState({inputFocused: true})}
                             onBlur={e => this.setState({inputFocused: false})}
                             value={this.state.enteredQuantity}
+                            keyboardType="number-pad"
+                            textAlign="right"
+                            paddingHorizontal={10}
                         />
+                        </Body>
+                    <Right>
                         <Text>{quantityName}</Text>
+
+                    </Right>
                     </CardItem>
                 </Card>
                 <this.RenderCompletionOption optionText={minCompletion} optionQuantity={minQuantity}
@@ -288,10 +297,3 @@ export class BadgeDetailsCTA extends Component {
         )
     }
 }
-
-const styles = StyleSheet.create({
-    checkmark: {
-        padding: 10,
-        borderRadius: 5
-    }
-});

@@ -38,11 +38,13 @@ export const CURRENT_BADGES = gql`
                     maxQuantity
                 },
                 achievements {
-                    name,
-                    title,
-                    text,
-                    recurring,
+                    name
+                    title
+                    text
                     score
+                    recurring
+                    weekFrequency
+                    weeks
                 }
                 externalLink
             },
@@ -120,10 +122,10 @@ export const UNCOMPLETE_CHALLENGE = gql`
 
 export const SELECT_ACHIEVEMENT = gql`
     mutation selectAchievement($achievementName: String!) {
-    selectAchievement(achievementName:$achievementName) {
-        id
+        selectAchievement(achievementName:$achievementName) {
+            id
 
-    }
+        }
     }
 `;
 
@@ -133,6 +135,45 @@ export const COMPLETE_ACHIEVEMENT = gql`
         completeAchievement(achievementSelectionId: $achievementSelectionId) {
             id
 
+        }
+    }
+`;
+
+export const CURRENTLY_SELECTED_ACHIEVEMENTS = gql`
+    query currentlySelectedAchievements{
+        currentlySelectedAchievements {
+            id
+            achievement {
+                name
+                title
+                text
+                score
+                recurring
+                weekFrequency
+                weeks
+            }
+            achievementCompletions {
+                id
+            }
+        }
+    }
+`;
+
+export const COMPLETED_BADGES = gql`
+    query completedBadges{
+        getCompletedChallenges {
+            id
+            challengeCompletionQuantity
+            challengeGoalCompletionLevel
+            seasonPlanChallenge {
+                challenge {
+                    name
+                    icon {
+                        url
+                    }
+                    title
+                }
+            }
         }
     }
 `;

@@ -19,6 +19,7 @@ type Achievement {
     achievementSelections: [AchievementSelection!]
     badge: Badge!
     createdAt: DateTime!
+    externalLink: String
     name: String!
     props: Props!
     recurring: Boolean!
@@ -26,10 +27,13 @@ type Achievement {
     text: String!
     title: String!
     updatedAt: DateTime!
+    weekFrequency: Int!
+    weeks: Int!
 }
 
 type AchievementCompletion {
     achievement: Achievement!
+    achievementCompletionType: AchievementCompletionType!
     achievementSelection: AchievementSelection!
     createdAt: DateTime!
     id: Int
@@ -66,13 +70,13 @@ type Badge {
 type BadgeGoals {
     badgeGoalType: BadgeGoalType!
     goodCompletion: String!
-    goodQuantity: Int
+    goodQuantity: Float
     maxCompletion: String!
-    maxQuantity: Int
+    maxQuantity: Float
     medCompletion: String!
-    medQuantity: Int
+    medQuantity: Float
     minCompletion: String!
-    minQuantity: Int
+    minQuantity: Float
 }
 
 type ChallengeCompletion {
@@ -298,6 +302,7 @@ type Query {
     currentChallenges: [IUserChallenge!]
     currentSeason: Season
     currentlySelectedAchievements: [AchievementSelection!]
+    getCompletedChallenges: [ChallengeCompletion!]
     getCurrentUser: User!
     getLeaderBoard(connectionArgs: ConnectionArgs!, teamSize: TeamSize!): LeaderBoardEntryPage
     getMyTeam(teamId: Int!): Team!
@@ -421,6 +426,14 @@ type WikiWarning {
     props: Props!
     updatedAt: DateTime!
     warnings: String!
+}
+
+"Stores the achieved ChallengeGoal. If null assume MIN"
+enum AchievementCompletionType {
+    COMPLETED
+    RECURRING
+    RECURRING_TIMED_OUT
+    TIMED_OUT
 }
 
 "Defines how BadgeGoals are ordered by their quantity."

@@ -17,9 +17,9 @@ function BadgeNavigation() {
         <Tab.Navigator
             initialRouteName="CurrentTopic"
         >
-            <Tab.Screen name="Achievements" component={AchievementComponent}/>
-            <Tab.Screen name="CurrentTopic" component={CurrentBadgesComponent}/>
-            <Tab.Screen name="BadgeCollection" component={BadgeCollectionComponent}/>
+            <Tab.Screen name="Achievements" component={AchievementComponent} options={{title: "Achievements"}}/>
+            <Tab.Screen name="CurrentTopic" component={CurrentBadgesComponent} options={{title: "Thema"}}/>
+            <Tab.Screen name="BadgeCollection" component={BadgeCollectionComponent} options={{title: "Sammlung"}}/>
 
         </Tab.Navigator>
     )
