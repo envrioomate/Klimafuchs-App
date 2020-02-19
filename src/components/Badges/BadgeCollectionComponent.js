@@ -58,7 +58,6 @@ export default class BadgeCollectionComponent extends Component {
                         );
                         if (error) return <Text>Error {error.message}</Text>;
                         const completions = data.getCompletedChallenges;
-                        console.log(completions);
 
                         return (
                             <FlatList
