@@ -4,7 +4,12 @@ import {Body, Button, Card, CardItem, Container, Content, Icon, Footer, Left, Ri
 import material from "../../../../native-base-theme/variables/material";
 import {ChallengeGoalCompletionLevel} from "../BadgePreviewListComponent";
 import {Mutation} from "react-apollo";
-import {COMPLETE_CHALLENGE} from "../../../network/Badges.gql";
+import {
+    COMPLETE_CHALLENGE,
+    COMPLETED_BADGES, CURRENT_BADGES,
+    CURRENTLY_SELECTED_ACHIEVEMENTS,
+    GET_SCORE
+} from "../../../network/Badges.gql";
 import {LocalizationProvider as L} from "../../../localization/LocalizationProvider";
 import {badgeScreenStyles} from "../BadgeUtils";
 
@@ -251,7 +256,12 @@ export class BadgeDetailsCTA extends Component {
 
                 </Body>
                 <View style={{backgroundColor: '#fff', width: "100%", height: 64}}>
-                    <Mutation mutation={COMPLETE_CHALLENGE}>
+                    <Mutation mutation={COMPLETE_CHALLENGE}
+                              refetchQueries={[
+                                  {query: GET_SCORE},
+                                  {query: COMPLETED_BADGES},
+                                  {query: CURRENT_BADGES}
+                              ]}>
                         {(completeChallenge, {loading, error, refetch}) => (
 
                             <Button disabled={!isFilledOut}

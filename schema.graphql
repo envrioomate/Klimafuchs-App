@@ -315,6 +315,7 @@ type Query {
     paginatedPosts(connectionArgs: ConnectionArgs!): FeedPostPage!
     post(postId: Int!): FeedPost
     posts: [FeedPost!]!
+    score: Float!
     searchTeamsByName(teamName: String!): [Team!]!
     season(seasonId: Int!): Season
     seasonPlan(seasonId: Int!): SeasonPlan
@@ -403,6 +404,7 @@ type User {
     passwordResetToken: PasswordResetToken
     posts: [FeedPost!]
     role: Int!
+    score: Int!
     screenName: String!
     subscription: Subscription
     userName: String!

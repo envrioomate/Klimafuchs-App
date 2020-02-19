@@ -177,5 +177,8 @@ export const COMPLETED_BADGES = gql`
         }
     }
 `;
-
-
+export const GET_SCORE = gql`
+    query {
+        score
+    }
+`;

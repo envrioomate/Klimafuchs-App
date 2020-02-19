@@ -1,23 +1,8 @@
-import React, {Component, Fragment} from 'react';
-import {
-    Body,
-    Button,
-    Container,
-    Content,
-    H3,
-    Header,
-    Icon,
-    Left,
-    Right,
-    Text,
-    Title,
-    Card,
-    CardItem,
-    Spinner
-} from 'native-base';
+import React, {Component} from 'react';
+import {Body, Button, Card, CardItem, Container, Icon, Left, Right, Spinner, Text} from 'native-base';
 import {Mutation, Query} from "react-apollo";
-import {COMPLETE_ACHIEVEMENT, CURRENTLY_SELECTED_ACHIEVEMENTS, SELECT_ACHIEVEMENT} from "../../network/Badges.gql";
-import {FlatList, StyleSheet, View} from "react-native";
+import {COMPLETE_ACHIEVEMENT, CURRENTLY_SELECTED_ACHIEVEMENTS, GET_SCORE} from "../../network/Badges.gql";
+import {FlatList, StyleSheet} from "react-native";
 import material from "../../../native-base-theme/variables/material";
 
 
@@ -43,10 +28,8 @@ export default class AchievementComponent extends Component {
         }),
 
         default: StyleSheet.create({
-            achievementCardItem: {
-            },
-            achievementCard: {
-            }
+            achievementCardItem: {},
+            achievementCard: {}
         })
     };
 
@@ -56,12 +39,12 @@ export default class AchievementComponent extends Component {
     };
 
     AchievementPreview = ({achievementSelection}) => {
-        let {id, achievement, achievementCompletions} =  achievementSelection;
+        let {id, achievement, achievementCompletions} = achievementSelection;
         let achievementWasCompleted = achievementCompletions.length > 0;
 
         let cardStyle = achievementWasCompleted ?
             this.styles.completed
-                : this.styles.default;
+            : this.styles.default;
         return (
             <Card transparent={achievementWasCompleted} style={this.styles.achievementCard}
             >
@@ -86,14 +69,16 @@ export default class AchievementComponent extends Component {
                     <Right>
                         {this.state.selectedAchievements.has(achievement) ?
                             <Button disabled>
-                                <Text><Icon name="md-checkmark" style={{color: '#fff', fontSize: 18}}/> Ausgewählt</Text>
+                                <Text><Icon name="md-checkmark"
+                                            style={{color: '#fff', fontSize: 18}}/> Ausgewählt</Text>
                             </Button>
                             :
                             <Mutation
                                 mutation={COMPLETE_ACHIEVEMENT}
-                                refetchQueries={[{
-                                    query: CURRENTLY_SELECTED_ACHIEVEMENTS
-                                }]}
+                                refetchQueries={[
+                                    {query: CURRENTLY_SELECTED_ACHIEVEMENTS},
+                                    {query: GET_SCORE}
+                                ]}
                             >
                                 {(completeAchievement, {loading, error, refetch}) => (
 
