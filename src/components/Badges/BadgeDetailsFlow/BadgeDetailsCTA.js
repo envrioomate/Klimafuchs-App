@@ -43,7 +43,6 @@ export class BadgeDetailsCTA extends Component {
     iconMaxColor = material.completionMax;
 
     RenderCompletionOption = ({optionText, optionQuantity, autoCompleted, icon, iconTint, quantityName, orderASC, completionLevel}) => {
-        quantityName = quantityName || "Punkte";
         let isCompleted = completionLevel === this.state.completionLevel;
         return (
             <Card transparent>
@@ -68,7 +67,7 @@ export class BadgeDetailsCTA extends Component {
                         <Text
                             style={{flex: 1, flexDirection: "column", justifyContent: "center", alignItems: "stretch"}}>
                             {optionText}
-                            {optionQuantity ? <Text style={{
+                            {optionQuantity && quantityName ? <Text style={{
                                 flex: 1,
                                 flexDirection: "row",
                                 justifyContent: "flex-end"
@@ -95,11 +94,11 @@ export class BadgeDetailsCTA extends Component {
             badgeGoalType,
         } = badgeGoals;
 
-        let minCompleted = levelCompleted(badgeGoalType, Number.NEGATIVE_INFINITY, minQuantity, Number.POSITIVE_INFINITY, minQuantity, quantity);
-        let medCompleted = levelCompleted(badgeGoalType, minQuantity, medQuantity, minQuantity, medQuantity, quantity);
-        let goodCompleted = levelCompleted(badgeGoalType, medQuantity, goodQuantity, medQuantity, goodQuantity, quantity);
-        let maxCompleted = levelCompleted(badgeGoalType, goodQuantity, Number.POSITIVE_INFINITY, goodQuantity, maxQuantity, quantity);
-
+        let minCompleted = levelCompleted(badgeGoalType, Number.NEGATIVE_INFINITY, minQuantity,  medQuantity, Number.POSITIVE_INFINITY,quantity);
+        let medCompleted = levelCompleted(badgeGoalType, minQuantity, medQuantity, goodQuantity, medQuantity,  quantity);
+        let goodCompleted = levelCompleted(badgeGoalType, medQuantity, goodQuantity, maxQuantity,goodQuantity,  quantity);
+        let maxCompleted = levelCompleted(badgeGoalType, goodQuantity, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY, maxQuantity,  quantity);
+        console.log(badgeGoalType, medQuantity, goodQuantity, goodQuantity, medQuantity, quantity)
         let completionLevel =
             minCompleted ? ChallengeGoalCompletionLevel.MIN :
                 medCompleted ? ChallengeGoalCompletionLevel.MED :
@@ -132,6 +131,7 @@ export class BadgeDetailsCTA extends Component {
         quantity = quantity ||
             (badgeGoalType === "QUANTITY_ASC" ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY);
         let orderASC = badgeGoalType === "QUANTITY_ASC";
+        console.log("orderASC: ", orderASC);
         return (
             <Content style={{flex: 2, width: "100%"}}>
                 <Card transparent style={{flex:2}}>
@@ -157,7 +157,7 @@ export class BadgeDetailsCTA extends Component {
                 <this.RenderCompletionOption optionText={minCompletion} optionQuantity={minQuantity}
                                              autoCompleted={minCompleted} icon={challenge.icon}
                                              iconTint={this.iconMinColor}
-                                             quantityName={quantityName}
+                                             quantityName={orderASC ? quantityName: null}
                                              orderASC={orderASC}
                                              completionLevel={ChallengeGoalCompletionLevel.MIN}
                 />

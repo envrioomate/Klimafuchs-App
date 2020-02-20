@@ -29,13 +29,12 @@ class ScoreContainer extends Component {
     render() {
         let {score} = this.props;
         let {prevScore} = this.state;
-        console.log("animate score to ", score);
         return(
             <Title>
                 {this.state.hasUpdated ?
                     <AnimateNumber value={score} initial={prevScore} formatter={(val) => {
                     return parseFloat(val).toFixed(0)
-                }} timing="easeOut" onProgress={(progress) => {console.log("progress: ", progress)}} /> :
+                }} timing="easeOut" onProgress={(progress) => {}} /> :
                     score
                 } Punkte
             </Title>
