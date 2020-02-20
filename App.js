@@ -20,7 +20,6 @@ import ApolloProvider from "react-apollo/ApolloProvider";
 import client from "./src/network/client"
 import Api from "./src/network/api";
 import {SafeAreaProvider} from "react-native-safe-area-context";
-import SafeAreaView from "react-native-safe-area-view";
 
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();

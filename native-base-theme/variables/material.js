@@ -113,7 +113,7 @@ export default {
 
     completionNone: "#333",
     completionMin: "#aaa",
-    completionMed: "#f00",
+    completionMed: "#f8a407",
     completionGood: "#ff0",
     completionMax: "#0f0",
 
