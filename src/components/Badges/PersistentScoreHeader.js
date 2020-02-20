@@ -1,16 +1,20 @@
 import React, {Component, Fragment} from "react";
-import {Body, Container, Header, Left, Right, Spinner, Text, Title} from "native-base";
+import {Body, Button, Container, Header, Icon, Left, Right, Spinner, Text, Title} from "native-base";
 import material from "../../../native-base-theme/variables/material";
 import {Query} from "react-apollo";
 import {GET_SCORE} from "../../network/Badges.gql";
-import AnimateNumber from 'react-native-animate-number';
+import AnimateNumber from 'react-native-countup'; 
+
+import {StyleSheet, View, Animated} from "react-native";
+
 
 class ScoreContainer extends Component {
 
     state = {
         prevScore: 0,
         hasUpdated: false
-    }
+    };
+
     componentDidMount() {
         let {score} = this.props;
         this.setState({intialScore: score})
@@ -21,19 +25,20 @@ class ScoreContainer extends Component {
             this.setState({prevScore: prevProps.score, hasUpdated:true})
     }
 
+
     render() {
         let {score} = this.props;
         let {prevScore} = this.state;
         console.log("animate score to ", score);
         return(
-            <Text>
+            <Title>
                 {this.state.hasUpdated ?
-                    <AnimateNumber startAt={prevScore}  value={score} formatter={(val) => {
+                    <AnimateNumber value={score} initial={prevScore} formatter={(val) => {
                     return parseFloat(val).toFixed(0)
-                }} timing="easeOut"/> :
+                }} timing="easeOut" onProgress={(progress) => {console.log("progress: ", progress)}} /> :
                     score
-                }
-            </Text>
+                } Punkte
+            </Title>
         )
     }
 }
@@ -46,29 +51,27 @@ export class PersistentScoreHeader extends Component {
             <Fragment>
                 <Header transparent style={{backgroundColor: material.brandInfo}}>
                     <Left/>
-                    <Body>
-                        <Title>Persistent Score Placeholder</Title>
-                    </Body>
+
                     <Query query={GET_SCORE}>
                         {({loading, error, data, startPolling, stopPolling}) => {
                             if (loading) return (
-                                <Container>
+                                <Body>
                                     <Spinner/>
-                                </Container>
+                                </Body>
                             );
                             if (error) return <Text>Error {error.message}</Text>;
                             console.log(data.score);
                             startPolling(100)
                             setTimeout(stopPolling, 2000);
                             return (
-                                <Right>
+                                <Body>
                                     <ScoreContainer score={data.score}/>
-                                </Right>
+                                </Body>
                             )
                         }}
                     </Query>
-
-
+                    <Right>
+                    </Right>
                 </Header>
             </Fragment>
         )

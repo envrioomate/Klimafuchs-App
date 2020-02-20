@@ -48,6 +48,7 @@
     "react-dom": "16.8.3",
     "react-native": "https://github.com/expo/react-native/archive/sdk-35.0.0.tar.gz",
     "react-native-animate-number": "^0.1.2",
+    "react-native-countup": "^0.0.2",
     "react-native-draggable": "^1.0.15",
     "react-native-easy-grid": "^0.2.0",
     "react-native-fade-in-image": "^1.4.1",

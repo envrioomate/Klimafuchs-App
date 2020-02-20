@@ -12,6 +12,8 @@ function makeLocale(dataArray) {
     dataArray.forEach((entry) => {
         if(!entry.name) return;
         locale[entry.name] = entry;
+        delete locale[entry.name]["letzte Bearbeitung"];
+        delete locale[entry.name]["letzt:e Bearbeiter:in"];
         delete locale[entry.name].Anmerkungen;
         delete locale[entry.name].name;
     });

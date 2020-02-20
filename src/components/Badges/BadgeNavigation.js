@@ -6,6 +6,7 @@ import CurrentBadgesComponent from "./CurrentBadgesComponent";
 import BadgeCollectionComponent from "./BadgeCollectionComponent";
 import {PersistentScoreHeader} from "./PersistentScoreHeader";
 import BadgeDetailsScreen from "./BadgeDetailsFlow/BadgeDetailsScreen";
+import {SeasonProgressComponent} from "./Tree/SeasonProgressComponent";
 
 
 const Tab = createMaterialTopTabNavigator();
@@ -19,6 +20,7 @@ function BadgeNavigation() {
         >
             <Tab.Screen name="Achievements" component={AchievementComponent} options={{title: "Achievements"}}/>
             <Tab.Screen name="CurrentTopic" component={CurrentBadgesComponent} options={{title: "Thema"}}/>
+            <Tab.Screen name="Tree" component={SeasonProgressComponent} options={{title: "Tree"}}/>
             <Tab.Screen name="BadgeCollection" component={BadgeCollectionComponent} options={{title: "Sammlung"}}/>
 
         </Tab.Navigator>

@@ -10,11 +10,11 @@
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/KlimafuchsLogo.png",
+    "icon": "./assets/k4all-logo-low.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splashk4all.png",
       "resizeMode": "cover",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#009de0"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -29,7 +29,7 @@
       "package": "com.klimaschutz4all.app",
       "googleServicesFile": "./google-services.json"
     },
-    "scheme": "klimafuchs",
+    "scheme": "k4allapp",
     "description": ""
   }
 }
