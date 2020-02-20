@@ -165,7 +165,7 @@
   },
   "cta_header_text": {
     "default": "cta_header_text",
-    "de": "cta_header_text"
+    "de": "Wieviel hast Du gemacht?"
   },
   "select_achievements": {
     "default": "select_achievements",
@@ -173,15 +173,35 @@
   },
   "select_achievements_hint": {
     "default": "select_achievements_hint",
-    "de": "select_achievements_hint"
+    "de": "Du kannst noch Achievements auswählen um deinen Fortschritt zu verfolgen"
   },
   "badge_acquired": {
     "default": "badge_acquired",
-    "de": "badge_acquired"
+    "de": "Abzeichen freigeschaltet"
   },
   "badge_acquired_hint": {
     "default": "badge_acquired_hint",
-    "de": "badge_acquired_hint"
+    "de": "Du hast ${badgeTitle} in ${completionLevelFriendly} freigeschaltet"
+  },
+  "badge_not_completed": {
+    "default": "badge_not_completed",
+    "de": "nicht"
+  },
+  "badge_min_completed": {
+    "default": "badge_min_completed",
+    "de": "MInimal"
+  },
+  "badge_med_completed": {
+    "default": "badge_med_completed",
+    "de": "Mittel"
+  },
+  "badge_good_completed": {
+    "default": "badge_good_completed",
+    "de": "Gut"
+  },
+  "badge_max_completed": {
+    "default": "badge_max_completed",
+    "de": "Ausgezeichnet"
   },
   "notifications_list_empty": {
     "default": "Keine Benachrichtigungen",

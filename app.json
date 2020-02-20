@@ -10,7 +10,7 @@
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/k4all-logo-low.png",
+    "icon": "./assets/k4all-logo.png",
     "splash": {
       "image": "./assets/splashk4all.png",
       "resizeMode": "cover",

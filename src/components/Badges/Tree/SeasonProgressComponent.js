@@ -128,7 +128,6 @@ export class SeasonProgressComponent extends React.Component {
             let newLeafCount = this.state.leafCount;
             let currentLeafs = this.state.leafCount[this.state.seasonMonth] + 1
             newLeafCount[this.state.seasonMonth] = currentLeafs;
-            console.log(newLeafCount)
             this.state.leafs[this.state.seasonMonth].push(<Leaf key={newLeafCount}
                                                                 id={newLeafCount}
                                                                 month={this.state.seasonMonth}
@@ -168,7 +167,6 @@ export class SeasonProgressComponent extends React.Component {
         );
 
         let {leafs, seasonMonth, seasonType} = this.state;
-        console.log(this.leafRefs);
 
         return (
             <Container style={styles.container}   refreshControl={<RefreshControl
@@ -209,7 +207,6 @@ export class SeasonProgressComponent extends React.Component {
                                 if (challenge.challengeCompletion)
                                     return index
                             }).filter((elem) => elem !== undefined);
-                            console.log(challenges, completions);
 
 
                             const leafsForCompletions = <View style={styles.spriteCanvas}>
@@ -343,7 +340,6 @@ class Leaf extends React.Component {
         }
         if (!transform) transform = {loc: {x: 100, y: 100}, rot: 0, scale: {w: 20, h: 20}};
         let {loc, rot, scale} = transform;
-        console.log(JSON.stringify({id: id, month: month, t: {loc, rot, scale}}));
 
         const {w, h} = scale;
         const x = loc.x - w / 2;

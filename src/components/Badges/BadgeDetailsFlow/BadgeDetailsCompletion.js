@@ -3,13 +3,12 @@ import {Body, Button, Container, Left, Right, Spinner, Text} from "native-base";
 import material from "../../../../native-base-theme/variables/material";
 import {Image, View} from "react-native";
 import {LocalizationProvider as L} from "../../../localization/LocalizationProvider";
-import {completionLevelToColor} from "../BadgeUtils";
+import {completionLevelToColor, completionLevelToFriendlyString} from "../BadgeUtils";
 
 export class BadgeDetailsCompletion extends Component {
     render() {
         let {options, navigation, route} = this.props;
         let {badge, completion} = route.params; //
-        console.log("Completion: ", completion);
         return (
             <Fragment>
                 <Container transparent >
@@ -17,7 +16,7 @@ export class BadgeDetailsCompletion extends Component {
                         <Text>{L.get("badge_acquired")}</Text>
                         <Image style={{width: 400, height: 400, backgroundColor: completionLevelToColor(completion)}}
                                source={badge.challenge.icon ? {uri: badge.challenge.icon.url + '?date=' + (new Date()).getHours()} : require('../../../../assets/image_select.png')}/>
-                        <Text>{L.get("badge_acquired_hint")}</Text>
+                        <Text>{L.get("badge_acquired_hint", {badgeTitle: badge.challenge.title, completionLevelFriendly: completionLevelToFriendlyString(completion)})}</Text>
 
                     </Body>
                     <Text style={{marginLeft: 10}}>{L.get("select_achievements_hint")}</Text>
