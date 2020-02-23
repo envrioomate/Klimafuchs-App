@@ -19,6 +19,7 @@ export const CURRENT_BADGES = gql`
                 name,
                 title,
                 text,
+                hasCompletedText,
                 quantityName,
                 headerImage {
                     url
@@ -45,6 +46,7 @@ export const CURRENT_BADGES = gql`
                     recurring
                     weekFrequency
                     weeks
+                    maxCompletion
                 }
                 externalLink
             },
@@ -151,6 +153,9 @@ export const CURRENTLY_SELECTED_ACHIEVEMENTS = gql`
                 recurring
                 weekFrequency
                 weeks
+                externalLink
+                maxCompletion
+                
             }
             achievementCompletions {
                 id

@@ -193,8 +193,8 @@ export class InviteUsersScreen extends Component {
     };
 
     render() {
-        let {requestModalClose, onComplete, navigation} = this.props;
-        const teamId = navigation.getParam('teamId', -1);
+        let {requestModalClose, onComplete, navigation, route} = this.props;
+        const {teamId} = route.params
         return (
             <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
                 <Container>

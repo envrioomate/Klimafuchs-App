@@ -119,8 +119,9 @@ export class BadgeDetailsSelectAchievements extends Component {
 
     render() {
         let {options, navigation, route} = this.props;
-        let {badge} = route.params; //
+        let {badge, completion} = route.params; //
         let achievements = badge.challenge.achievements;
+        console.log(completion, route.params)
         return (
             <Fragment>
                 <Container transparent>

@@ -374,8 +374,6 @@ class CommentTreeWidget extends Component {
             if (!branchRoot.children) return;
             this._buildCommentTree(comments, branchRoot, this.maxRecursionDepth)
         });
-        console.log("tree:");
-        console.log(tree);
 
         return tree;
     };
@@ -419,10 +417,10 @@ class CommentTreeWidget extends Component {
 
 
     render() {
-        //let result = this.walkTree(this.state.commentTree);
+        let result = this.buildCommentTree(this.props.comments);
         return (
             <View style={{flex: 1, flexShrink: 0, alignItems: 'stretch', width: '100%'}}>
-                {this.buildCommentTree(this.props.comments).map(tree => this._walkTree(tree, this.recursionDepth))}
+                {result.map(tree => this._walkTree(tree, this.maxRecursionDepth))}
             </View>
         );
     }

@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
 import {AsyncStorage, StyleSheet, View} from 'react-native';
-import {NavigationContainer, DefaultTheme} from "@react-navigation/native";
+import {NavigationContainer, useLinking} from "@react-navigation/native";
 import {createMaterialBottomTabNavigator} from "@react-navigation/material-bottom-tabs";
 import {createStackNavigator} from "@react-navigation/stack";
 import {Root, Spinner, StyleProvider} from 'native-base';
 import LoginScreen from "./src/components/PreLogin/LoginScreen";
 import SignUpScreen from "./src/components/PreLogin/SignUpScreen";
-import CheckUserExistsScreen from "./src/components/PreLogin/CheckUserExistsScreen";
 import {Provider as ReduxProvider} from "react-redux";
 import getTheme from './native-base-theme/components';
 import material from './native-base-theme/variables/material';
@@ -15,12 +14,14 @@ import {PersistGate} from 'redux-persist/integration/react'
 
 import {AppNav} from "./src/components/LoggedInScreen";
 import {ForgotPasswordScreen} from "./src/components/PreLogin/ForgotPasswordScreen";
-import {Notifications, Screen} from "expo";
+import {Notifications} from "expo";
 import ApolloProvider from "react-apollo/ApolloProvider";
 import client from "./src/network/client"
 import Api from "./src/network/api";
 import {SafeAreaProvider} from "react-native-safe-area-context";
+import { Linking } from 'expo';
 
+const prefix = Linking.makeUrl('/');
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -34,8 +35,13 @@ export default class AppRoot extends Component {
     }
 
     handleNotification = (notification) => {
-        store.dispatch({type: 'NOTIFICATIONS/RECEIVE', notification});
-        console.log("received notification: " + JSON.stringify(notification))
+        if (notification.origin === 'received') {
+            store.dispatch({type: 'NOTIFICATIONS/RECEIVE', notification});
+            console.log("received notification: " + JSON.stringify(notification))
+
+        } else if (notification.origin === 'selected') {
+            if(notification.data.path) Linking.openURL(prefix + notification.data.path)
+        }
     };
 
     componentDidMount() {
@@ -134,9 +140,40 @@ const MyTheme = {
     },
 };
 
-const RootContainer = () => {
+function RootContainer() {
+
+    //see https://reactnavigation.org/docs/en/deep-linking.html
+
+    const ref = React.useRef();
+
+
+    const { getInitialState } = useLinking(ref, {
+        prefixes: [prefix],
+    });
+    const [isReady, setIsReady] = React.useState(false);
+    const [initialState, setInitialState] = React.useState();
+
+    React.useEffect(() => {
+        getInitialState()
+            .catch(() => {})
+            .then(state => {
+                if (state !== undefined) {
+                    setInitialState(state);
+                }
+
+                setIsReady(true);
+            });
+    }, [getInitialState]);
+
+    if (!isReady) {
+        return null;
+    }
+
+    if (!isReady) {
+        return <Spinner/>
+    }
     return (
-        <NavigationContainer theme={MyTheme}>
+        <NavigationContainer theme={MyTheme} initialState={initialState} ref={ref}>
             <Stack.Navigator initialRouteName="AuthLoading" headerMode="none">
                 <Stack.Screen name="AuthLoading" component={AuthLoadingScreen}/>
                 <Stack.Screen name="App" component={AppNav}/>
@@ -144,7 +181,7 @@ const RootContainer = () => {
             </Stack.Navigator>
         </NavigationContainer>
     )
-};
+}
 
 /*
 const AuthNav = createStackNavigator({

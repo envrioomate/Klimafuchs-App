@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {LinearGradient} from "expo";
+import {LinearGradient} from "expo-linear-gradient";
 import {
     Body,
     Button,
@@ -21,6 +21,8 @@ import {View} from "react-native";
 import {Grid, Row} from "react-native-easy-grid";
 import {loginScreenStyles} from "./LoginScreen";
 import Api from "../../network/api";
+import {LocalizationProvider as L} from "../../localization/LocalizationProvider";
+import Constants from "expo-constants";
 
 export class ForgotPasswordScreen extends Component {
 
@@ -41,7 +43,7 @@ export class ForgotPasswordScreen extends Component {
         Api.requestPasswordReset(this.state.email,
             (res) => {
                 Toast.show({
-                    text: renderList.get("toast_password_reset_success"),
+                    text: L.get("toast_password_reset_success"),
                 })
             },
             (err) => {
@@ -54,7 +56,7 @@ export class ForgotPasswordScreen extends Component {
     render() {
 
         return (
-            <Container>
+            <Container style={{paddingTop: Constants.statusBarHeight}}>
                 <Header>
                     <Left>
                         <Button transparent onPress={() => {
@@ -64,50 +66,39 @@ export class ForgotPasswordScreen extends Component {
                         </Button>
                     </Left>
                     <Body>
-
                     </Body>
                     <Right>
-
                     </Right>
                 </Header>
-                <LinearGradient
-                    colors={['#8dc2db', '#b8d497']}
-                    style={{
-                        flex: 1,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}>
                     <View style={loginScreenStyles.container} contentContainerStyle={loginScreenStyles.row}>
                         <Grid style={{alignItems: 'flex-start'}}>
 
                             <Row size={2}>
                                 <Card style={loginScreenStyles.loginCard}>
                                     <CardItem style={loginScreenStyles.loginCardItem}>
-                                        <H1>{renderList.get("reset_password_title")}</H1>
+                                        <H1>{L.get("reset_password_title")}</H1>
                                     </CardItem>
                                     <CardItem style={loginScreenStyles.loginCardItem}>
                                         <Form style={{flex: 1}}>
                                             <Item regular style={loginScreenStyles.loginFormTextInput}>
                                                 <Input name="email"
-                                                       placeholder={renderList.get("email_placeholder")}
+                                                       placeholder={L.get("email_placeholder")}
                                                        onChangeText={(text) => this.setState({email: text})}
                                                        value={this.state.email}/>
                                             </Item>
 
                                         </Form>
                                     </CardItem>
-
                                 </Card>
                             </Row>
                             <Row size={1} style={loginScreenStyles.row}>
                                 <Button primary style={loginScreenStyles.loginButton}
                                         onPress={() => this.resetPassword()}>
-                                    <Text>{renderList.get("reset_password_action")}</Text>
+                                    <Text>{L.get("reset_password_action")}</Text>
                                 </Button>
                             </Row>
                         </Grid>
                     </View>
-                </LinearGradient>
             </Container>
         )
             ;

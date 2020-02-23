@@ -46,7 +46,7 @@ export class BadgeDetailsCTA extends Component {
         let isCompleted = completionLevel === this.state.completionLevel;
         return (
             <Card transparent>
-                <CardItem style={autoCompleted ? {backgroundColor: '#0f0'} : {}}
+                <CardItem style={autoCompleted ? {backgroundColor: '#b5c5b5'} : {}}
                           button={!optionQuantity}
                           onPress={() => {
                               if (this.state.completionLevel !== completionLevel)
@@ -245,7 +245,6 @@ export class BadgeDetailsCTA extends Component {
         let {badge} = route.params; //
         let {completionLevel, enteredQuantity} = this.state;
         let isFilledOut = completionLevel !== null;
-        console.log(this.state)
         return (
             <Container transparent style={{flex: 1, justifyContent: 'space-between'}}>
                 <Body style={{flex: 1, width: "100%", justifyContent: 'space-between', alignItems: 'center'}}>

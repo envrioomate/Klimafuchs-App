@@ -67,6 +67,10 @@
     "default": "AGBs",
     "de": "AGBs"
   },
+  "app_title": {
+    "default": "K4AllApp",
+    "de": "Klimaschutz4All"
+  },
   "signupscreen_title": {
     "default": "Registrieren",
     "de": "Registrieren"
@@ -161,7 +165,7 @@
   },
   "has_completed_text": {
     "default": "has_completed_text",
-    "de": "has_completed_text"
+    "de": "Habe ich gemacht!"
   },
   "cta_header_text": {
     "default": "cta_header_text",
@@ -169,7 +173,7 @@
   },
   "select_achievements": {
     "default": "select_achievements",
-    "de": "Achievements auswählen"
+    "de": "Das nehm ich mir vor!"
   },
   "select_achievements_hint": {
     "default": "select_achievements_hint",
@@ -203,6 +207,22 @@
     "default": "badge_max_completed",
     "de": "Ausgezeichnet"
   },
+  "tab_achievements": {
+    "default": "Achievements",
+    "de": "Geschafft"
+  },
+  "tab_thema": {
+    "default": "Thema",
+    "de": "Thema"
+  },
+  "tab_tree": {
+    "default": "Tree",
+    "de": "Baum"
+  },
+  "tab_collection": {
+    "default": "Sammlung",
+    "de": "Abzeichen"
+  },
   "notifications_list_empty": {
     "default": "Keine Benachrichtigungen",
     "de": "Keine Benachrichtigungen"
@@ -210,5 +230,9 @@
   "hint_dismiss_all_notifications": {
     "default": "Alle Benachrichtigungen löschen?",
     "de": "Alle Benachrichtigungen löschen?"
+  },
+  "enable_notifications_now": {
+    "default": "Benachrichtigungen jetzt einschalten?",
+    "de": ""
   }
 }

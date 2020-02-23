@@ -38,24 +38,10 @@ export class LeaderBoardScreen extends Component {
                     const userId = data.getCurrentUser.id;
                     return (
                         <Container style={{flex: 1}}>
-                            <Form>
-                                <Picker mode="dropdown"
-                                        iosHeader="Team größe"
-                                        iosIcon={<Icon name="arrow-down"/>}
-                                        style={{width: undefined}}
-                                        selectedValue={this.state.sizeFilter}
-                                        onValueChange={(value) => {
-                                            console.log(value);
-                                            this.setState({sizeFilter: value})
-                                        }}
-                                >
-                                    {this.sizeOptions()}
-                                </Picker>
-                            </Form>
+
                             <Query query={LEADERBOARD}
                                    variables={{
                                        connectionArgs: {first: this.pageSize},
-                                       teamSize: this.state.sizeFilter
                                    }}>
                                 {({loading, error, data, refetch, fetchMore}) => {
                                     if (loading) {
@@ -63,6 +49,7 @@ export class LeaderBoardScreen extends Component {
                                     }
                                     if (error) return <Text>{error.message}</Text>;
                                     if (data.getLeaderBoard) {
+                                        console.log(data)
                                         if (data.getLeaderBoard.page.edges.length > 0) {
                                             return (
                                                 <Fragment>
@@ -72,8 +59,7 @@ export class LeaderBoardScreen extends Component {
                                         } else {
                                             return (
                                                 <Fragment>
-                                                    <Text>Es gibt noch keine Teams in dieser Größe</Text>
-                                                    {this.renderFetchMoreButton(data, loading, fetchMore)}
+                                                    <Text>Es gibt noch keine Teams</Text>
                                                 </Fragment>
                                             )
                                         }
@@ -106,6 +92,7 @@ export class LeaderBoardScreen extends Component {
     }
 
     renderFetchMoreButton(data, loading, fetchMore) {
+        console.log(this.state.endReached)
         return (
             <Button full light disabled={this.state.refreshing || this.state.endReached} onPress={() => {
                 const lastCursor = data.getLeaderBoard.page.edges[data.getLeaderBoard.page.edges.length - 1].cursor;

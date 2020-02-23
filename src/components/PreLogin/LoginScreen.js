@@ -48,10 +48,12 @@ class LoginScreen extends Component {
     render() {
 
         return (
+
             <Container>
+
                 <LinearGradient
                     colors={[
-                        material.brandPrimary,
+                        material.brandInfo,
                         material.brandInfo
                     ]}
                     style={{
@@ -67,14 +69,15 @@ class LoginScreen extends Component {
                                     padding: 5,
                                     flex: 1,
                                     alignItems: 'center',
+                                    paddingTop: 50,
                                     marginBottom: 10
                                 }}>
                                     <Image
                                         style={{flex: 1, width: 100, height: 100, margin: 5}}
                                         resizeMode="contain"
-                                        source={require('../../../assets/KlimafuchsLogo.png')}
+                                        source={require('../../../assets/k4all-logo.png')}
                                     />
-                                    <H1 style={{color: 'white', fontWeight: 'bold'}}>Klimafuchs</H1>
+                                    <H1 style={{color: 'white', fontWeight: 'bold'}}>{L.get("app_title")}</H1>
                                 </View>
                                 <Card style={loginScreenStyles.loginCard}>
                                     <CardItem style={loginScreenStyles.loginCardItem}>
@@ -161,7 +164,13 @@ class LoginScreen extends Component {
 }
 
 export const loginScreenStyles = StyleSheet.create({
-    container: {},
+    container: {
+        flex: 1,
+
+        alignItems: 'center',
+        justifyContent: 'center',
+
+    },
     row: {
         alignSelf: 'center',
         flex: 1,

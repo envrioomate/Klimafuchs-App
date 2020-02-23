@@ -1,14 +1,23 @@
 import React, {Component, Fragment} from 'react';
-import {Body, Button, Container, Fab, H1, Header, Icon, Left, List, ListItem, Right, Text, Title} from "native-base";
-import {ListView, StyleSheet} from "react-native";
+import {Body, Card, CardItem, Container, Fab, H1, Header, Icon, Left, ListItem, Right, Text, Title} from "native-base";
+import {FlatList, StyleSheet} from "react-native";
 import material from "../../../native-base-theme/variables/material";
 import {connect} from "react-redux";
-import {actions} from "../../persistence/actions/Actions";
-import {store} from "../../persistence/store";
-import {Notifications} from "expo";
+import {Linking, Notifications} from "expo";
 import {MaterialDialog} from "react-native-material-dialog";
 import {LocalizationProvider as L} from "../../localization/LocalizationProvider";
 import SafeAreaView from 'react-native-safe-area-view';
+import Swipeout from 'react-native-swipeout';
+import Constants from "expo-constants";
+
+import {NotificationToggle} from "../Profile/ProfileScreen";
+
+const prefix = Linking.makeUrl('/');
+
+const pkg = Constants.manifest.releaseChannel
+    ? Constants.manifest.android.package  // When published, considered as using standalone build
+    : "host.exp.exponent"; // In expo client mode
+
 
 class NotificationsScreen extends Component {
     static navigationOptions = {
@@ -22,13 +31,9 @@ class NotificationsScreen extends Component {
         showDismissAllDialog: false
     };
 
-    deleteRow(secId, rowId, rowMap) {
-        console.log(rowMap[`${secId}${rowId}`].props)
-        let {closeRow, body} = rowMap[`${secId}${rowId}`].props;
-        let notificationId = body.props.notification.notificationId;
+    deleteRow = (notificationId) => {
         this.props.dispatch({type: 'NOTIFICATIONS/DELETE', notificationId});
         Notifications.dismissNotificationAsync(notificationId);
-        closeRow();
     }
 
     deleteAllNotifications = () => {
@@ -40,60 +45,83 @@ class NotificationsScreen extends Component {
     };
 
 
-    ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    renderList = (notifications) => {
+    renderList = (notifications, navigation) => {
         return (
-            <List
-                dataSource={this.ds.cloneWithRows(notifications)}
+            <FlatList
+                data={notifications}
                 rightOpenValue={-75}
                 keyExtractor={(item, index) => '' + index}
-                renderRow={(data) => <NotificationComponent notification={data}/>}
-                renderRightHiddenRow={(data, secId, rowId, rowMap) =>
-                    <Button full danger onPress={_ => this.deleteRow(secId, rowId, rowMap)}>
-                        <Icon active name="trash"/>
-                    </Button>}
+                renderItem={({item}) => <NotificationComponent
+                    notification={item}
+                    deleteRowCallback={this.deleteRow}
+                    navigation={navigation}/>
+                }
             />
         )
     };
 
 
     render() {
-        let {notifications} = this.props;
+        let {notifications, navigation} = this.props;
+        console.log("notifications: ", notifications);
         return (
             <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
                 <Header>
-                    <Left style={{flex:1}}/>
-                    <Body style={{paddingLeft: 10, flex:6}}>
+                    <Left style={{flex: 1}}/>
+                    <Body style={{paddingLeft: 10, flex: 6}}>
                         <Title>Benachrichtigungen</Title>
                     </Body>
                 </Header>
 
                 <Container>
                     {notifications.length > 0 ?
-                        this.renderList(notifications)
-                        : <H1>{L.get("notifications_list_empty")}</H1>}
-                    <Fab style={{backgroundColor: material.brandInfo}} position="bottomRight"
-                         onPress={() => this.setState({showDismissAllDialog: true})}>
                         <Fragment>
-                            <Icon name="md-close" style={{color: material.brandLight}}/>
-                            <MaterialDialog
-                                visible={this.state.showDismissAllDialog}
-                                cancelLabel={L.get('no')}
-                                onCancel={() => {
-                                    this.setState({showDismissAllDialog: false})
-                                }}
-                                okLabel={L.get('yes')}
-                                onOk={async () => {
-                                    this.deleteAllNotifications();
-                                    this.setState({showDismissAllDialog: false});
-                                }}
-                                colorAccent={material.textLight}>
-                                <Text style={{color: material.textLight}}>
-                                    {L.get('hint_dismiss_all_notifications')}
-                                </Text>
-                            </MaterialDialog>
+                            {this.renderList(notifications, navigation)}
+                            <Fab style={{backgroundColor: material.brandInfo}} position="bottomRight"
+                                 onPress={() => this.setState({showDismissAllDialog: true})}>
+                                <Fragment>
+                                    <Icon name="md-close" style={{color: material.brandLight}}/>
+                                    <MaterialDialog
+                                        visible={this.state.showDismissAllDialog}
+                                        cancelLabel={L.get('no')}
+                                        onCancel={() => {
+                                            this.setState({showDismissAllDialog: false})
+                                        }}
+                                        okLabel={L.get('yes')}
+                                        onOk={async () => {
+                                            this.deleteAllNotifications();
+                                            this.setState({showDismissAllDialog: false});
+                                        }}
+                                        colorAccent={material.textLight}>
+                                        <Text style={{color: material.textLight}}>
+                                            {L.get('hint_dismiss_all_notifications')}
+                                        </Text>
+                                    </MaterialDialog>
+                                </Fragment>
+                            </Fab>
                         </Fragment>
-                    </Fab>
+                        :
+                        <Fragment>
+                            <Container>
+                                <Body>
+                                    <Card transparent>
+                                        <CardItem>
+
+                                    <H1>{L.get("notifications_list_empty")}</H1>
+                                        </CardItem>
+                                        <CardItem>
+                                            <Body>
+                                                <Text>{L.get("enable_notifications_now")}</Text>
+                                            </Body>
+                                            <Right>
+                                                <NotificationToggle/>
+                                            </Right>
+                                        </CardItem>
+                                    </Card>
+                                </Body>
+                            </Container>
+                        </Fragment>}
+
 
                 </Container>
             </SafeAreaView>
@@ -101,22 +129,38 @@ class NotificationsScreen extends Component {
     }
 }
 
-const NotificationComponent = ({notification: notification}) => {
+const NotificationComponent = ({notification, deleteRowCallback, navigation}) => {
+    console.log(notification);
+    let id = notification.notificationId;
+    let {icon, body, title} = notification.data;
+
+    console.log(id, icon, body, title)
+    let swipeBtns = [{
+        text: 'Delete',
+        backgroundColor: 'red',
+        underlayColor: 'rgba(0, 0, 0, 1, 0.6)',
+        onPress: () => {
+            deleteRowCallback(id)
+        }
+    }];
     return (
-        <ListItem style={styles.notificationListItem}>
-            <Left style={{flex:1, width: '100%', height: '100%', justifyContent: 'flex-start', alignItems: 'flex-start',
+        <Swipeout right={swipeBtns}>
+            <ListItem style={styles.notificationListItem} disabled={!notification.data.path} onPress={() => {
+                if (notification.data.path) Linking.openURL(prefix + notification.data.path);
             }}>
-                <Icon active style={{fontSize: 27}} name={notification.data.icon || 'md-notifications-outline'}/>
-            </Left>
-            <Body style={{flex:6, paddingLeft:0, marginLeft:0}}>
-                <Text style={{ paddingLeft:0, marginLeft:0}}>
-                    TEST
-                </Text>
-                <Text style={{ paddingLeft:0, marginLeft:0}} note numberOfLines={2}>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Culpa, pariatur.
-                </Text>
-            </Body>
-        </ListItem>
+                <Left>
+                    <Icon active name={icon || 'md-notifications-outline'}/>
+                </Left>
+                <Body style={{flex: 6, paddingLeft: 0, marginLeft: 0}}>
+                    <Text style={{paddingLeft: 0, marginLeft: 0}}>
+                        {title}
+                    </Text>
+                    <Text style={{paddingLeft: 0, marginLeft: 0}} note numberOfLines={2}>
+                        {body}
+                    </Text>
+                </Body>
+            </ListItem>
+        </Swipeout>
     )
 };
 
@@ -128,6 +172,7 @@ const styles = StyleSheet.create({
     notificationListItem: {
         padding: 10,
         paddingLeft: 20,
+
     }
 });
 

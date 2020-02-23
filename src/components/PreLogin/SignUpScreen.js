@@ -5,6 +5,8 @@ import Api from "../../network/api";
 import material from '../../../native-base-theme/variables/material';
 import {ValidatingTextField} from "../Common/ValidatingTextInput";
 import {LocalizationProvider as L} from "../../localization/LocalizationProvider";
+import Constants from 'expo-constants'
+
 
 class SignUpScreen extends Component {
     state = {
@@ -77,7 +79,7 @@ class SignUpScreen extends Component {
     render() {
         return (
             <Fragment>
-                <Header>
+                <Header style={{paddingTop: Constants.statusBarHeight}}>
                     <Left>
                         <Button transparent
                                 onPress={() => this.props.navigation.goBack()}>

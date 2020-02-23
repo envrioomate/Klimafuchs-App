@@ -13,6 +13,7 @@ import {BadgeScreen} from "./Badges/BadgeNavigation";
 const Tab = createMaterialBottomTabNavigator();
 
 export const AppNav = () => {
+
     return (
         <Tab.Navigator tabBarOptions={{
             activeTintColor: material.tabBarActiveTextColor,

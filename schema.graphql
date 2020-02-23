@@ -20,6 +20,7 @@ type Achievement {
     badge: Badge!
     createdAt: DateTime!
     externalLink: String
+    maxCompletion: String
     name: String!
     props: Props!
     recurring: Boolean!
@@ -55,6 +56,7 @@ type Badge {
     badgeGoals: BadgeGoals
     createdAt: DateTime!
     externalLink: String
+    hasCompletedText: String
     headerImage: WikiImage
     icon: WikiImage
     name: String!
@@ -250,7 +252,9 @@ type Notification {
     body: String!
     icon: String!
     id: Int!
+    path: String
     status: String!
+    subscription: Subscription!
     ticketId: Int!
     title: String!
     user: User!
@@ -304,7 +308,7 @@ type Query {
     currentlySelectedAchievements: [AchievementSelection!]
     getCompletedChallenges: [ChallengeCompletion!]
     getCurrentUser: User!
-    getLeaderBoard(connectionArgs: ConnectionArgs!, teamSize: TeamSize!): LeaderBoardEntryPage
+    getLeaderBoard(connectionArgs: ConnectionArgs!, teamSize: TeamSize): LeaderBoardEntryPage
     getMyTeam(teamId: Int!): Team!
     getPageProps(pageId: Int!): Props
     getTeam(teamId: Int!): Team!

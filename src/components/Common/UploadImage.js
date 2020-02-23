@@ -141,7 +141,7 @@ class UploadImage extends React.Component {
                             }}
                             onPress={() => this.pickImage(upload)}>
                             <ImageBackground
-                                style={{height: '100%', width: '100%', backgroundColor: '#ffff00'}}
+                                style={{height: '100%', width: '100%', backgroundColor: '#b5b5b5'}}
                                 resizeMode="cover"
                                 source={imgSrc}>
                                 {this.state.uploading ? <Spinner/> :

@@ -114,8 +114,8 @@ export default {
     completionNone: "#333",
     completionMin: "#aaa",
     completionMed: "#f8a407",
-    completionGood: "#ff0",
-    completionMax: "#0f0",
+    completionGood: "#f0ad4e",
+    completionMax: "#6C9C2E",
 
     //Container
     containerBgColor: "#ffffff",

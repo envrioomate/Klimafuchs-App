@@ -207,7 +207,7 @@ class ProfileScreen extends Component {
     };
 }
 
-class NotificationToggle extends Component {
+export class NotificationToggle extends Component {
 
     state = {
         hasPermission: false,
@@ -229,7 +229,6 @@ class NotificationToggle extends Component {
         await this._checkAndGetPermission();
         await this._getPushToken();
         this.setState({loading: false});
-        console.log(this.state)
     };
 
     componentDidMount() {
@@ -237,14 +236,20 @@ class NotificationToggle extends Component {
     }
 
     toggleSubscription = (isSubscribed, pushToken, refetch) => {
+
+        console.log(this.state.loading,
+            this.state.optimisticResult,
+            isSubscribed, !!isSubscribed,
+            this.state.loading ? this.state.optimisticResult : !!isSubscribed);
         if (isSubscribed) {
             return (
                 <Mutation mutation={UNSUBSCRIBE_FROM_NOTIFICATIONS}>
                     {(unsubscribe, {loading, error}) => {
+                        if(loading) return (<Spinner/>)
                         return (
                             <Switch
-                                value={this.state.loading ? this.state.optimisticResult : isSubscribed}
-                                disabled={loading}
+                                value={this.state.loading ? this.state.optimisticResult : !!isSubscribed}
+                                disabled={this.state.loading}
                                 onValueChange={async () => {
                                     this.setState({loading: true, optimisticResult: false})
                                     await unsubscribe().then(() => {
@@ -311,7 +316,6 @@ class NotificationToggle extends Component {
                             <Switch disabled/>
                         )
                     }
-                    console.log(data.isSubscribed);
                     return (
                         <Fragment>
                             {this.toggleSubscription(data && data.isSubscribed, pushToken, refetch)}

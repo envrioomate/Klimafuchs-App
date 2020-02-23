@@ -7,22 +7,22 @@ import BadgeCollectionComponent from "./BadgeCollectionComponent";
 import {PersistentScoreHeader} from "./PersistentScoreHeader";
 import BadgeDetailsScreen from "./BadgeDetailsFlow/BadgeDetailsScreen";
 import {SeasonProgressComponent} from "./Tree/SeasonProgressComponent";
+import {LocalizationProvider as L} from "../../localization/LocalizationProvider";
 
 
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
 
-
+//             add this to reenable tree view
+//            <Tab.Screen name="Tree" component={SeasonProgressComponent} options={{title:  L.get("tab_tree")}}/>
 function BadgeNavigation() {
     return (
         <Tab.Navigator
             initialRouteName="CurrentTopic"
         >
-            <Tab.Screen name="Achievements" component={AchievementComponent} options={{title: "Achievements"}}/>
-            <Tab.Screen name="CurrentTopic" component={CurrentBadgesComponent} options={{title: "Thema"}}/>
-            <Tab.Screen name="Tree" component={SeasonProgressComponent} options={{title: "Tree"}}/>
-            <Tab.Screen name="BadgeCollection" component={BadgeCollectionComponent} options={{title: "Sammlung"}}/>
-
+            <Tab.Screen name="Achievements" component={AchievementComponent} options={{title: L.get("tab_achievements")}}/>
+            <Tab.Screen name="CurrentTopic" component={CurrentBadgesComponent} options={{title:  L.get("tab_thema")}}/>
+            <Tab.Screen name="BadgeCollection" component={BadgeCollectionComponent} options={{title:  L.get("tab_collection")}}/>
         </Tab.Navigator>
     )
 }

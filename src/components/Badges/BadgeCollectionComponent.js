@@ -1,6 +1,5 @@
 import React, {Component, Fragment} from 'react';
-import {FlatList, Image, StyleSheet, View} from "react-native";
-
+import {FlatList, Image, StyleSheet, View, Dimensions} from "react-native";
 import {
     Body,
     Button,
@@ -27,9 +26,10 @@ const CollectedBadge = ({completion}) => {
     const iconTint = completionLevelToColor(completion);
     return (
         <Fragment>
-            <Image style={{backgroundColor: iconTint, ...badgeScreenStyles.iconPreview}}
+            <View style={{margin: 2}}>
+            <Image style={{backgroundColor: iconTint, ...styles.collected}}
                    source={icon ? {uri: icon.url + '?date=' + (new Date()).getHours()} : require('../../../assets/image_select.png')}/>
-
+            </View>
         </Fragment>
     )
 };
@@ -46,9 +46,7 @@ export default class BadgeCollectionComponent extends Component {
 
     render() {
         return (
-            <Body>
-                <Text>Abzeichen</Text>
-
+            <Body style={{ backgroundColor: '#fff'}}>
                 <Query query={COMPLETED_BADGES}>
                     {({loading, error, data, refetch}) => {
                         if (loading) return (
@@ -60,6 +58,7 @@ export default class BadgeCollectionComponent extends Component {
                         const completions = data.getCompletedChallenges;
 
                         return (
+                            <View style={{margin: 10}}>
                             <FlatList
                                 style={{flex: 1}}
                                 data={completions}
@@ -70,6 +69,7 @@ export default class BadgeCollectionComponent extends Component {
                                 numColumns={3}
                             >
                             </FlatList>
+                            </View>
                         )
                     }}
                     </Query>
@@ -77,3 +77,12 @@ export default class BadgeCollectionComponent extends Component {
         )
     }
 }
+
+const styles = StyleSheet.create({
+    collected: {
+        width: (Dimensions.get('window').width / 3) - 10 ,
+        height: (Dimensions.get('window').width / 3) - 10,
+        borderRadius: 5,
+        padding: 20,
+    },
+});

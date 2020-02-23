@@ -189,7 +189,7 @@ export const INVITE_USER = gql`
 
 
 export const LEADERBOARD = gql`
-    query getLeaderBoard($connectionArgs:ConnectionArgs!, $teamSize:TeamSize! ) {
+    query getLeaderBoard($connectionArgs:ConnectionArgs!, $teamSize:TeamSize ) {
         getLeaderBoard(connectionArgs:$connectionArgs, teamSize:$teamSize ) {
             page {
                 edges {

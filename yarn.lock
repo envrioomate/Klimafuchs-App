@@ -2167,7 +2167,7 @@ cosmiconfig@^5.0.5, cosmiconfig@^5.2.1:
     js-yaml "^3.13.1"
     parse-json "^4.0.0"
 
-create-react-class@^15.6.3:
+create-react-class@^15.6.0, create-react-class@^15.6.3:
   version "15.6.3"
   resolved "https://registry.yarnpkg.com/create-react-class/-/create-react-class-15.6.3.tgz#2d73237fb3f970ae6ebe011a9e66f46dbca80036"
   integrity sha512-M+/3Q6E6DLO6Yx3OwrWjwHBnvfXXYA7W+dFjt/ZDBemHO1DDZhsalX/NUtnTYclN6GfnBDRh4qRHjcDHmlJBJg==
@@ -2535,6 +2535,11 @@ expo-image-picker@~7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/expo-image-picker/-/expo-image-picker-7.0.0.tgz#e4a5a52bd6f9655f75ecf3cc866aa9bb0c99e24b"
   integrity sha512-LeGdAqbeuB2KsT369ns1kDtCGbyDCmY2gIFlf/rsD3+UmagRFX9emZLGPEnUNdCWXoctSejjFwxDnCUtpvL6yw==
+
+expo-intent-launcher@~7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/expo-intent-launcher/-/expo-intent-launcher-7.0.0.tgz#913da3e7cc32ea10f5e67be02ae0b590d1498c8a"
+  integrity sha512-GrtG6tJMCtrOIkcf+2nwVLW7Mmb5442opmGPjXxMOUeXaPkVwO6/1+eQo10X9FgI/ehLXbdi7PgHMJniTPf70g==
 
 expo-keep-awake@~7.0.0:
   version "7.0.0"
@@ -5249,6 +5254,15 @@ react-native-svg@9.9.5:
   version "9.9.5"
   resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-9.9.5.tgz#5f9fa196ac78ac10c0ce85152e429dba98353904"
   integrity sha512-nqiPIsC1jB1TUK+ii7ryWc2pDU+YFJojj3awWXOKEP214gfKvjypjvjmW4PCcH70uBLUp3AwaDK2GI/hmbmaoA==
+
+react-native-swipeout@^2.3.6:
+  version "2.3.6"
+  resolved "https://registry.yarnpkg.com/react-native-swipeout/-/react-native-swipeout-2.3.6.tgz#47dac8a835825cf3f2eef9e495574a3d9ab6d3fa"
+  integrity sha512-t9suUCspzck4vp2pWggWe0frS/QOtX6yYCawHnEes75A7dZCEE74bxX2A1bQzGH9cUMjq6xsdfC94RbiDKIkJg==
+  dependencies:
+    create-react-class "^15.6.0"
+    prop-types "^15.5.10"
+    react-tween-state "^0.1.5"
 
 react-native-tab-view@2.11:
   version "2.11.0"

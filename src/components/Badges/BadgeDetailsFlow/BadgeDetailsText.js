@@ -1,10 +1,11 @@
 import React, {Component, Fragment} from "react";
-import {Body, Button, Card, CardItem, Container, Content, Icon, Text} from "native-base";
+import { View} from "react-native";
+
+import {Button, Card, CardItem, Container, Content, Icon, Text} from "native-base";
 import material from "../../../../native-base-theme/variables/material";
 import {LocalizationProvider as L} from "../../../localization/LocalizationProvider";
 import {ExternalLinkButton} from "../ExternalLinkButton";
 import Markdown from 'react-native-simple-markdown'
-import {StyleSheet, View} from "react-native";
 
 
 export class BadgeDetailsText extends Component {
@@ -12,48 +13,65 @@ export class BadgeDetailsText extends Component {
         let {options, navigation, route} = this.props;
         let {badge} = route.params; //
         return (
-            <Fragment>
-                <Container style={{flex:11,justifyContent: "space-between", alignItems: "stretch"}}>
+            <Container style={{
+                flex: 4,
+                flexDirection: "column",
+                justifyContent: "flex-end",
+                alignItems: "stretch"
+            }}>
+                <Container style={{
+                    flex: 1,
+                    flexDirection: "column",
+                    justifyContent: "flex-end",
+                    alignItems: "stretch"
+                }}>
+                    <Content>
 
-                        <Content >
-                            <Body style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
-                                <Card transparent>
-                                    <CardItem>
-                                        <Markdown styles={markdownStyles}>
-                                            {badge.challenge.text}
-                                        </Markdown>
-                                    </CardItem>
-                                    {badge.challenge.externalLink ?
-                                    <CardItem style={{
-                                        flex: 1,
-                                        flexDirection: "row",
-                                        justifyContent: "flex-end",
-                                        alignItems: "stretch"
-                                    }}>
-                                        <ExternalLinkButton url={badge.challenge.externalLink}/>
-                                    </CardItem>
-                                        : null}
-                                </Card>
+                        <Card transparent>
 
-                            </Body>
-                        </Content>
+                            <CardItem style={{
+                                flex: 1,
+                                flexDirection: "row",
+                                justifyContent: "center",
+                                alignItems: "stretch"
+                            }}>
+                                <Markdown styles={markdownStyles}>
+                                    {badge.challenge.text}
+                                </Markdown>
+                            </CardItem>
+                            {badge.challenge.externalLink ?
+                                <CardItem style={{
+                                    flex: 1,
+                                    flexDirection: "row",
+                                    justifyContent: "flex-end",
+                                    alignItems: "stretch"
+                                }}>
+                                    <ExternalLinkButton url={badge.challenge.externalLink}/>
+                                </CardItem>
+                                : null}
+                        </Card>
 
-                    <Card transparent style={{flex:1,justifyContent: "flex-end", alignItems: "stretch"}}>
-                        <CardItem>
-                            <Text>{L.get("has_completed_text")}</Text>
-                        </CardItem>
+
+
+                    </Content>
+
+                    <View transparent style={{height: 64}}>
                         <CardItem>
                             <Button style={{flex: 1, justifyContent: "center", alignItems: "center"}}
                                     onPress={() => {
                                         navigation.navigate("BadgeDetailsCTA", {badge: badge})
 
                                     }}>
+                                <Text>{badge.challenge.hasCompletedText ? badge.challenge.hasCompletedText : L.get("has_completed_text")}</Text>
+
                                 <Icon name='md-checkmark' style={{color: material.brandLight}}/>
+
                             </Button>
                         </CardItem>
-                    </Card>
+                    </View>
                 </Container>
-            </Fragment>
+
+            </Container>
         )
     }
 }
@@ -65,12 +83,13 @@ const markdownStyles = {
         color: 'purple',
     },
     link: {
-        color: 'pink',
+        color: "#00f",
+        textDecorationLine: 'underline'
     },
     mailTo: {
         color: 'orange',
     },
     text: {
-        color: '#555555',
+        color: material.textLight,
     },
 }

@@ -41,10 +41,10 @@ export class EditTeamScreen extends Component {
     };
 
     render() {
-        let {requestModalClose, onComplete, navigation} = this.props;
-        const teamId = navigation.getParam('teamId', -1);
+        let {requestModalClose, onComplete, navigation, route} = this.props;
+        const {teamId, teamData} = route.params
         console.debug(teamId)
-        const {name, description, closed, avatar} = navigation.getParam('teamData', {});
+        const {name, description, closed, avatar} = teamData;
         return (
             <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
                 <Container>
