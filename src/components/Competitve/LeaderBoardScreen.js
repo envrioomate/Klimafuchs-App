@@ -162,7 +162,6 @@ class TeamCard extends Component {
     render() {
         let {index, team, currentUserId} = this.props;
         let {node, cursor} = team;
-        console.log(team)
         const teamAvatarUrl =
             node.avatar
                 ? `${env.dev.API_IMG_URL}${node.avatar.filename}`

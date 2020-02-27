@@ -56,12 +56,14 @@ export default class BadgeCollectionComponent extends Component {
                         );
                         if (error) return <Text>Error {error.message}</Text>;
                         const completions = data.getCompletedChallenges;
+                        let shownCompletions = completions.filter(c =>  c.challengeGoalCompletionLevel !=="MIN");
+                        console.log(shownCompletions);
 
                         return (
                             <View style={{margin: 10}}>
                             <FlatList
                                 style={{flex: 1}}
-                                data={completions}
+                                data={shownCompletions}
                                 keyExtractor={(item, index) => item.id.toString()}
                                 renderItem={({item}) => {
                                     return <CollectedBadge completion={item}/>

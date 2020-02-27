@@ -147,6 +147,11 @@ export class EditTeamScreen extends Component {
                                                                 console.log(validationError);
                                                                 return
                                                             }
+                                                            console.log({
+                                                                avatarId: this.state.mediaId
+                                                            }
+
+                                                        )
                                                             updateTeam({
                                                                 variables: {
                                                                     id: teamId,
@@ -186,4 +191,4 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: material.brandInfo
     }
-})
+});

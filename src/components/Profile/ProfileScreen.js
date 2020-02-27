@@ -117,7 +117,10 @@ class ProfileScreen extends Component {
                         <Query query={CURRENT_USER}>
                             {({data, loading, error, refetch}) => {
                                 if (loading) return <Spinner/>;
-                                if (error) return <Text>{error}</Text>;
+                                if (error) {
+                                    console.log(error);
+                                    return <Text>{JSON.stringify(error)}</Text>;
+                                }
                                 let {userName, screenName, avatar} = data.getCurrentUser;
                                 return (
                                     <Fragment>

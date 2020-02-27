@@ -154,8 +154,6 @@ export class AnimatedAchievementContainer extends Component {
         let {id, achievement, achievementCompletions} = achievementSelection;
         let achievementWasCompleted = achievementCompletions.length > 0;
 
-        console.log("AchievementData: ", {id, achievement, achievementCompletions})
-
         const {hasCompleted, hasCompletedText, duration} = this.state;
 
         return (

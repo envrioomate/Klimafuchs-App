@@ -71,7 +71,7 @@ export class BadgeDetailsCTA extends Component {
                                 flex: 1,
                                 flexDirection: "row",
                                 justifyContent: "flex-end"
-                            }}>{` (${orderASC ? 'bis' : 'ab'} ${optionQuantity} ${quantityName})`}</Text> : null}
+                            }}>{` (${orderASC ? 'ab' : 'bis'} ${optionQuantity} ${quantityName})`}</Text> : null}
                         </Text>
 
                     </Body>
@@ -94,11 +94,12 @@ export class BadgeDetailsCTA extends Component {
             badgeGoalType,
         } = badgeGoals;
 
-        let minCompleted = levelCompleted(badgeGoalType, Number.NEGATIVE_INFINITY, minQuantity,  medQuantity, Number.POSITIVE_INFINITY,quantity);
-        let medCompleted = levelCompleted(badgeGoalType, minQuantity, medQuantity, goodQuantity, medQuantity,  quantity);
-        let goodCompleted = levelCompleted(badgeGoalType, medQuantity, goodQuantity, maxQuantity,goodQuantity,  quantity);
-        let maxCompleted = levelCompleted(badgeGoalType, goodQuantity, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY, maxQuantity,  quantity);
-        console.log(badgeGoalType, medQuantity, goodQuantity, goodQuantity, medQuantity, quantity)
+
+        let minCompleted = levelCompleted(badgeGoalType, Number.NEGATIVE_INFINITY, medQuantity,  medQuantity, Number.POSITIVE_INFINITY,quantity);
+        let medCompleted = levelCompleted(badgeGoalType, medQuantity, goodQuantity, goodQuantity, medQuantity,  quantity);
+        let goodCompleted = levelCompleted(badgeGoalType, goodQuantity, maxQuantity, maxQuantity,goodQuantity,  quantity);
+        let maxCompleted = levelCompleted(badgeGoalType, maxQuantity, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY, maxQuantity,  quantity);
+        console.log(badgeGoalType, minCompleted, medQuantity, goodQuantity, maxQuantity, quantity)
         let completionLevel =
             minCompleted ? ChallengeGoalCompletionLevel.MIN :
                 medCompleted ? ChallengeGoalCompletionLevel.MED :
@@ -279,11 +280,17 @@ export class BadgeDetailsCTA extends Component {
                                             completionLevel === badge.challengeCompletion.challengeGoalCompletionLevel) {
                                             navigation.navigate("BadgeDetailsCompletion", {badge: badge, completion: badge.challengeCompletion});
                                         }
+
+                                        console.log({variables: {
+                                                challengeId: badge.id,
+                                                challengeGoalCompletionLevel: completionLevel,
+                                                challengeCompletionQuantity: Number.parseFloat(enteredQuantity)
+                                            }});
                                         let completion = await completeChallenge({
                                             variables: {
                                                 challengeId: badge.id,
                                                 challengeGoalCompletionLevel: completionLevel,
-                                                challengeCompletionQuantity: enteredQuantity
+                                                challengeCompletionQuantity: Number.parseFloat(enteredQuantity)
                                             },
                                         }).catch(err => {
                                             this.setState({loading: false});

@@ -189,6 +189,7 @@ class TeamCard extends Component {
             membership.team.avatar
                 ? `${env.dev.API_IMG_URL}${membership.team.avatar.filename}`
                 : `${env.dev.API_IMG_URL}avatar_default.png`;
+        console.log("image url: ", teamAvatarUrl)
         return (
 
             <FSModal

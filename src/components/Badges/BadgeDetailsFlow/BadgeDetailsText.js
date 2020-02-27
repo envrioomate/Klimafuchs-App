@@ -5,7 +5,7 @@ import {Button, Card, CardItem, Container, Content, Icon, Text} from "native-bas
 import material from "../../../../native-base-theme/variables/material";
 import {LocalizationProvider as L} from "../../../localization/LocalizationProvider";
 import {ExternalLinkButton} from "../ExternalLinkButton";
-import Markdown from 'react-native-simple-markdown'
+import Markdown from 'react-native-easy-markdown'
 
 
 export class BadgeDetailsText extends Component {

@@ -1,7 +1,7 @@
 import React, {Component, Fragment} from "react";
 import {Body, Content, H1, Title, Text} from "native-base";
 import {StyleSheet} from "react-native";
-import Markdown from 'react-native-simple-markdown'
+import Markdown from 'react-native-easy-markdown'
 
 export class ThemaComponent extends Component {
     render() {
