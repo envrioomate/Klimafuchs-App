@@ -48,11 +48,7 @@ export class TeamsScreen extends Component {
             marginTop: '20%',
             marginBottom: '20%',
         }}>
-            <Image
-                style={{width: 100, height: 100, margin: 5}}
-                resizeMode="contain"
-                source={require('../../../assets/asset_missing.png')}
-            />
+
             <H3 style={{marginBottom: '5%'}}>Du hast noch kein Team</H3>
 
             <FSModal

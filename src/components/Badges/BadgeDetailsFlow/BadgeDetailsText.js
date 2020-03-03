@@ -51,18 +51,20 @@ export class BadgeDetailsText extends Component {
                                 : null}
                         </Card>
 
-
-
                     </Content>
 
-                    <View transparent style={{height: 64}}>
+                    <View transparent>
                         <CardItem>
+                        <Text>{badge.challenge.hasCompletedText ? badge.challenge.hasCompletedText : L.get("has_completed_text")}</Text>
+                        </CardItem>
+
+                        <CardItem>
+
                             <Button style={{flex: 1, justifyContent: "center", alignItems: "center"}}
                                     onPress={() => {
                                         navigation.navigate("BadgeDetailsCTA", {badge: badge})
 
                                     }}>
-                                <Text>{badge.challenge.hasCompletedText ? badge.challenge.hasCompletedText : L.get("has_completed_text")}</Text>
 
                                 <Icon name='md-checkmark' style={{color: material.brandLight}}/>
 

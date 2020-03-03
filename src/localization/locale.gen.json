@@ -169,7 +169,7 @@
   },
   "cta_header_text": {
     "default": "cta_header_text",
-    "de": "Wieviel hast Du gemacht?"
+    "de": "Was hast du erreicht?"
   },
   "select_achievements": {
     "default": "select_achievements",
@@ -177,7 +177,7 @@
   },
   "select_achievements_hint": {
     "default": "select_achievements_hint",
-    "de": "Du kannst noch Achievements auswählen um deinen Fortschritt zu verfolgen"
+    "de": "Du kannst noch Aktivitäten auswählen, mit denen du in den nächsten Monaten in diesem Bereich am Ball bleibst."
   },
   "badge_acquired": {
     "default": "badge_acquired",
@@ -185,7 +185,7 @@
   },
   "badge_acquired_hint": {
     "default": "badge_acquired_hint",
-    "de": "Du hast ${badgeTitle} in ${completionLevelFriendly} freigeschaltet"
+    "de": "Du hast beim Aspekt ${badgeTitle} {completionLevelFriendly}"
   },
   "badge_not_completed": {
     "default": "badge_not_completed",
@@ -193,19 +193,19 @@
   },
   "badge_min_completed": {
     "default": "badge_min_completed",
-    "de": "MInimal"
+    "de": "teilgenommen und dafür Punkte bekommen"
   },
   "badge_med_completed": {
     "default": "badge_med_completed",
-    "de": "Mittel"
+    "de": "das Abzeichen in Orange (guter Anfang) erworben."
   },
   "badge_good_completed": {
     "default": "badge_good_completed",
-    "de": "Gut"
+    "de": "das Abzeichen in gelb (gut) erworben."
   },
   "badge_max_completed": {
     "default": "badge_max_completed",
-    "de": "Ausgezeichnet"
+    "de": "das Abzeichen in grün (ausgezeichnet) erworben."
   },
   "tab_achievements": {
     "default": "Achievements",
@@ -233,6 +233,106 @@
   },
   "enable_notifications_now": {
     "default": "Benachrichtigungen jetzt einschalten?",
+    "de": ""
+  },
+  "load_more_teams": {
+    "default": "load more",
+    "de": ""
+  },
+  "join_team_button_join": {
+    "default": "Beitreten",
+    "de": ""
+  },
+  "join_team_button_request_send": {
+    "default": "Anfrage gesendet",
+    "de": ""
+  },
+  "join_team_button_member": {
+    "default": "Mitglied",
+    "de": ""
+  },
+  "join_team_dialog_title": {
+    "default": "Team ${teamName} beitreten?",
+    "de": ""
+  },
+  "join_team_dialog_confirm": {
+    "default": "Ok",
+    "de": ""
+  },
+  "join_team_dialog_cancel": {
+    "default": "Abbrechen",
+    "de": ""
+  },
+  "team_tabs_leaderboard_title": {
+    "default": "Bestenliste",
+    "de": ""
+  },
+  "team_tabs_teams_title": {
+    "default": "Meine Teams",
+    "de": ""
+  },
+  "create_team_view_title": {
+    "default": "Team erstellen",
+    "de": ""
+  },
+  "create_team_view_team_name_label": {
+    "default": "Team Name",
+    "de": ""
+  },
+  "create_team_view_team_description_label": {
+    "default": "Team Beschreibung",
+    "de": ""
+  },
+  "create_team_view_closed_group_label": {
+    "default": "Geschlossenes Team",
+    "de": ""
+  },
+  "create_team_view_cancel": {
+    "default": "Abbrechen",
+    "de": ""
+  },
+  "create_team_view_continue": {
+    "default": "Weiter",
+    "de": ""
+  },
+  "create_team_view_invite_error": {
+    "default": "Fehler beim einladen",
+    "de": ""
+  },
+  "create_team_view_create_team_error": {
+    "default": "Fehler beim erstellen",
+    "de": ""
+  },
+  "create_team_view_invite_view_title": {
+    "default": "Einladen",
+    "de": ""
+  },
+  "create_team_view_invite": {
+    "default": "Einladen",
+    "de": ""
+  },
+  "create_team_view_invite_label": {
+    "default": "Anzeigename/eMail",
+    "de": ""
+  },
+  "create_team_view_confirm": {
+    "default": "Fertig",
+    "de": ""
+  },
+  "team_details_team_rank_label": {
+    "default": "Platz",
+    "de": ""
+  },
+  "team_details_team_score_label": {
+    "default": "Punkte",
+    "de": ""
+  },
+  "team_details_team_size_label": {
+    "default": "Teamgröße",
+    "de": ""
+  },
+  "team_details_team_members_label": {
+    "default": "Teammitglieder",
     "de": ""
   }
 }

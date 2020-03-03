@@ -60,7 +60,9 @@ function BadgePreview(props) {
                     </Body>
                     <Right>
                         <Image style={{backgroundColor: completionLevelToColor(badge.challengeCompletion), ...badgeScreenStyles.iconPreview}}
-                               source={badge.challenge.icon ? {uri: badge.challenge.icon.url + '?date=' + (new Date()).getHours()} : require('../../../assets/image_select.png')}/>
+                               source={badge.challenge.icon ? {uri: badge.challenge.icon.url + '?date=' + (new Date()).getHours()} : require('../../../assets/image_select.png')}
+                               resizeMode="contain"
+                        />
                     </Right>
                 </CardItem>
             </Card>

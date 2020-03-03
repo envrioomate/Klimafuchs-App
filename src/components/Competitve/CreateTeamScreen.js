@@ -54,7 +54,7 @@ export class CreateTeamScreen extends Component {
                         </Left>
                         <Body>
                             <Title>
-                                Team erstellen
+                                {L.get("create_team_view_title")}
                             </Title>
                         </Body>
                     </Header>
@@ -71,7 +71,7 @@ export class CreateTeamScreen extends Component {
 
                             <CardItem style={{flex: 1, flexDirection: 'row', justifyContent: 'center',}}>
                                 <View style={{height: 200, width: 200}}>
-                                    <UploadImage onUploadFinished={(media) => this.setState({mediaId: media.id})}/>
+                                    <UploadImage onUploadFinished={(media, err) => err ? null : this.setState({mediaId: media.id})}/>
                                 </View>
                             </CardItem>
 
@@ -80,7 +80,7 @@ export class CreateTeamScreen extends Component {
                                     <ValidatingTextField
                                         name='teamName'
                                         validateAs='teamName'
-                                        label='Name des Teams'
+                                        label={L.get("create_team_view_team_name_label")}
                                         onChangeText={(text) => this.setState({teamName: text})}
                                         value={this.state.teamName}
                                         showErrors={this.state.showErrors}
@@ -105,7 +105,7 @@ export class CreateTeamScreen extends Component {
                                         color: material.textColor,
                                         fontSize: 12,
                                         marginBottom: 5
-                                    }}>Team Beschreibung</Label>
+                                    }}>{L.get("create_team_view_team_description_label")}</Label>
 
                                 </Form>
                             </CardItem>
@@ -128,7 +128,7 @@ export class CreateTeamScreen extends Component {
                             <CardItem footer>
                                 <Right style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
                                     <Button transparent onPress={() => requestModalClose()}>
-                                        <Text>Abbrechen</Text>
+                                        <Text>{L.get("create_team_view_cancel")}</Text>
                                     </Button>
                                     <Mutation mutation={CREATE_TEAM} errorPolicy="all">
                                         {(createTeam) => {
@@ -162,7 +162,7 @@ export class CreateTeamScreen extends Component {
                                                                     this.setState({nameError: err.message})
                                                                 })
                                                         }}>
-                                                    <Text>Weiter</Text>
+                                                    <Text>{L.get("create_team_view_continue")}</Text>
                                                 </Button>
                                             )
                                         }}
@@ -209,7 +209,7 @@ export class InviteUsersScreen extends Component {
                         </Left>
                         <Body>
                             <Title>
-                                Nutzer einladen
+                                {L.get("create_team_view_invite_view_title")}
                             </Title>
                         </Body>
                     </Header>
@@ -227,7 +227,7 @@ export class InviteUsersScreen extends Component {
                             <CardItem>
                                 <Form style={{flex: 1, alignItems: 'stretch'}}>
                                     <Input
-                                        name='searchParam@'
+                                        name='searchParam'
                                         label='searchParam'
                                         onChangeText={(text) => this.setState({searchParam: text})}
                                         value={this.state.searchParam}
@@ -240,7 +240,7 @@ export class InviteUsersScreen extends Component {
                                         color: material.textColor,
                                         fontSize: 12,
                                         marginBottom: 5
-                                    }}>eMailadresse oder Nickname eingeben</Label>
+                                    }}>{L.get("create_team_view_invite_label")}</Label>
                                 </Form>
                             </CardItem>
 
@@ -263,7 +263,7 @@ export class InviteUsersScreen extends Component {
                                                             this.setState({showSuccess: false,showError: L.get("invite_error")})
                                                         })
                                             }}>
-                                                <Text>Einladen</Text>
+                                                <Text>{L.get("create_team_view_invite")}</Text>
                                             </Button>
                                         )}
                                     </Mutation>
@@ -282,7 +282,7 @@ export class InviteUsersScreen extends Component {
                                             onPress={() => {
                                                 this.props.navigation.navigate('Main')
                                             }}>
-                                        <Text>Fertig</Text>
+                                        <Text>{L.get("create_team_view_confirm")}</Text>
                                     </Button>
                                 </Right>
                             </CardItem>

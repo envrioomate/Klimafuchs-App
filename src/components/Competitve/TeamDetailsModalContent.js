@@ -1,14 +1,37 @@
 import React, {Component, Fragment} from "react";
-import {AsyncStorage, Image, ImageBackground, View, RefreshControl} from "react-native"
-import {ActionSheet, Body, Button, Card, CardItem, Content, H1, H3, Icon, Left, Right, Spinner, Text} from "native-base";
+import {AsyncStorage, Image, ImageBackground, RefreshControl, View} from "react-native"
+import {
+    ActionSheet,
+    Body,
+    Button,
+    Card,
+    CardItem,
+    Content,
+    H1,
+    H3,
+    Icon,
+    Left,
+    Right,
+    Spinner,
+    Text
+} from "native-base";
 import material from "../../../native-base-theme/variables/material";
 import {FSModalContentBase} from "../Common/FSModal";
 import {Mutation, Query} from "react-apollo";
-import {CONFIRM_MEMBER, DEL_USER, GET_MY_TEAM, GET_TEAM, MOD_USER, TeamSize, UNMOD_USER} from "../../network/Teams.gql";
+import {
+    CONFIRM_MEMBER,
+    DEL_USER,
+    GET_MY_TEAM,
+    GET_TEAM,
+    LEAVE_TEAM,
+    MOD_USER,
+    MY_MEMBERSHIPS,
+    TeamSize,
+    UNMOD_USER
+} from "../../network/Teams.gql";
 import {Util} from "../../util";
 import {MaterialDialog} from "react-native-material-dialog";
-import BlurView from "expo-blur";
-
+import {LocalizationProvider as L} from "../../localization/LocalizationProvider";
 import {LinearGradient} from "expo-linear-gradient";
 import * as env from "../../../env";
 
@@ -44,74 +67,89 @@ export class TeamDetailsModalContent extends FSModalContentBase {
         console.log(showUsers, showRequests, team.closed, myMembership, editMode);
         return (
             <Fragment>
-                <Content style={{width:'100%'}}
+                <Content style={{width: '100%'}}
                          refreshControl={<RefreshControl
                              refreshing={this.state.refreshing || loading}
                              onRefresh={() => refetch()}
                          />}>
-                <View first style={{margin:0, padding: 0, width:'100%', height: 200}}>
-                    <ImageBackground source={{uri: teamAvatarUrl}} style={{ margin:0, padding: 0, width: '100%', height: '100%'}}>
-                            <LinearGradient           colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0.8)']}  style={{ flex:1, flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', padding: 10,}}>
+                    <View first style={{margin: 0, padding: 0, width: '100%', height: 200}}>
+                        <ImageBackground source={{uri: teamAvatarUrl}}
+                                         style={{margin: 0, padding: 0, width: '100%', height: '100%'}}>
+                            <LinearGradient colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0.8)']} style={{
+                                flex: 1,
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                                alignItems: 'flex-start',
+                                padding: 10,
+                            }}>
                                 <Fragment>
                                     <H1 style={{color: "#fff"}}>{team.name}</H1>
                                     <Text style={{color: "#fff"}}>{team.description}</Text>
                                 </Fragment>
                             </LinearGradient>
-                            {editMode &&<Button style={{position: 'absolute', right:0}} transparent onPress={() => {
+                            {editMode && <Button style={{position: 'absolute', right: 0}} transparent onPress={() => {
                                 requestModalClose();
                                 editMode(team.id, false, team)
                             }}>
-                                <Icon style={{color: material.textLight}} name="md-create" />
+                                <Icon style={{color: material.textLight}} name="md-create"/>
                             </Button>}
 
-                    </ImageBackground>
+                        </ImageBackground>
 
-                </View>
-                <CardItem>
-                    <View style={{
-                        flex: 1,
-                        flexDirection: 'row'
-                    }}><Text>Rang: </Text><Text>{team.place === -1 ? 'Nicht Plaziert' : team.place}</Text></View>
-                    <View
-                        style={{flex: 1, flexDirection: 'row'}}><Text>Punktzahl: </Text><Text>{team.score}</Text></View>
-                </CardItem>
-                <CardItem>
-                    <View style={{
-                        flex: 1,
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-
-                    }}>
-                        <Text>Teamgröße: {TeamSize[team.teamSize].name}</Text>
-                        <Icon name="md-lock" style={{color: material.textLight}}/>
                     </View>
-                </CardItem>
-                {showUsers &&
-                <Fragment>
-                    <CardItem style={{width: '100%', backgroundColor: '#ECECEC'}}>
-                        <Text>Teammitgileder</Text>
+                    <CardItem>
+                        <View style={{
+                            flex: 1,
+                            flexDirection: 'row'
+                        }}><Text>Rang: </Text><Text>{team.place === -1 ? 'Nicht Plaziert' : team.place}</Text></View>
+                        <View
+                            style={{
+                                flex: 1,
+                                flexDirection: 'row'
+                            }}><Text>{L.get("team_details_team_score_label")}: </Text><Text>{team.score}</Text></View>
                     </CardItem>
+                    <CardItem>
+                        <View style={{
+                            flex: 1,
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
 
-                    {this.renderAdmins(team.members, myMembership, editMode, refetch)}
-                    <CardItem style={{width: '100%', backgroundColor: '#ECECEC'}}/>
-                    {this.renderUsers(team.members, myMembership, editMode, refetch)}
-                    {showRequests &&
-                    <Fragment>
-                        <CardItem style={{width: '100%', backgroundColor: '#ECECEC'}}/>
-                        {this.renderJoinRequests(team.members, myMembership, editMode, refetch)}
-                        {editMode && <CardItem style={{flex:1, flexDirection: 'row', justifyContent: 'center', width: '100%', backgroundColor: '#ECECEC'
                         }}>
-                            <Button bordered dark onPress={() => {
-                                requestModalClose();
-                                editMode(team.id, true)
+                            <Text>{L.get("team_details_team_size_label")}: {TeamSize[team.teamSize].name}</Text>
+                            <Icon name="md-lock" style={{color: material.textLight}}/>
+                        </View>
+                    </CardItem>
+                    {showUsers &&
+                    <Fragment>
+                        <CardItem style={{width: '100%', backgroundColor: '#ECECEC'}}>
+                            <Text>Teammitgileder</Text>
+                        </CardItem>
+
+                        {this.renderAdmins(team.members, myMembership, editMode, refetch)}
+                        <CardItem style={{width: '100%', backgroundColor: '#ECECEC'}}/>
+                        {this.renderUsers(team.members, myMembership, editMode, refetch)}
+                        {showRequests &&
+                        <Fragment>
+                            <CardItem style={{width: '100%', backgroundColor: '#ECECEC'}}/>
+                            {this.renderJoinRequests(team.members, myMembership, editMode, refetch)}
+                            {editMode && <CardItem style={{
+                                flex: 1,
+                                flexDirection: 'row',
+                                justifyContent: 'center',
+                                width: '100%',
+                                backgroundColor: '#ECECEC'
                             }}>
-                                <Text>Nutzer einladen</Text>
-                            </Button>
-                        </CardItem>}
+                                <Button bordered dark onPress={() => {
+                                    requestModalClose();
+                                    editMode(team.id, true)
+                                }}>
+                                    <Text>Nutzer einladen</Text>
+                                </Button>
+                            </CardItem>}
+                        </Fragment>
+                        }
                     </Fragment>
                     }
-                </Fragment>
-                }
                 </Content>
             </Fragment>
 
@@ -237,6 +275,7 @@ class UserRow extends Component {
         showDeclineUserDialog: false,
         showMakeAdminDialog: false,
         showDemoteAdminDialog: false,
+        showLeaveTeamDialog: false
     };
 
     overflowUserActionsConfig = {
@@ -327,6 +366,33 @@ class UserRow extends Component {
         ],
     };
 
+    overflowAsUserActionsConfig = {
+        config:
+            {
+                options: [
+                    {text: "Aus Team austreten", icon: "md-alert", iconColor: "#444"},
+                    {text: "Abbrechen", icon: "close", iconColor: "#25de5b"}
+                ],
+                cancelButtonIndex: 1,
+                destructiveButtonIndex: 0,
+            },
+        callback: (buttonIndex) => {
+            this.overflowAsUserActionsConfig.actions[buttonIndex]();
+        },
+        actions: [
+            //Adminstatus entfernen
+            () => {
+                console.log("asUserAction emitted");
+
+                this.setState({showLeaveTeamDialog: true})
+            },
+            //Abbrechen
+            () => {
+                console.log("action cancelled")
+            },
+        ],
+    };
+
     render() {
         let {member, ownStatus, editMode, refetch} = this.props;
         const {isAdmin, isActive} = member;
@@ -360,21 +426,44 @@ class UserRow extends Component {
                     <Button style={{width: 40, height: '100%', flex: 1, justifyContent: 'center'}} transparent dark
                             onPress={() => {
                                 console.log(ownStatus);
-                                if (ownStatus.isAdmin) member.isAdmin ? ActionSheet.show(
-                                    this.overflowAdminActionsConfig.config,
-                                    this.overflowAdminActionsConfig.callback
-                                ) : (member.isActive ? ActionSheet.show(
-                                        this.overflowUserActionsConfig.config,
-                                        this.overflowUserActionsConfig.callback
-                                    ) : ActionSheet.show(
-                                        this.overflowRequestActionsConfig.config,
-                                        this.overflowRequestActionsConfig.callback
+                                if (ownStatus.isAdmin) {
+                                    member.isAdmin ? ActionSheet.show(
+                                        this.overflowAdminActionsConfig.config,
+                                        this.overflowAdminActionsConfig.callback
+                                    ) : (member.isActive ? ActionSheet.show(
+                                            this.overflowUserActionsConfig.config,
+                                            this.overflowUserActionsConfig.callback
+                                        ) : ActionSheet.show(
+                                            this.overflowRequestActionsConfig.config,
+                                            this.overflowRequestActionsConfig.callback
+                                        )
                                     )
-                                )
+                                } else if (ownStatus.isActive) {
+                                    ActionSheet.show(
+                                        this.overflowAsUserActionsConfig.config,
+                                        this.overflowAsUserActionsConfig.callback
+                                    )
+                                }
                             }}>
                         <Icon name={"md-more"}/>
 
-                        <Mutation mutation={CONFIRM_MEMBER} errorPolicy="all">
+                        <Mutation
+                            mutation={CONFIRM_MEMBER}
+                            errorPolicy="all"
+                            refetchQueries={[
+                                {
+                                    query: GET_TEAM,
+                                    variables: ownStatus.teamId
+                                },
+                                {
+                                    query: GET_MY_TEAM,
+                                    variables: ownStatus.teamId
+                                },
+                                {
+                                    query: MY_MEMBERSHIPS,
+                                },
+                            ]}
+                        >
                             {(confirmMember, {loading, error}) => {
                                 return (
                                     <MaterialDialog
@@ -397,7 +486,22 @@ class UserRow extends Component {
                             }}
                         </Mutation>
 
-                        <Mutation mutation={MOD_USER} errorPolicy="all">
+                        <Mutation mutation={MOD_USER}
+                                  errorPolicy="all"
+                                  refetchQueries={[
+                                      {
+                                          query: GET_TEAM,
+                                          variables: ownStatus.teamId
+                                      },
+                                      {
+                                          query: GET_MY_TEAM,
+                                          variables: ownStatus.teamId
+                                      },
+                                      {
+                                          query: MY_MEMBERSHIPS,
+                                      },
+                                  ]}
+                        >
                             {(modMember, {loading, error}) => {
                                 return (
                                     <MaterialDialog
@@ -422,7 +526,21 @@ class UserRow extends Component {
                             }}
                         </Mutation>
 
-                        <Mutation mutation={UNMOD_USER} errorPolicy="all">
+                        <Mutation mutation={UNMOD_USER}
+                                  errorPolicy="all"
+                                  refetchQueries={[
+                                      {
+                                          query: GET_TEAM,
+                                          variables: ownStatus.teamId
+                                      },
+                                      {
+                                          query: GET_MY_TEAM,
+                                          variables: ownStatus.teamId
+                                      },
+                                      {
+                                          query: MY_MEMBERSHIPS,
+                                      },
+                                  ]}>
                             {(unmodMember, {loading, error}) => {
                                 return (
                                     <MaterialDialog
@@ -446,7 +564,22 @@ class UserRow extends Component {
                             }}
                         </Mutation>
 
-                        <Mutation mutation={DEL_USER} errorPolicy="all">
+                        <Mutation mutation={DEL_USER}
+                                  errorPolicy="all"
+                                  refetchQueries={[
+                                      {
+                                          query: GET_TEAM,
+                                          variables: ownStatus.teamId
+                                      },
+                                      {
+                                          query: GET_MY_TEAM,
+                                          variables: ownStatus.teamId
+                                      },
+                                      {
+                                          query: MY_MEMBERSHIPS,
+                                      },
+                                  ]}
+                        >
                             {(delMember, {loading, error}) => {
                                 return (
                                     <MaterialDialog
@@ -469,7 +602,22 @@ class UserRow extends Component {
                             }}
                         </Mutation>
 
-                        <Mutation mutation={DEL_USER} errorPolicy="all">
+                        <Mutation mutation={DEL_USER}
+                                  errorPolicy="all"
+                                  refetchQueries={[
+                                      {
+                                          query: GET_TEAM,
+                                          variables: ownStatus.teamId
+                                      },
+                                      {
+                                          query: GET_MY_TEAM,
+                                          variables: ownStatus.teamId
+                                      },
+                                      {
+                                          query: MY_MEMBERSHIPS,
+                                      },
+                                  ]}
+                        >
                             {(delMember, {loading, error}) => {
                                 return (
                                     <MaterialDialog
@@ -491,6 +639,46 @@ class UserRow extends Component {
                                 )
                             }}
                         </Mutation>
+
+                        <Mutation mutation={LEAVE_TEAM}
+                                  errorPolicy="all"
+                                  refetchQueries={[
+                                      {
+                                          query: GET_TEAM,
+                                          variables: ownStatus.teamId
+                                      },
+                                      {
+                                          query: GET_MY_TEAM,
+                                          variables: ownStatus.teamId
+                                      },
+                                      {
+                                          query: MY_MEMBERSHIPS,
+                                      },
+                                  ]}
+                        >
+                            {(delMember, {loading, error}) => {
+                                return (
+                                    <MaterialDialog
+                                        title={`Aus dem Team austreten?`}
+                                        visible={this.state.showLeaveTeamDialog}
+                                        onOk={() => {
+                                            delMember({
+                                                variables: {
+                                                    membershipId: member.id
+                                                }
+                                            })
+                                                .then()
+                                                .catch((error) => console.log(error));
+                                            this.setState({showLeaveTeamDialog: false})
+                                        }}
+                                        onCancel={() => this.setState({showLeaveTeamDialog: false})}>
+                                        <Fragment/>
+                                    </MaterialDialog>
+                                )
+                            }}
+                        </Mutation>
+
+
                     </Button>
                 </Right>}
             </CardItem>

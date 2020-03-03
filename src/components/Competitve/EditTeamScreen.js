@@ -76,7 +76,7 @@ export class EditTeamScreen extends Component {
 
                             <CardItem style={{flex: 1, flexDirection: 'row', justifyContent: 'center',}}>
                                 <View style={{height: 200, width: 200}}>
-                                    <UploadImage placeholder={Util.AvatarToUri(avatar)} onUploadFinished={(media) => this.setState({mediaId: media.id})}/>
+                                    <UploadImage placeholder={Util.AvatarToUri(avatar)} onUploadFinished={(media, err) => err ? null : this.setState({mediaId: media.id})}/>
                                 </View>
                             </CardItem>
 

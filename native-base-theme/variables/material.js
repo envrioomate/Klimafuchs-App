@@ -103,9 +103,9 @@ export default {
     checkboxTickColor: "#fff",
 
     // Color
-    brandPrimary: "#c8d200",
+    brandPrimary: "#9fa900",
     brandInfo: "#009de0",
-    brandSuccess: "#6C9C2E",
+    brandSuccess: "#9fa900",
     brandDanger: "#d9534f",
     brandWarning: "#f0ad4e",
     brandDark: "#00080D",
@@ -114,7 +114,7 @@ export default {
     completionNone: "#aaa",
     completionMin: "#f5f5f5",
     completionMed: "#f8a407",
-    completionGood: "#F0FC0A",
+    completionGood: "#f6fc33",
     completionMax: "#6C9C2E",
 
     //Container

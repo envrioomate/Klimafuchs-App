@@ -179,6 +179,16 @@ export const DEL_USER = gql`
     }
 `;
 
+export const LEAVE_TEAM = gql`
+    mutation leaveTeam($membershipId:Int!) {
+        leaveTeam(membershipId:$membershipId) {
+            id
+        }
+    }
+`;
+
+
+
 export const INVITE_USER = gql`
     mutation inviteUserToTeam($teamId:Int!, $screenName:String!) {
         inviteUserToTeam(teamId: $teamId, screenName: $screenName) {

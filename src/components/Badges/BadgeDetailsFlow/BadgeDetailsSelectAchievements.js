@@ -122,10 +122,11 @@ export class BadgeDetailsSelectAchievements extends Component {
         let {badge, completion} = route.params; //
         let achievements = badge.challenge.achievements;
         console.log(completion, route.params)
+         // TODO L.get
         return (
             <Fragment>
                 <Container transparent>
-                    <Text>Achievments</Text>
+                    <Text>Aktivitäten</Text>
                     <Query query={CURRENTLY_SELECTED_ACHIEVEMENTS}>
                         {({loading, error, data, refetch}) => {
                             if (loading) return (

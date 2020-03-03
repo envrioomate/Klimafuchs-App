@@ -25,12 +25,12 @@ export class LocalizationProvider {
             }
             else {
                 let error = `MISSING string for ${key} in ${lang}!`;
-                console.warn(error);
+                console.log(error);
                 return template.default ? this.makeTemplateString(key, template.default, values) : error;
             }
         } else {
             let error = `MISSING localization for ${key}!`;
-            console.warn(error);
+            console.log(error);
             return error;
         }
     }
@@ -41,12 +41,12 @@ export class LocalizationProvider {
             let template = new Function(...Object.keys(values), "return `"+string+"`;")(...Object.values(values));
             if(template.length < 1) {
                 let error = `MISSING string for ${key} in ${lang}!`;
-                console.warn(error);
+                console.log(error);
                 return error;
             }
             return template;
         } catch (e) {
-            console.warn(e.message);
+            console.log(e.message);
             return string;
 
         }

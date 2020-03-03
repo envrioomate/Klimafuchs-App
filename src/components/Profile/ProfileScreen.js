@@ -130,7 +130,8 @@ class ProfileScreen extends Component {
                                                     return (
                                                         <View style={{width: 200, height: 200, margin: 20}}>
                                                             <UploadImage placeholder={Util.AvatarToUri(avatar)}
-                                                                         onUploadFinished={(media) => {
+                                                                         onUploadFinished={(media,err) => {
+                                                                             if(err) return;
                                                                              console.log(media);
                                                                              updateProfile({
                                                                                  variables: {
@@ -487,6 +488,7 @@ class PasswordSetting extends SettingsField {
                                     />
                                 </Body>
                             </ListItem>
+
                             <ListItem>
                                 <Body>
                                     <ValidatingTextField
@@ -522,6 +524,7 @@ class PasswordSetting extends SettingsField {
                                     />
                                 </Body>
                             </ListItem>
+
                             <ListItem>
                                 <Body>
                                 </Body>

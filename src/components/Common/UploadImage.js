@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 import {Mutation} from 'react-apollo'
 import {ReactNativeFile} from 'apollo-upload-client';
 import React from 'react';
-import {ImageBackground, TouchableWithoutFeedback, View} from 'react-native';
+import {ImageBackground, TouchableWithoutFeedback, View, Alert} from 'react-native';
 import {Button, Icon, Spinner, Text} from 'native-base';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
@@ -89,7 +89,29 @@ class UploadImage extends React.Component {
                 })
                 .catch(err => {
                     this.setState({uploading: false});
-                    console.error(err)
+                    console.log(err)
+
+                    let message = "Es ist kaputt 😢";
+
+                    if (err.networkError) {
+                        switch (err.networkError.statusCode) {
+                            case (413): message = "Das Bild ist zu groß (maximal 2 MB)"; break;
+                            case (500): message = "Server on fire 🔥"; break;
+
+                        }
+                    }
+                    Alert.alert(
+                        'Fehler beim Hochladen',
+                        message,
+                        [
+                            {text: 'Ok', onPress: () => console.log('OK Pressed')},
+                        ],
+                        { cancelable: false }
+                    )
+
+                    this.props.onUploadFinished(null, err);
+
+
                 });
         }
     };

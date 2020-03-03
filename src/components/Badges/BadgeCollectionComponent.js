@@ -24,11 +24,14 @@ const CollectedBadge = ({completion}) => {
     const badge = completion.seasonPlanChallenge.challenge;
     const icon = badge.icon;
     const iconTint = completionLevelToColor(completion);
+    //TODO Badge Border und text beschreibung +  completion text + externalLink
     return (
         <Fragment>
             <View style={{margin: 2}}>
             <Image style={{backgroundColor: iconTint, ...styles.collected}}
-                   source={icon ? {uri: icon.url + '?date=' + (new Date()).getHours()} : require('../../../assets/image_select.png')}/>
+                   source={icon ? {uri: icon.url + '?date=' + (new Date()).getHours()} : require('../../../assets/image_select.png')}
+                    resizeMode="contain"
+            />
             </View>
         </Fragment>
     )

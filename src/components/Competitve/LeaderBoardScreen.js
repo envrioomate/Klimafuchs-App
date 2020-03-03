@@ -9,6 +9,8 @@ import { BlurView } from 'expo-blur';
 import material from "../../../native-base-theme/variables/material";
 import {TeamDetailsModalContent} from "./TeamDetailsModalContent";
 import {FSModal} from "../Common/FSModal";
+import {LocalizationProvider as L} from "../../localization/LocalizationProvider";
+
 export class LeaderBoardScreen extends Component {
     static navigationOptions = {
         title: 'Leaderboard',
@@ -172,20 +174,18 @@ class TeamCard extends Component {
         const rightContent = isMember
             ? <Fragment>
                 <Button transparent onPress={() => {
-                    console.log("moooo")
                 }}>
                     <Text>
-                        Mitglied
+                        {L.get("join_team_button_member")}
                     </Text>
                 </Button>
             </Fragment>
             : pendingRequest
                 ? <Fragment>
                     <Button transparent onPress={() => {
-                        console.log("moooo")
                     }}>
                         <Text>
-                            Anfrage gesendet
+                            {L.get("join_team_button_request_send")}
                         </Text>
                     </Button>
                 </Fragment>
@@ -195,14 +195,14 @@ class TeamCard extends Component {
                     >
                         {(requestJoinTeam) => {
                             return (
-                                <Button transparent onPress={() => {
+                                <Button light onPress={() => {
                                     this.setState({showJoinDialog: true})
                                 }}>
                                     <Text>
-                                        Beitreten
+                                        {L.get("join_team_button_join")}
                                     </Text>
                                     <MaterialDialog
-                                        title={`Team ${team.node.name} beitreten?`}
+                                        title={L.get("join_team_dialog_title", {teamName: team.node.name})}
                                         visible={this.state.showJoinDialog}
                                         onOk={() => {
                                             console.log(team)
@@ -219,9 +219,7 @@ class TeamCard extends Component {
                                             this.setState({showJoinDialog: false})
                                         }}
                                         onCancel={() => this.setState({showJoinDialog: false})}>
-                                        <Text>
-                                            Join team {team.node.name}?
-                                        </Text>
+                                        <Text/>
                                     </MaterialDialog>
                                 </Button>
                             )

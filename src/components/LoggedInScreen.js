@@ -21,7 +21,7 @@ export const AppNav = () => {
             inactiveTintColor: material.tabBarTextColor,
             barStyle: {backgroundColor: material.tabDefaultBg, height: 50},
         }}
-                       initialRouteName="BadgeTab"
+                       initialRouteName="CompetitiveTab"
                        headerMode="none"
                        labeled="true"
         >
@@ -35,7 +35,7 @@ export const AppNav = () => {
             />
             <Tab.Screen name="NotificationsTab"  component={NotificationsScreen}
                         options={{
-                            title: "Benachrichtigungen",
+                            title: "Mitteilungen",
                             tabBarIcon: ({focused, tintColor}) => (
                                 <Icon name='md-notifications' style={{fontSize: 20, color: tintColor}}/>
                             )
