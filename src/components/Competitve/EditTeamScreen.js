@@ -115,20 +115,6 @@ export class EditTeamScreen extends Component {
                                 </Form>
                             </CardItem>
 
-                            <CardItem>
-
-                                <Left>
-                                    <Text>Geschlossene Gruppe</Text>
-                                </Left>
-                                <Right>
-                                    <Switch value={this.state.isPrivate || closed} onValueChange={
-                                        () => {
-                                            this.setState({isPrivate: !this.state.isPrivate})
-                                        }
-                                    }/>
-                                </Right>
-
-                            </CardItem>
 
                             <CardItem footer>
                                 <Right style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
@@ -158,7 +144,7 @@ export class EditTeamScreen extends Component {
                                                                     name: this.state.teamName,
                                                                     description: this.state.teamDescription,
                                                                     avatarId: this.state.mediaId,
-                                                                    closed: this.state.isPrivate
+                                                                    closed: false
 
                                                                 }
                                                             })

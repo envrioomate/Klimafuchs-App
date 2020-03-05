@@ -35,6 +35,8 @@ import {Notifications} from 'expo';
 import * as Permissions from 'expo-permissions';
 import {LocalizationProvider as L} from "../../localization/LocalizationProvider";
 import SafeAreaView from 'react-native-safe-area-view';
+import { Updates } from 'expo';
+
 class ProfileScreen extends Component {
 
     static navigationOptions = {
@@ -83,12 +85,24 @@ class ProfileScreen extends Component {
         super(props);
     }
 
+
+
     _signOutAsync = async () => {
-        await AsyncStorage.removeItem('uId');
-        await AsyncStorage.removeItem('token');
-        await client.clearStore();
-        console.log("signed out");
-        this.props.navigation.navigate('Auth');
+        try{
+            await AsyncStorage.removeItem('uId');
+            await AsyncStorage.removeItem('token');
+            await client.clearStore();
+            await client.resetStore();
+        } catch (e) {
+            console.log(e)
+        } finally {
+            await AsyncStorage.removeItem('uId');
+            await AsyncStorage.removeItem('token');
+            console.log("signed out");
+            Updates.reloadFromCache()
+
+        }
+
     };
 
     render() {
@@ -116,10 +130,11 @@ class ProfileScreen extends Component {
                     <Content style={{flex: 1}}>
                         <Query query={CURRENT_USER}>
                             {({data, loading, error, refetch}) => {
+                                this.refetchData = refetch;
                                 if (loading) return <Spinner/>;
                                 if (error) {
                                     console.log(error);
-                                    return <Text>{JSON.stringify(error)}</Text>;
+                                    return <Text>Error fetching user data</Text>;
                                 }
                                 let {userName, screenName, avatar} = data.getCurrentUser;
                                 return (

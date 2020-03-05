@@ -74,6 +74,10 @@ export const MY_MEMBERSHIPS = gql`
             },
             isActive,
             isAdmin
+            user {
+                id
+            }
+            isAccepted
         }
     }
 `;
@@ -127,10 +131,12 @@ export const GET_TEAM = gql`
                 }
                 isActive
                 isAdmin
+                isAccepted
             }
             avatar {
                 filename
             }
+            scorePerUser
         }
     }
 `;
@@ -187,7 +193,21 @@ export const LEAVE_TEAM = gql`
     }
 `;
 
+export const ACCEPT_INVITE = gql`
+    mutation accecptInvite($membershipId:Int!) {
+        acceptInvite(membershipId: $membershipId) {
+            id
+        }
+    }
+`;
 
+export const REJECT_INVITE = gql`
+    mutation rejectInvite($membershipId:Int!) {
+        rejectInvite(membershipId: $membershipId) {
+            id
+        }
+    }
+`;
 
 export const INVITE_USER = gql`
     mutation inviteUserToTeam($teamId:Int!, $screenName:String!) {
@@ -220,6 +240,7 @@ export const LEADERBOARD = gql`
                             isActive,
                             isAdmin
                         }
+                        
                     }
                     cursor
                 }

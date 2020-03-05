@@ -3,6 +3,7 @@ import {Image, RefreshControl, StyleSheet, View} from 'react-native';
 import {
     Body,
     Button,
+    CardItem,
     Container,
     Content,
     Fab,
@@ -12,9 +13,8 @@ import {
     List,
     ListItem,
     Right,
-    Text,
-    Thumbnail,
     StyleProvider,
+    Text
 } from "native-base";
 import getTheme from '../../../native-base-theme/components';
 import {MY_MEMBERSHIPS} from "../../network/Teams.gql";
@@ -24,6 +24,9 @@ import {CreateTeamScreen} from "./CreateTeamScreen";
 import env from "../../../env";
 import {FSModal} from "../Common/FSModal";
 import {TeamDetailsModalContent} from "./TeamDetailsModalContent";
+import {createStackNavigator} from "@react-navigation/stack";
+
+const Stack = createStackNavigator();
 
 
 export class TeamsScreen extends Component {
@@ -36,18 +39,36 @@ export class TeamsScreen extends Component {
     };
 
     inviteToTeam = (teamId, users, teamData) => {
-        this.props.navigation.navigate((users ? "InviteUsers" : "EditTeam"), {teamId: teamId, teamData})
+        this.props.navigation.navigate("InviteUsers", {teamId: teamId, teamData})
     };
+
+    editTeam = (teamId, users, teamData) => {
+        this.props.navigation.navigate((users ? "InviteUsers" : "EditTeam"), {teamId: teamId, teamData})
+
+    }
+
     renderTeamsGettingStarted = (refetch) => (
-        <View style={{
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginLeft: '10%',
-            marginRight: '10%',
-            marginTop: '20%',
-            marginBottom: '20%',
-        }}>
+        <Content
+            style={{
+                flex: 1,
+                marginLeft: '10%',
+                marginRight: '10%',
+                marginTop: '20%',
+                marginBottom: '20%',
+            }}
+            contentContainerStyle={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'space-between',
+            }}
+            refreshControl={<RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={() => {
+                    this.setState({refreshing: true});
+                    refetch().then(this.setState({refreshing: false}))
+                }}
+            />}
+        >
 
             <H3 style={{marginBottom: '5%'}}>Du hast noch kein Team</H3>
 
@@ -62,7 +83,7 @@ export class TeamsScreen extends Component {
                 <Button block
                         style={styles.ctaButton}
                         onPress={() => this.props.navigation.navigate('CreateTeam')}>
-                    <Text style={{color: material.tabBarTextColor}}>Team erstellen</Text>
+                    <Text>Team erstellen</Text>
                 </Button>
             </FSModal>
             <Button block
@@ -70,12 +91,32 @@ export class TeamsScreen extends Component {
                     onPress={() => {
                         this.props.navigation.navigate('Teams')
                     }}>
-                <Text style={{color: material.tabBarTextColor}}>Team beitreten</Text>
+                <Text>Team beitreten</Text>
             </Button>
-        </View>
+        </Content>
     );
 
     renderTeams = (memberships, refetch) => {
+        const hasActiveTeam = memberships.filter((member) => member.isActive).length > 0;
+
+        if (!hasActiveTeam) return this.__renderTeamsOld(memberships, refetch);
+
+        let mainTeam = memberships[0];
+        let editMode = mainTeam.isAdmin;
+        return (
+            <TeamDetailsModalContent
+                teamId={mainTeam.team.id}
+                ownStatus={mainTeam}
+                editMode={this.editTeam}
+                requestModalClose={() => console.log("quit modal")}
+                standalone
+                ref={(ref) => {
+                    this.teamDetailsContent = ref
+                }}
+            />
+        )
+    };
+    __renderTeamsOld = (memberships, refetch) => {
         return (
             <Container style={{flex: 1}}>
                 <Content
@@ -91,6 +132,13 @@ export class TeamsScreen extends Component {
                         }}
                     />
                     }>
+
+                    <CardItem>
+                        <Text>
+                            Einladungen
+                        </Text>
+
+                    </CardItem>
                     <List>
                         {memberships.map((membership) => {
                             return (
@@ -165,7 +213,7 @@ class TeamCard extends Component {
         },
         actions: [
             () => {
-               
+
             },
             () => {
                 console.log("action cancelled")
@@ -206,7 +254,7 @@ class TeamCard extends Component {
                     this.teamDetails.openModal()
                 }}>
                     <Left>
-                        <Image source={{uri: teamAvatarUrl}} style={{width:64, height: 64}}/>
+                        <Image source={{uri: teamAvatarUrl}} style={{width: 64, height: 64}}/>
                     </Left>
                     <Body style={{height: '100%', flex: 3, paddingLeft: 10}}>
                         <View>
@@ -215,7 +263,7 @@ class TeamCard extends Component {
                         </View>
                     </Body>
                     <Right>
-                        {membership.isAdmin &&  <StyleProvider style={getTheme({iconFamily: "MaterialCommunityIcons"})}>
+                        {membership.isAdmin && <StyleProvider style={getTheme({iconFamily: "MaterialCommunityIcons"})}>
                             <Icon type="MaterialCommunityIcons" name='account-check' style={{color: '#000'}}/>
                         </StyleProvider>}
                     </Right>
@@ -225,7 +273,6 @@ class TeamCard extends Component {
 
         )
     }
-
 
 
 }

@@ -235,104 +235,124 @@
     "default": "Benachrichtigungen jetzt einschalten?",
     "de": ""
   },
+  "teams_tab_leaderboard_title": {
+    "default": "Platzierungen",
+    "de": "Platzierungen"
+  },
+  "teams_tab_myteam_title": {
+    "default": "Mein Team",
+    "de": "Mein Team"
+  },
   "load_more_teams": {
-    "default": "load more",
-    "de": ""
+    "default": "Mehr laden",
+    "de": "Mehr laden"
   },
   "join_team_button_join": {
     "default": "Beitreten",
-    "de": ""
+    "de": "Beitreten"
   },
   "join_team_button_request_send": {
     "default": "Anfrage gesendet",
-    "de": ""
+    "de": "Anfrage gesendet"
   },
   "join_team_button_member": {
     "default": "Mitglied",
-    "de": ""
+    "de": "Mitglied"
   },
   "join_team_dialog_title": {
     "default": "Team ${teamName} beitreten?",
-    "de": ""
+    "de": "Team ${teamName} beitreten?"
   },
   "join_team_dialog_confirm": {
     "default": "Ok",
-    "de": ""
+    "de": "Ok"
   },
   "join_team_dialog_cancel": {
     "default": "Abbrechen",
-    "de": ""
+    "de": "Abbrechen"
   },
   "team_tabs_leaderboard_title": {
     "default": "Bestenliste",
-    "de": ""
+    "de": "Bestenliste"
   },
   "team_tabs_teams_title": {
     "default": "Meine Teams",
-    "de": ""
+    "de": "Meine Teams"
   },
   "create_team_view_title": {
     "default": "Team erstellen",
-    "de": ""
+    "de": "Team erstellen"
   },
   "create_team_view_team_name_label": {
     "default": "Team Name",
-    "de": ""
+    "de": "Team Name"
   },
   "create_team_view_team_description_label": {
     "default": "Team Beschreibung",
-    "de": ""
+    "de": "Team Beschreibung"
   },
   "create_team_view_closed_group_label": {
     "default": "Geschlossenes Team",
-    "de": ""
+    "de": "Geschlossenes Team"
   },
   "create_team_view_cancel": {
     "default": "Abbrechen",
-    "de": ""
+    "de": "Abbrechen"
   },
   "create_team_view_continue": {
     "default": "Weiter",
-    "de": ""
+    "de": "Weiter"
   },
   "create_team_view_invite_error": {
     "default": "Fehler beim einladen",
-    "de": ""
+    "de": "Fehler beim einladen"
   },
   "create_team_view_create_team_error": {
     "default": "Fehler beim erstellen",
-    "de": ""
+    "de": "Fehler beim erstellen"
   },
   "create_team_view_invite_view_title": {
     "default": "Einladen",
-    "de": ""
+    "de": "Einladen"
   },
   "create_team_view_invite": {
     "default": "Einladen",
-    "de": ""
+    "de": "Einladen"
   },
   "create_team_view_invite_label": {
     "default": "Anzeigename/eMail",
-    "de": ""
+    "de": "Anzeigename/eMail"
   },
   "create_team_view_confirm": {
     "default": "Fertig",
-    "de": ""
+    "de": "Fertig"
   },
   "team_details_team_rank_label": {
     "default": "Platz",
-    "de": ""
+    "de": "Platz"
   },
   "team_details_team_score_label": {
     "default": "Punkte",
-    "de": ""
+    "de": "Punkte"
   },
   "team_details_team_size_label": {
     "default": "Teamgröße",
-    "de": ""
+    "de": "Teamgröße"
   },
   "team_details_team_members_label": {
     "default": "Teammitglieder",
+    "de": "Teammitglieder"
+  },
+  "teams_screen_edit_team_button_label": {
+    "default": "Team bearbeiten",
+    "de": ""
+  },
+  "team_details_accept_invite": {
+    "default": "Annehmen",
+    "de": ""
+  },
+  "team_details_decline_invite": {
+    "default": "Ablehnen",
     "de": ""
   }
 }

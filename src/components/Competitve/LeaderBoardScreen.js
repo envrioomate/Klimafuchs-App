@@ -2,7 +2,7 @@ import React, {Component, Fragment} from 'react';
 import {RefreshControl, Text, View, ImageBackground} from 'react-native';
 import {Body, Button, Container, Content, Form, Icon, List, ListItem, Picker, Right, Left, Spinner} from "native-base";
 import {Mutation, Query} from "react-apollo";
-import {CURRENT_USER_ID, LEADERBOARD, REQUEST_JOIN_TEAM, TeamSize} from "../../network/Teams.gql";
+import {CURRENT_USER_ID, LEADERBOARD, MY_MEMBERSHIPS, REQUEST_JOIN_TEAM, TeamSize} from "../../network/Teams.gql";
 import * as env from "../../../env"
 import {MaterialDialog} from 'react-native-material-dialog';
 import { BlurView } from 'expo-blur';
@@ -33,11 +33,11 @@ export class LeaderBoardScreen extends Component {
 
     render() {
         return (
-            <Query query={CURRENT_USER_ID}>
+            <Query query={MY_MEMBERSHIPS}>
                 {({loading, error, data}) => {
                     if (loading) return <Spinner/>;
-                    if (error) return <Text>{error}</Text>
-                    const userId = data.getCurrentUser.id;
+                    if (error) return <Text>{JSON.stringify(error)}</Text>
+                    const myMemberships = data.myMemberships;
                     return (
                         <Container style={{flex: 1}}>
 
@@ -55,7 +55,7 @@ export class LeaderBoardScreen extends Component {
                                         if (data.getLeaderBoard.page.edges.length > 0) {
                                             return (
                                                 <Fragment>
-                                                    {this.renderLeaderBoard(data.getLeaderBoard.page.edges, refetch, this.renderFetchMoreButton(data, loading, fetchMore), userId)}
+                                                    {this.renderLeaderBoard(data.getLeaderBoard.page.edges, refetch, this.renderFetchMoreButton(data, loading, fetchMore), myMemberships)}
                                                 </Fragment>
                                             );
                                         } else {
@@ -98,7 +98,6 @@ export class LeaderBoardScreen extends Component {
         return (
             <Button full light disabled={this.state.refreshing || this.state.endReached} onPress={() => {
                 const lastCursor = data.getLeaderBoard.page.edges[data.getLeaderBoard.page.edges.length - 1].cursor;
-                console.log(lastCursor)
                 fetchMore({
                     variables: {
                         connectionArgs: {
@@ -118,11 +117,11 @@ export class LeaderBoardScreen extends Component {
                         });
                     }
                 })
-            }}><Text>load more</Text></Button>
+            }}><Text>{L.get("load_more_teams")}</Text></Button>
         )
     }
 
-    renderLeaderBoard(leaderBoard, refetch, lbutton, userId) {
+    renderLeaderBoard(leaderBoard, refetch, lbutton, myMemberships) {
         return (
             <Container style={{flex: 1}}>
                 <Content
@@ -141,7 +140,7 @@ export class LeaderBoardScreen extends Component {
                     <List>
                         {leaderBoard.map((team, index) => {
                             return (
-                                <TeamCard key={team.cursor} index={index} team={team} currentUserId={userId}/>
+                                <TeamCard key={team.cursor} index={index} team={team} myMemberships={myMemberships}/>
                             )
                         })}
                     </List>
@@ -162,14 +161,20 @@ class TeamCard extends Component {
     };
 
     render() {
-        let {index, team, currentUserId} = this.props;
+        let {index, team, myMemberships} = this.props;
         let {node, cursor} = team;
         const teamAvatarUrl =
             node.avatar
                 ? `${env.dev.API_IMG_URL}${node.avatar.filename}`
                 : `${env.dev.API_IMG_URL}avatar_default.png`;
-        const isMember = node.members.some((member) => (member.user.id === currentUserId) && member.isActive);
-        const pendingRequest = node.members.some((member) => (member.user.id === currentUserId) && !member.isActive);
+        const membershipInTeam = myMemberships.filter((member) => member.team.id === node.id)[0] || null;
+        const hasActiveTeam = myMemberships.filter((member) => member.isActive).length > 0
+        const isMember = membershipInTeam && membershipInTeam.isActive;
+        const pendingRequest =  membershipInTeam && !membershipInTeam.isActive;
+
+        console.log("TeamCard " + index + ": ",
+            node.name, membershipInTeam, isMember, pendingRequest
+        )
 
         const rightContent = isMember
             ? <Fragment>
@@ -189,7 +194,7 @@ class TeamCard extends Component {
                         </Text>
                     </Button>
                 </Fragment>
-                : team.node.closed ? <Fragment/> :<Fragment>
+                : team.node.closed || hasActiveTeam ? <Fragment/> :<Fragment>
                     <Mutation mutation={REQUEST_JOIN_TEAM}
                               refetchQueries={[{query: LEADERBOARD}]}
                     >

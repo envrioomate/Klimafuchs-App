@@ -110,21 +110,6 @@ export class CreateTeamScreen extends Component {
                                 </Form>
                             </CardItem>
 
-                            <CardItem>
-
-                                <Left>
-                                    <Text>Geschlossene Gruppe</Text>
-                                </Left>
-                                <Right>
-                                    <Switch value={this.state.isPrivate} onValueChange={
-                                        () => {
-                                            this.setState({isPrivate: !this.state.isPrivate})
-                                        }
-                                    }/>
-                                </Right>
-
-                            </CardItem>
-
                             <CardItem footer>
                                 <Right style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
                                     <Button transparent onPress={() => requestModalClose()}>
@@ -147,7 +132,7 @@ export class CreateTeamScreen extends Component {
                                                                     name: this.state.teamName,
                                                                     description: this.state.teamDescription,
                                                                     avatarId: this.state.mediaId,
-                                                                    closed: this.state.isPrivate
+                                                                    closed: false
                                                                 }
                                                             })
                                                                 .then(({data}) => {
@@ -202,7 +187,7 @@ export class InviteUsersScreen extends Component {
 
                         <Left>
                             <Button transparent onPress={() => {
-                                navigation.navigate('MyTeams');
+                                navigation.goBack();
                             }}>
                                 <Icon name='md-arrow-back'/>
                             </Button>

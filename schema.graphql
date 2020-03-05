@@ -201,6 +201,7 @@ type Membership {
     activationDate: DateTime
     dateCreated: DateTime!
     id: Int!
+    isAccepted: Boolean!
     isActive: Boolean!
     isAdmin: Boolean!
     team: Team!
@@ -208,6 +209,7 @@ type Membership {
 }
 
 type Mutation {
+    acceptInvite(membershipId: Int!): Membership!
     addComment(comment: FeedCommentInput!): FeedComment!
     addPost(post: FeedPostInput!): FeedPost!
     changePassword(newPassword: String!, oldPassword: String!): User!
@@ -223,6 +225,7 @@ type Mutation {
     likeComment(commentId: Int!): FeedComment!
     likePost(postId: Int!): FeedPost!
     modMember(membershipId: Int!): Membership!
+    rejectInvite(membershipId: Int!): Membership!
     removeComment(CommentId: Int!): FeedComment!
     removeOwnComment(CommentId: Int!): Boolean!
     removeOwnPost(postId: Int!): Boolean!
@@ -376,6 +379,7 @@ type Team {
     name: String!
     place: Int
     score: Int!
+    scorePerUser: Int!
     teamSize: TeamSize!
 }
 

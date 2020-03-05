@@ -2,15 +2,16 @@ import React, {Fragment} from 'react';
 
 import {Body, Header, Icon, Left, Right, Title} from "native-base";
 import material from "../../../native-base-theme/variables/material";
-import {TeamsScreen} from "./TeamsScreen";
+import { TeamsScreen} from "./TeamsScreen";
 import {LeaderBoardScreen} from "./LeaderBoardScreen";
-import CreateTeamScreen from "./CreateTeamScreen";
+import CreateTeamScreen, {InviteUsersScreen} from "./CreateTeamScreen";
 import {EditTeamScreen} from "./EditTeamScreen";
 import {createMaterialTopTabNavigator} from "@react-navigation/material-top-tabs";
 import {createStackNavigator} from "@react-navigation/stack";
 import SafeAreaView from "react-native-safe-area-view";
 import {StyleSheet} from "react-native";
 import Constants from "expo-constants";
+import {LocalizationProvider as L} from "../../localization/LocalizationProvider";
 
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
@@ -23,6 +24,8 @@ const TeamsNav = () => {
                 <Stack.Screen name="Main" component={LeaderBoardNav}/>
                 <Stack.Screen name="CreateTeam" component={CreateTeamScreen}/>
                 <Stack.Screen name="EditTeam" component={EditTeamScreen}/>
+                <Stack.Screen name="InviteUsers" component={InviteUsersScreen}/>
+
             </Stack.Navigator>
     )
 };
@@ -48,8 +51,12 @@ const LeaderBoardNav = () => {
                 }
             }}
         >
-            <Tab.Screen name="Teams" component={LeaderBoardScreen}/>
-            <Tab.Screen name="MyTeams" component={TeamsScreen}/>
+            <Tab.Screen name="Teams" component={LeaderBoardScreen} options={{
+                title: L.get("teams_tab_leaderboard_title"),
+            }}/>
+            <Tab.Screen name="MyTeams" component={TeamsScreen} options={{
+                title: L.get("teams_tab_myteam_title"),
+            }}/>
         </Tab.Navigator>
     )
 };

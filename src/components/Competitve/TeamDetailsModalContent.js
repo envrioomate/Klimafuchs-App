@@ -19,13 +19,14 @@ import material from "../../../native-base-theme/variables/material";
 import {FSModalContentBase} from "../Common/FSModal";
 import {Mutation, Query} from "react-apollo";
 import {
+    ACCEPT_INVITE,
     CONFIRM_MEMBER,
     DEL_USER,
     GET_MY_TEAM,
     GET_TEAM,
     LEAVE_TEAM,
     MOD_USER,
-    MY_MEMBERSHIPS,
+    MY_MEMBERSHIPS, REJECT_INVITE,
     TeamSize,
     UNMOD_USER
 } from "../../network/Teams.gql";
@@ -55,16 +56,18 @@ export class TeamDetailsModalContent extends FSModalContentBase {
         return myMembership;
     };
 
-    cardContent = (team, myMembership, refetch, editMode, requestModalClose, loading) => {
+    cardContent = (team, myMembership, refetch, editMode, requestModalClose, loading, standalone) => {
         let showUsers = team.closed ? (myMembership && myMembership.isActive) : true;
         let showRequests = myMembership && myMembership.isAdmin;
+        let isInvite = myMembership ? !myMembership.isAccepted : false;
+
+        let teamSize = team.members.filter(m => m.isActive).length
 
         const teamAvatarUrl =
             team.avatar
                 ? `${env.dev.API_IMG_URL}${team.avatar.filename}`
                 : `${env.dev.API_IMG_URL}image_select.png`;
 
-        console.log(showUsers, showRequests, team.closed, myMembership, editMode);
         return (
             <Fragment>
                 <Content style={{width: '100%'}}
@@ -75,28 +78,13 @@ export class TeamDetailsModalContent extends FSModalContentBase {
                     <View first style={{margin: 0, padding: 0, width: '100%', height: 200}}>
                         <ImageBackground source={{uri: teamAvatarUrl}}
                                          style={{margin: 0, padding: 0, width: '100%', height: '100%'}}>
-                            <LinearGradient colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0)', 'rgba(0,0,0,0.8)']} style={{
-                                flex: 1,
-                                flexDirection: 'column',
-                                justifyContent: 'center',
-                                alignItems: 'flex-start',
-                                padding: 10,
-                            }}>
-                                <Fragment>
-                                    <H1 style={{color: "#fff"}}>{team.name}</H1>
-                                    <Text style={{color: "#fff"}}>{team.description}</Text>
-                                </Fragment>
-                            </LinearGradient>
-                            {editMode && <Button style={{position: 'absolute', right: 0}} transparent onPress={() => {
-                                requestModalClose();
-                                editMode(team.id, false, team)
-                            }}>
-                                <Icon style={{color: material.textLight}} name="md-create"/>
-                            </Button>}
 
                         </ImageBackground>
 
                     </View>
+                    <CardItem>
+                        <Text>{team.description}</Text>
+                    </CardItem>
                     <CardItem>
                         <View style={{
                             flex: 1,
@@ -106,7 +94,7 @@ export class TeamDetailsModalContent extends FSModalContentBase {
                             style={{
                                 flex: 1,
                                 flexDirection: 'row'
-                            }}><Text>{L.get("team_details_team_score_label")}: </Text><Text>{team.score}</Text></View>
+                            }}><Text>{L.get("team_details_team_score_label")}: </Text><Text>{team.scorePerUser}</Text></View>
                     </CardItem>
                     <CardItem>
                         <View style={{
@@ -115,8 +103,7 @@ export class TeamDetailsModalContent extends FSModalContentBase {
                             justifyContent: 'space-between',
 
                         }}>
-                            <Text>{L.get("team_details_team_size_label")}: {TeamSize[team.teamSize].name}</Text>
-                            <Icon name="md-lock" style={{color: material.textLight}}/>
+                            <Text>{L.get("team_details_team_size_label")}: {teamSize}</Text>
                         </View>
                     </CardItem>
                     {showUsers &&
@@ -139,17 +126,56 @@ export class TeamDetailsModalContent extends FSModalContentBase {
                                 width: '100%',
                                 backgroundColor: '#ECECEC'
                             }}>
-                                <Button bordered dark onPress={() => {
+                                <Button primary onPress={() => {
                                     requestModalClose();
                                     editMode(team.id, true)
                                 }}>
-                                    <Text>Nutzer einladen</Text>
+                                    <Text>{L.get("create_team_view_invite_view_title")}</Text>
                                 </Button>
                             </CardItem>}
+
                         </Fragment>
                         }
                     </Fragment>
                     }
+                    {isInvite && <CardItem style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        width: '100%',
+                        backgroundColor: '#ECECEC'
+                    }}>
+                        <Mutation mutation={REJECT_INVITE} refetchQueries={[{query:MY_MEMBERSHIPS}]}>
+                            {(rejectInvite, { data, loading, error}) => (
+                                <Button primary onPress={() => {
+                                    requestModalClose();
+                                    rejectInvite({
+                                        variables: {
+                                            membershipId: myMembership.id
+                                        }
+                                    })
+                                }}>
+                                    <Text>{L.get("team_details_decline_invite")}</Text>
+                                </Button>
+                                )}
+                        </Mutation>
+                        <Mutation mutation={ACCEPT_INVITE} refetchQueries={[{query:MY_MEMBERSHIPS}]}>
+                            {(acceptInvite, { data, loading, error}) => (
+                                <Button primary onPress={() => {
+                                    requestModalClose();
+                                    acceptInvite({
+                                        variables: {
+                                            membershipId: myMembership.id
+                                        }
+                                    })
+                                }}>
+                                    <Text>{L.get("team_details_accept_invite")}</Text>
+                                </Button>
+                            )}
+                        </Mutation>
+
+                    </CardItem>}
+
                 </Content>
             </Fragment>
 
@@ -216,7 +242,7 @@ export class TeamDetailsModalContent extends FSModalContentBase {
     </Card>;
 
     render() {
-        let {requestModalClose, teamId, editMode} = this.props;
+        let {requestModalClose, teamId, editMode, standalone} = this.props;
         if (this.state.uId < 0) return this.renderPlaceholder(requestModalClose);
 
         return (
@@ -227,7 +253,7 @@ export class TeamDetailsModalContent extends FSModalContentBase {
                     if (loading) return this.renderPlaceholder(requestModalClose);
                     const ownStatus = this.getOwnStatus(data.getTeam.members);
                     return (
-                        <Card style={{
+                        <Card transparent={standalone} style={{
                             margin: '10%',
                             flex: 1,
                             justifyContent: 'flex-start',
@@ -235,7 +261,23 @@ export class TeamDetailsModalContent extends FSModalContentBase {
                             backgroundColor: material.containerBgColor,
                         }}
                         >
-                            <CardItem header style={
+                            { standalone ?<CardItem>
+                                <Left>
+                                <H1>
+                                    {data ? data.getTeam.name : 'error'}
+                                </H1>
+                                </Left>
+                                <Right>
+                                    {editMode && <Button style={{right: 0}} info onPress={() => {
+                                        requestModalClose();
+                                        editMode(teamId, false, data.getTeam)
+                                    }}>
+                                        <Icon style={{color: material.brandLight}} name="md-create"/>
+                                        <Text>{L.get("teams_screen_edit_team_button_label")}</Text>
+                                    </Button>}
+                                </Right>
+                                </CardItem>
+                                : <CardItem header style={
                                 {
                                     backgroundColor: (ownStatus && ownStatus.isActive) ? material.brandInfo : material.brandPrimary,
                                 }}>
@@ -251,7 +293,7 @@ export class TeamDetailsModalContent extends FSModalContentBase {
                                     marginLeft: 10,
 
                                 }}>{data ? data.getTeam.name : 'error'}</H3>
-                            </CardItem>
+                            </CardItem> }
 
                             {error ?
                                 <Content><Text>{JSON.stringify(error)}</Text></Content>
