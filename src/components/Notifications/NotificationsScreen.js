@@ -10,7 +10,7 @@ import SafeAreaView from 'react-native-safe-area-view';
 import Swipeout from 'react-native-swipeout';
 import Constants from "expo-constants";
 
-import {NotificationToggle} from "../Profile/ProfileScreen";
+import {NotificationToggle} from "./NotificationToggle";
 
 const prefix = Linking.makeUrl('/');
 
@@ -103,22 +103,14 @@ class NotificationsScreen extends Component {
                         :
                         <Fragment>
                             <Container>
-                                <Body>
                                     <Card transparent>
                                         <CardItem>
-
-                                    <H1>{L.get("notifications_list_empty")}</H1>
-                                        </CardItem>
-                                        <CardItem>
                                             <Body>
-                                                <Text>{L.get("enable_notifications_now")}</Text>
+                                           <H1>{L.get("notifications_list_empty")}</H1>
                                             </Body>
-                                            <Right>
-                                                <NotificationToggle/>
-                                            </Right>
                                         </CardItem>
+                                        <NotificationToggle/>
                                     </Card>
-                                </Body>
                             </Container>
                         </Fragment>}
 

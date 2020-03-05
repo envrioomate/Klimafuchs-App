@@ -173,7 +173,7 @@
   },
   "select_achievements": {
     "default": "select_achievements",
-    "de": "Das nehm ich mir vor!"
+    "de": "Weiter zur Auswahl"
   },
   "select_achievements_hint": {
     "default": "select_achievements_hint",
@@ -224,15 +224,31 @@
     "de": "Abzeichen"
   },
   "notifications_list_empty": {
-    "default": "Keine Benachrichtigungen",
-    "de": "Keine Benachrichtigungen"
+    "default": "Keine Mitteilungen",
+    "de": "Keine Mitteilungen"
   },
   "hint_dismiss_all_notifications": {
-    "default": "Alle Benachrichtigungen löschen?",
-    "de": "Alle Benachrichtigungen löschen?"
+    "default": "Alle Mitteilungen löschen?",
+    "de": "Alle Mitteilungen löschen?"
   },
   "enable_notifications_now": {
-    "default": "Benachrichtigungen jetzt einschalten?",
+    "default": "Mitteilungen jetzt einschalten?",
+    "de": ""
+  },
+  "success_subscribing_to_notification": {
+    "default": "Mitteilungen eingeschaltet",
+    "de": ""
+  },
+  "error_subscribing_to_notification": {
+    "default": "Fehler: Mitteilungen nicht eingeschaltet",
+    "de": ""
+  },
+  "success_unsubscribing_from_notification": {
+    "default": "Mitteilungen ausgeschaltet",
+    "de": ""
+  },
+  "error_unsubscribing_from_notification": {
+    "default": "Fehler: Mitteilungen nicht ausgeschaltet",
     "de": ""
   },
   "teams_tab_leaderboard_title": {

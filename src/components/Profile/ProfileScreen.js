@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react';
-import {AsyncStorage, Switch, View, StyleSheet} from 'react-native';
+import {AsyncStorage, StyleSheet, View} from 'react-native';
 import {
     ActionSheet,
     Body,
@@ -20,22 +20,14 @@ import {
 import UploadImage from "../Common/UploadImage";
 import PropTypes from "prop-types"
 import {Mutation, Query} from "react-apollo";
-import {
-    CHANGE_PASSWORD,
-    CURRENT_USER, IS_SUBSCRIBED_TO_NOTIFICATIONS,
-    SUBSCRIBE_TO_NOTIFICATIONS, TEST_NOTIFICATION,
-    UNSUBSCRIBE_FROM_NOTIFICATIONS,
-    UPDATE_PROFILE
-} from "../../network/UserData.gql";
+import {CHANGE_PASSWORD, CURRENT_USER, UPDATE_PROFILE} from "../../network/UserData.gql";
 import {Util} from "../../util";
 import {ValidatingTextField} from "../Common/ValidatingTextInput";
 import client from "../../network/client"
 import material from "../../../native-base-theme/variables/material";
-import {Notifications} from 'expo';
-import * as Permissions from 'expo-permissions';
-import {LocalizationProvider as L} from "../../localization/LocalizationProvider";
+import {Updates} from 'expo';
 import SafeAreaView from 'react-native-safe-area-view';
-import { Updates } from 'expo';
+import {NotificationToggle} from "../Notifications/NotificationToggle";
 
 class ProfileScreen extends Component {
 
@@ -203,16 +195,10 @@ class ProfileScreen extends Component {
                                             />
 
                                             <ListItem itemDivider style={{backgroundColor: 'rgba(0,0,0,0)'}}/>
-
-                                            <ListItem>
-                                                <Body>
-                                                    <Text>Benachrichtigungen</Text>
-                                                </Body>
-                                                <Right>
-                                                    <NotificationToggle/>
-                                                </Right>
-                                            </ListItem>
                                         </List>
+
+                                        <NotificationToggle/>
+
                                     </Fragment>
                                 )
                             }}
@@ -224,141 +210,6 @@ class ProfileScreen extends Component {
 
         );
     };
-}
-
-export class NotificationToggle extends Component {
-
-    state = {
-        hasPermission: false,
-        loading: true,
-        optimisticResult: false,
-        pushToken: ''
-    };
-
-    _checkAndGetPermission = async () => {
-
-        let {status} = await Permissions.getAsync(Permissions.NOTIFICATIONS);
-        if (status !== 'granted') {
-            status = (await Permissions.askAsync(Permissions.NOTIFICATIONS)).status
-        }
-        this.setState({hasPermission: status === 'granted'});
-    };
-
-    _init = async () => {
-        await this._checkAndGetPermission();
-        await this._getPushToken();
-        this.setState({loading: false});
-    };
-
-    componentDidMount() {
-        this._init().catch(error => console.error(error));
-    }
-
-    toggleSubscription = (isSubscribed, pushToken, refetch) => {
-
-        console.log(this.state.loading,
-            this.state.optimisticResult,
-            isSubscribed, !!isSubscribed,
-            this.state.loading ? this.state.optimisticResult : !!isSubscribed);
-        if (isSubscribed) {
-            return (
-                <Mutation mutation={UNSUBSCRIBE_FROM_NOTIFICATIONS}>
-                    {(unsubscribe, {loading, error}) => {
-                        if(loading) return (<Spinner/>)
-                        return (
-                            <Switch
-                                value={this.state.loading ? this.state.optimisticResult : !!isSubscribed}
-                                disabled={this.state.loading}
-                                onValueChange={async () => {
-                                    this.setState({loading: true, optimisticResult: false})
-                                    await unsubscribe().then(() => {
-                                        Toast.show({
-                                            text: L.get("success_unsubscribing_from_notification")
-                                        })
-
-                                    }).catch(error => {
-                                        Toast.show({
-                                            text: L.get("error_unsubscribing_from_notification")
-                                        })
-                                    });
-                                    refetch()
-
-                                }}
-                            />
-                        )
-                    }}
-                </Mutation>
-            )
-        } else {
-            return (
-                <Mutation mutation={SUBSCRIBE_TO_NOTIFICATIONS} errorPolicy="all">
-                    {(subscribe, {loading, error}) => {
-                        if(error) console.log(error.graphQLErrors.map(({message}) => message));
-                        return (
-                            <Switch
-                                value={this.state.loading ? this.state.optimisticResult : isSubscribed}
-                                disabled={loading}
-                                onValueChange={async () => {
-                                    this.setState({loading: true, optimisticResult: true})
-                                    await subscribe({
-                                        variables: {
-                                            pushToken
-                                        },
-                                    }).then(() => {
-                                        Toast.show({
-                                            text: L.get("success_subscribing_to_notification")
-                                        })
-
-                                    }).catch(error => {
-                                        Toast.show({
-                                            text: L.get("error_subscribing_to_notification")
-                                        })
-                                    });
-                                    refetch()
-                                }}
-                            />
-                        )
-                    }}
-                </Mutation>
-            )
-        }
-    };
-
-    render() {
-        const {hasPermission, pushToken} = this.state;
-
-        return (
-            <Query query={IS_SUBSCRIBED_TO_NOTIFICATIONS}>
-                {({loading, error, data, refetch}) => {
-                    if(loading) {
-                        return(
-                            <Switch disabled/>
-                        )
-                    }
-                    return (
-                        <Fragment>
-                            {this.toggleSubscription(data && data.isSubscribed, pushToken, refetch)}
-                            {__DEV__ && data && data.isSubscribed &&
-                            <Mutation mutation={TEST_NOTIFICATION}>
-                                {(testNotification) => (
-                                    <Button onPress={() => testNotification().catch(error => console.error(error))}>
-                                        <Text>test</Text>
-                                    </Button>
-                                )}
-                            </Mutation>
-                            }
-                        </Fragment>
-                    )
-
-                }}
-            </Query>
-        )
-    }
-
-    _getPushToken = async () => {
-        const token = await Notifications.getExpoPushTokenAsync();
-        this.setState({pushToken: token});
-    }
 }
 
 class SettingsField extends Component {
