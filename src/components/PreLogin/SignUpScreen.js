@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react';
-import {AsyncStorage, KeyboardAvoidingView, StyleSheet} from 'react-native'
+import {AsyncStorage, KeyboardAvoidingView, StyleSheet, View} from 'react-native'
 import {Body, Button, Container, Content, Form, Header, Icon, Left, Right, Title} from "native-base";
 import Api from "../../network/api";
 import material from '../../../native-base-theme/variables/material';
@@ -93,8 +93,8 @@ class SignUpScreen extends Component {
                 </Header>
                 <Container>
                     <Content style={{flex: 1}}>
-                        <KeyboardAvoidingView>
                             <Form style={styles.form}>
+                                <KeyboardAvoidingView behavior="position" >
 
                                 <ValidatingTextField
                                     name='userName'
@@ -158,8 +158,9 @@ class SignUpScreen extends Component {
                                         onPress={() => this.register()}>
                                     <Icon name="md-arrow-round-forward"/>
                                 </Button>
+                                </KeyboardAvoidingView>
+
                             </Form>
-                        </KeyboardAvoidingView>
 
                     </Content>
                 </Container>

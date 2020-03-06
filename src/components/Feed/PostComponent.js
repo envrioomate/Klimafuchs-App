@@ -298,12 +298,8 @@ class AddCommentWidget extends Component {
                     transparent={true}
                     visible={this.state.modalVisible}
                     style={styles.modal}
-                    onRequestClose={() => {
-                        this.cancelComment(false);
-                        Toast.show({
-                            text: "Modal closed",
-                        });
-                    }}>
+                    onBackButtonPress={() => this.closeModal()}
+                    onRequestClose={() => this.closeModal()}>
                     <Mutation key={this.props.postId}
                               mutation={ADD_COMMENT}
                               refetchQueries={[{

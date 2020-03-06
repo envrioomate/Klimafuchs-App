@@ -356,7 +356,7 @@ class UserRow extends Component {
         config:
             {
                 options: [
-                    {text: "Annehemn", icon: "md-alert", iconColor: "#444"},
+                    {text: "Annehmen", icon: "md-alert", iconColor: "#444"},
                     {text: "Entfernen", icon: "md-alert", iconColor: "#444"},
                     {text: "Abbrechen", icon: "close", iconColor: "#25de5b"}
                 ],

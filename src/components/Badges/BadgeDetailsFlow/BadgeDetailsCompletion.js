@@ -20,7 +20,6 @@ export class BadgeDetailsCompletion extends Component {
             <Fragment>
                 <Container transparent >
                     <Body style={{flex:1}}>
-                        <Text>{L.get("badge_acquired")}</Text>
                         <Image style={{width: screenWidth - screenWidth/10, height: screenWidth - screenWidth/10, backgroundColor: completionLevelToColor(completion)}}
                                source={badge.challenge.icon ? {uri: badge.challenge.icon.url + '?date=' + (new Date()).getHours()} : require('../../../../assets/image_select.png')}
                                resizeMode="contain"

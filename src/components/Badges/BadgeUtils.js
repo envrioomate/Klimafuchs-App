@@ -48,7 +48,6 @@ export const badgeScreenStyles = StyleSheet.create({
     iconPreview: {
         width: 44,
         height: 44,
-        borderRadius: 5,
         padding: 20,
     },
 });

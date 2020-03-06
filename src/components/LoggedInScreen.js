@@ -21,7 +21,7 @@ export const AppNav = () => {
             inactiveTintColor: material.tabBarTextColor,
             barStyle: {backgroundColor: material.tabDefaultBg, height: 50},
         }}
-                       initialRouteName="NotificationsTab"
+                       initialRouteName="BadgeTab"
                        headerMode="none"
                        labeled="true"
         >

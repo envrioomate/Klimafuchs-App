@@ -128,7 +128,7 @@ const NotificationComponent = ({notification, deleteRowCallback, navigation}) =>
 
     console.log(id, icon, body, title)
     let swipeBtns = [{
-        text: 'Delete',
+        text: 'Entfernen',
         backgroundColor: 'red',
         underlayColor: 'rgba(0, 0, 0, 1, 0.6)',
         onPress: () => {

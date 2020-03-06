@@ -212,6 +212,7 @@ export class InviteUsersScreen extends Component {
                             <CardItem>
                                 <Form style={{flex: 1, alignItems: 'stretch'}}>
                                     <Input
+                                        style={{borderColor: material.textColor, borderWidth: 1}}
                                         name='searchParam'
                                         label='searchParam'
                                         onChangeText={(text) => this.setState({searchParam: text})}
@@ -229,12 +230,19 @@ export class InviteUsersScreen extends Component {
                                 </Form>
                             </CardItem>
 
+
+                            <CardItem  style={{flex:1,justifyContent: 'flex-end' }}>
+                                {(this.state.showSuccess && !this.state.showError) &&
+                                <Text style={{color: '#5f5'}}>Deine Einladung wurde erfolgreich verschickt!</Text>}
+                                {this.state.showError && <Text>{this.state.searchParam} wurde nicht gefunden</Text>}
+                            </CardItem>
+
                             <CardItem>
                                 <Right style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
                                     <Mutation mutation={INVITE_USER} errorPolicy="all">
                                         {(inviteUserToTeam, {loading, error}) => (
 
-                                            <Button transparent onPress={() => {
+                                            <Button primary onPress={() => {
                                                 this.setState({showError: false, showSuccess: false});
                                                 inviteUserToTeam({
                                                         variables: {
@@ -255,15 +263,10 @@ export class InviteUsersScreen extends Component {
                                 </Right>
                             </CardItem>
 
-                            <CardItem  style={{flex:1,justifyContent: 'flex-end' }}>
-                                {(this.state.showSuccess && !this.state.showError) &&
-                                <Text style={{color: '#5f5'}}>Deine Einladung wurde erfolgreich verschickt!</Text>}
-                                {this.state.showError && <Text>{this.state.showError}</Text>}
-                            </CardItem>
 
                             <CardItem footer style={{flex:1,justifyContent: 'flex-end' }}>
                                 <Right style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
-                                    <Button transparent
+                                    <Button info
                                             onPress={() => {
                                                 this.props.navigation.navigate('Main')
                                             }}>

@@ -77,7 +77,9 @@ export class BadgeDetailsCTA extends Component {
                     </Body>
                     <Right>
                         <Image style={isCompleted ? {backgroundColor: iconTint, ...badgeScreenStyles.iconPreview} : {backgroundColor: '#aaa', ...badgeScreenStyles.iconPreview}}
-                               source={icon ? {uri: icon.url + '?date=' + (new Date()).getHours()} : require('../../../../assets/image_select.png')}/>
+                               source={icon ? {uri: icon.url + '?date=' + (new Date()).getHours()} : require('../../../../assets/image_select.png')}
+                               resizeMode="contain"
+                        />
 
                     </Right>
                 </CardItem>
