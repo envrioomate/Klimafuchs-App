@@ -4,6 +4,8 @@ import {
     ActionSheet,
     Body,
     Button,
+    Card,
+    CardItem,
     Container,
     Content,
     Header,
@@ -78,9 +80,8 @@ class ProfileScreen extends Component {
     }
 
 
-
     _signOutAsync = async () => {
-        try{
+        try {
             await AsyncStorage.removeItem('uId');
             await AsyncStorage.removeItem('token');
             await client.clearStore();
@@ -99,26 +100,8 @@ class ProfileScreen extends Component {
 
     render() {
         return (
-            <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
+            <SafeAreaView style={styles.container}>
                 <Container>
-                    <Header>
-                        <Left/>
-                        <Body>
-                            <Title>
-                                Profil
-                            </Title>
-                        </Body>
-                        <Right>
-                            <Button transparent onPress={() => {
-                                ActionSheet.show(
-                                    this.overflowActionsConfig.config,
-                                    this.overflowActionsConfig.callback
-                                )
-                            }}>
-                                <Icon name='md-more'/>
-                            </Button>
-                        </Right>
-                    </Header>
                     <Content style={{flex: 1}}>
                         <Query query={CURRENT_USER}>
                             {({data, loading, error, refetch}) => {
@@ -131,30 +114,44 @@ class ProfileScreen extends Component {
                                 let {userName, screenName, avatar} = data.getCurrentUser;
                                 return (
                                     <Fragment>
-                                        <View style={{flex: 1, alignItems: 'flex-start'}}>
-                                            <Mutation mutation={UPDATE_PROFILE}>
-                                                {(updateProfile, data, error) => {
-                                                    return (
-                                                        <View style={{width: 200, height: 200, margin: 20}}>
-                                                            <UploadImage placeholder={Util.AvatarToUri(avatar)}
-                                                                         onUploadFinished={(media,err) => {
-                                                                             if(err) return;
-                                                                             console.log(media);
-                                                                             updateProfile({
-                                                                                 variables: {
-                                                                                     avatarId: media.id
-                                                                                 }
-                                                                             }).then(() => {
-                                                                                 refetch();
-                                                                             }).catch((err) => console.log(err))
-                                                                         }}/>
+                                        <Card transparent>
+                                            <CardItem>
+                                                <Body>
+                                                    <Mutation mutation={UPDATE_PROFILE}>
+                                                        {(updateProfile, data, error) => {
+                                                            return (
+                                                                <View style={{width: 200, height: 200, margin: 20}}>
+                                                                    <UploadImage placeholder={Util.AvatarToUri(avatar)}
+                                                                                 onUploadFinished={(media, err) => {
+                                                                                     if (err) return;
+                                                                                     console.log(media);
+                                                                                     updateProfile({
+                                                                                         variables: {
+                                                                                             avatarId: media.id
+                                                                                         }
+                                                                                     }).then(() => {
+                                                                                         refetch();
+                                                                                     }).catch((err) => console.log(err))
+                                                                                 }}/>
 
-                                                            <Text>Profilbild ändern</Text>
-                                                        </View>
-                                                    )
-                                                }}
-                                            </Mutation>
-                                        </View>
+                                                                    <Text>Profilbild ändern</Text>
+                                                                </View>
+                                                            )
+                                                        }}
+                                                    </Mutation>
+                                                </Body>
+                                                <Right style={{alignSelf: "flex-start"}}>
+                                                    <Button bordered info onPress={() => {
+                                                        ActionSheet.show(
+                                                            this.overflowActionsConfig.config,
+                                                            this.overflowActionsConfig.callback
+                                                        )
+                                                    }}>
+                                                        <Icon name='md-more'/>
+                                                    </Button>
+                                                </Right>
+                                            </CardItem>
+                                        </Card>
                                         <List>
                                             <SettingsField value={userName}
                                                            hint="email"
@@ -204,6 +201,14 @@ class ProfileScreen extends Component {
                             }}
                         </Query>
 
+                        <Button info block
+                        onPress={() => {
+                            this.props.navigation.navigate("About");
+                        }}>
+                            <Text>
+                                Über die App
+                            </Text>
+                        </Button>
                     </Content>
                 </Container>
             </SafeAreaView>

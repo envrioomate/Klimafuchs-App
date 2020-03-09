@@ -58,7 +58,7 @@ export default class NewPostComponent extends Component {
 
     render() {
         return (
-            <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
+            <SafeAreaView style={styles.container}>
 
             <Container >
 

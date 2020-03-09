@@ -2,7 +2,6 @@ import React from "react";
 import {Image} from 'react-native';
 import {Body, Button, Header, Icon, Left, Right, Title} from "native-base";
 import {createStackNavigator} from "@react-navigation/stack";
-import Constants from "expo-constants";
 import {BadgeDetailsSelectAchievements} from "./BadgeDetailsSelectAchievements";
 import {BadgeDetailsCompletion} from "./BadgeDetailsCompletion";
 import {BadgeDetailsText} from "./BadgeDetailsText";
@@ -28,11 +27,7 @@ const BadgeDetailsScreen = () => {
                             : scene.route.name;
 
                     return (
-                        <Header style={{
-                            paddingTop: Constants.statusBarHeight + 24,
-                            paddingBottom: 32,
-
-                        }}>
+                        <Header>
                             <Left>
                                 <Button transparent
                                         onPress={() => navigation.goBack()}>
@@ -43,15 +38,17 @@ const BadgeDetailsScreen = () => {
                                 <Title>{badge.challenge.title}</Title>
                             </Body>
                             <Right>
-                                <Image style={{backgroundColor: completionLevelToColor(completion), ...badgeScreenStyles.iconPreview}}
-                                       source={badge.challenge.icon ? {uri: badge.challenge.icon.url + '?date=' + (new Date()).getHours()} : require('../../../../assets/image_select.png')}
-                                       resizeMode="contain"
+                                <Image
+                                    style={{backgroundColor: completionLevelToColor(completion), ...badgeScreenStyles.iconPreview}}
+                                    source={badge.challenge.icon ? {uri: badge.challenge.icon.url + '?date=' + (new Date()).getHours()} : require('../../../../assets/image_select.png')}
+                                    resizeMode="contain"
                                 />
                             </Right>
                         </Header>
                     );
                 }
-            }}
+            }
+            }
         >
             <Stack.Screen name="BadgeDetailsText" component={BadgeDetailsText}/>
             <Stack.Screen name="BadgeDetailsCTA" component={BadgeDetailsCTA}/>

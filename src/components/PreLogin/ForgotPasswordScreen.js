@@ -23,6 +23,7 @@ import {loginScreenStyles} from "./LoginScreen";
 import Api from "../../network/api";
 import {LocalizationProvider as L} from "../../localization/LocalizationProvider";
 import Constants from "expo-constants";
+import material from "../../../native-base-theme/variables/material";
 
 export class ForgotPasswordScreen extends Component {
 
@@ -30,6 +31,7 @@ export class ForgotPasswordScreen extends Component {
         super(props);
         this.state = {
             email: '',
+            success: false
         }
     }
 
@@ -42,9 +44,7 @@ export class ForgotPasswordScreen extends Component {
         }
         Api.requestPasswordReset(this.state.email,
             (res) => {
-                Toast.show({
-                    text: L.get("toast_password_reset_success"),
-                })
+                this.setState({success: true})
             },
             (err) => {
                 Toast.show({
@@ -54,7 +54,7 @@ export class ForgotPasswordScreen extends Component {
     }
 
     render() {
-
+        let {success} = this.state
         return (
             <Container style={{paddingTop: Constants.statusBarHeight}}>
                 <Header>
@@ -92,10 +92,20 @@ export class ForgotPasswordScreen extends Component {
                                 </Card>
                             </Row>
                             <Row size={1} style={loginScreenStyles.row}>
-                                <Button primary style={loginScreenStyles.loginButton}
-                                        onPress={() => this.resetPassword()}>
-                                    <Text>{L.get("reset_password_action")}</Text>
-                                </Button>
+                                {success ?
+                                    <Card transparent>
+                                        <CardItem>
+                                    <Text style={{color: material.brandSuccess}}>
+                                        {L.get("toast_password_reset_success")}
+                                    </Text>
+                                        </CardItem>
+                                    </Card>
+                                    :
+                                    <Button primary style={loginScreenStyles.loginButton}
+                                            onPress={() => this.resetPassword()}>
+                                        <Text>{L.get("reset_password_action")}</Text>
+                                    </Button>
+                                }
                             </Row>
                         </Grid>
                     </View>

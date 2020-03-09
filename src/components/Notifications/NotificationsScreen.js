@@ -65,13 +65,8 @@ class NotificationsScreen extends Component {
         let {notifications, navigation} = this.props;
         console.log("notifications: ", notifications);
         return (
-            <SafeAreaView style={styles.container} forceInset={{top: 'always'}}>
-                <Header>
-                    <Left style={{flex: 1}}/>
-                    <Body style={{paddingLeft: 10, flex: 6}}>
-                        <Title>Benachrichtigungen</Title>
-                    </Body>
-                </Header>
+            <SafeAreaView style={styles.container}>
+
 
                 <Container>
                     {notifications.length > 0 ?

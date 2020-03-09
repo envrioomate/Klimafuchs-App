@@ -97,6 +97,8 @@ export class BadgeDetailsCTA extends Component {
         } = badgeGoals;
 
 
+        quantity = parseFloat(quantity.replace(',', '.'));
+
         let minCompleted = levelCompleted(badgeGoalType, Number.NEGATIVE_INFINITY, medQuantity,  medQuantity, Number.POSITIVE_INFINITY,quantity);
         let medCompleted = levelCompleted(badgeGoalType, medQuantity, goodQuantity, goodQuantity, medQuantity,  quantity);
         let goodCompleted = levelCompleted(badgeGoalType, goodQuantity, maxQuantity, maxQuantity,goodQuantity,  quantity);

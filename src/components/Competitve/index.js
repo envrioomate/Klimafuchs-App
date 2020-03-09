@@ -44,13 +44,7 @@ const styles = StyleSheet.create({
 
 const LeaderBoardNav = () => {
     return (
-        <Tab.Navigator
-            tabBarOptions={{
-                style: {
-                    paddingTop: Constants.statusBarHeight,
-                }
-            }}
-        >
+        <Tab.Navigator>
             <Tab.Screen name="Teams" component={LeaderBoardScreen} options={{
                 title: L.get("teams_tab_leaderboard_title"),
             }}/>

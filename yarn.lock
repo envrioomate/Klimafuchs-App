@@ -923,6 +923,15 @@
     pouchdb-collections "^1.0.1"
     tiny-queue "^0.2.1"
 
+"@react-native-community/art@^1.0.3":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@react-native-community/art/-/art-1.1.2.tgz#8d365ad5a12f83a0570ef83590f883a201f8e723"
+  integrity sha512-KCPWdrdkjMOjUjKjYhJUt628mjf+SyoopXPztFbPvSpMl6jI9Qs8fnxnrt8ITKJvt7Xy7K7y6Cn/Q5h1GgIwjQ==
+  dependencies:
+    art "^0.10.3"
+    invariant "^2.2.4"
+    prop-types "^15.7.2"
+
 "@react-native-community/cli@^1.2.1":
   version "1.12.0"
   resolved "https://registry.yarnpkg.com/@react-native-community/cli/-/cli-1.12.0.tgz#f4cbc2204af63a87d5736d2fa6a018c1fd5efd44"
@@ -1540,7 +1549,7 @@ array-unique@^0.3.2:
   resolved "https://registry.yarnpkg.com/array-unique/-/array-unique-0.3.2.tgz#a894b75d4bc4f6cd679ef3244a9fd8f46ae2d428"
   integrity sha1-qJS3XUvE9s1nnvMkSp/Y9Gri1Cg=
 
-art@^0.10.0:
+art@^0.10.0, art@^0.10.3:
   version "0.10.3"
   resolved "https://registry.yarnpkg.com/art/-/art-0.10.3.tgz#b01d84a968ccce6208df55a733838c96caeeaea2"
   integrity sha512-HXwbdofRTiJT6qZX/FnchtldzJjS3vkLJxQilc3Xj+ma2MXjY4UAyQ0ls1XZYVnDvVIBiFZbC6QsvtW86TD6tQ==
@@ -5196,6 +5205,14 @@ react-native-paper@^2.7.0:
     react-lifecycles-compat "^3.0.4"
     react-native-safe-area-view "^0.12.0"
 
+react-native-progress@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/react-native-progress/-/react-native-progress-4.0.3.tgz#0020a9ce9fa5cb14c7aac8f993b31f27a7ff2150"
+  integrity sha512-UMjY9W82bU/NLJ2PxkQ3rZFHZPzVTwKowuOfO1bWEainuyjAXwlcZdyQnZxuqIgHrLkZpg9ppdu+g2mflT86ZQ==
+  dependencies:
+    "@react-native-community/art" "^1.0.3"
+    prop-types "^15.7.2"
+
 react-native-reanimated@~1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.2.0.tgz#9219227a52a5dfa4d34c324596d6726ccd874293"
@@ -5276,6 +5293,11 @@ react-native-tab-view@2.11:
   version "2.11.0"
   resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-2.11.0.tgz#2e57d1f617ccc88c7f452708804f3409f880b700"
   integrity sha512-vqetlxGO7A8bnqvXcB50MWpRZAImXFrDGz1WCQKdCqe03Ey3ZzENe7yLuWrtBJYlepGfOLAsmCXv+wW82Yfm1w==
+
+react-native-tooltips@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-tooltips/-/react-native-tooltips-1.0.2.tgz#51f8f0e5e49f1a1999a37f257d7d04c0c5d69593"
+  integrity sha512-4JDI9fjWmCeiGzSGp5FFEPRYCX/kfawd+IU9LEIN8oICV5AWowF6xmCt0Qtxiqh8Ek4y0nF1JLSO3HeVXGXPAQ==
 
 react-native-typography@^1.0.3:
   version "1.4.1"

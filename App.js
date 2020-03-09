@@ -20,6 +20,7 @@ import client from "./src/network/client"
 import Api from "./src/network/api";
 import {SafeAreaProvider} from "react-native-safe-area-context";
 import { Linking } from 'expo';
+import {PersistentScoreHeader} from "./src/components/Badges/PersistentScoreHeader";
 
 const prefix = Linking.makeUrl('/');
 const Tab = createMaterialBottomTabNavigator();
@@ -174,10 +175,33 @@ function RootContainer() {
     }
     return (
         <NavigationContainer theme={MyTheme} initialState={initialState} ref={ref}>
-            <Stack.Navigator initialRouteName="AuthLoading" headerMode="none">
-                <Stack.Screen name="AuthLoading" component={AuthLoadingScreen}/>
-                <Stack.Screen name="App" component={AppNav}/>
-                <Stack.Screen name="Auth" component={AuthNav}/>
+            <Stack.Navigator initialRouteName="AuthLoading" headerMode="screen">
+                <Stack.Screen name="AuthLoading" component={AuthLoadingScreen} options={{
+                    headerShown: false
+                }}/>
+                <Stack.Screen name="App" component={AppNav}
+                              options={{
+                                  header: ({ scene, previous, navigation }) => {
+                                      const { options } = scene.descriptor;
+                                      const title =
+                                          options.headerTitle !== undefined
+                                              ? options.headerTitle
+                                              : options.title !== undefined
+                                              ? options.title
+                                              : scene.route.name;
+
+                                      return (
+                                          <PersistentScoreHeader options={options} navigation={navigation}/>
+                                      );
+                                  }
+                                  ,headerStyle: {
+                                      height: 80, // Specify the height of your custom header
+                                  }
+                              }}
+                />
+                <Stack.Screen name="Auth" component={AuthNav} options={{
+                    headerShown: false
+                }}/>
             </Stack.Navigator>
         </NavigationContainer>
     )

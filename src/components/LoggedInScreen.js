@@ -8,6 +8,7 @@ import NotificationsScreen from "./Notifications/NotificationsScreen";
 import TeamsNav from "./Competitve"
 import material from '../../native-base-theme/variables/material';
 import {BadgeScreen} from "./Badges/BadgeNavigation";
+import {ProfileNav} from "./Profile";
 
 
 const Tab = createMaterialBottomTabNavigator();
@@ -15,7 +16,10 @@ const Tab = createMaterialBottomTabNavigator();
 export const AppNav = () => {
 
     return (
-        <Tab.Navigator tabBarOptions={{
+        <Tab.Navigator
+
+
+            tabBarOptions={{
             activeTintColor: material.tabBarActiveTextColor,
             inactiveBackgroundColor: '#f0f',
             inactiveTintColor: material.tabBarTextColor,
@@ -59,7 +63,7 @@ export const AppNav = () => {
 
                         }}
             />
-            <Tab.Screen name="ProfileTab"  component={ProfileScreen}
+            <Tab.Screen name="ProfileTab"  component={ProfileNav}
                         options={{
                             title: "Profil",
                             tabBarIcon: ({focused, tintColor}) => (

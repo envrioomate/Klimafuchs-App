@@ -47,16 +47,9 @@ export default class FeedComponent extends Component {
 
     render() {
         return (
-            <SafeAreaView style={styles.container} forceInset={{top: 'always', bottom: 'never'}}>
+            <SafeAreaView style={styles.container}>
                 <StatusBar backgroundColor={'transparent'} translucent/>
                 <Container style={{flex:1, width:"100%"}}>
-                    <Header>
-                        <Left/>
-                        <Body>
-                            <Title>{L.get("feed_navigation_title")}</Title>
-                        </Body>
-                        <Right/>
-                    </Header>
                     <Query query={LOAD_FEED}
                            variables={{page: {first: this.pageSize, after: ""}}}
                            fetchPolicy="cache-and-network"

@@ -58,7 +58,7 @@ export class TeamDetailsModalContent extends FSModalContentBase {
 
     cardContent = (team, myMembership, refetch, editMode, requestModalClose, loading, standalone) => {
         let showUsers = team.closed ? (myMembership && myMembership.isActive) : true;
-        let showRequests = myMembership && myMembership.isAdmin;
+        let showRequests = myMembership && myMembership.isAdmin && !standalone;
         let isInvite = myMembership ? !myMembership.isAccepted : false;
 
         let teamSize = team.members.filter(m => m.isActive).length
@@ -94,7 +94,7 @@ export class TeamDetailsModalContent extends FSModalContentBase {
                             style={{
                                 flex: 1,
                                 flexDirection: 'row'
-                            }}><Text>{L.get("team_details_team_score_label")}: </Text><Text>{team.scorePerUser}</Text></View>
+                            }}><Text>{L.get("team_details_team_score_label")}: </Text><Text>{team.scorePerUser.toFixed(0)}</Text></View>
                     </CardItem>
                     <CardItem>
                         <View style={{
@@ -115,7 +115,7 @@ export class TeamDetailsModalContent extends FSModalContentBase {
                         {this.renderAdmins(team.members, myMembership, editMode, refetch)}
                         <CardItem style={{width: '100%', backgroundColor: '#ECECEC'}}/>
                         {this.renderUsers(team.members, myMembership, editMode, refetch)}
-                        {showRequests &&
+                        {editMode &&
                         <Fragment>
                             <CardItem style={{width: '100%', backgroundColor: '#ECECEC'}}/>
                             {this.renderJoinRequests(team.members, myMembership, editMode, refetch)}
@@ -352,35 +352,43 @@ class UserRow extends Component {
         ],
     };
 
-    overflowRequestActionsConfig = {
-        config:
-            {
-                options: [
-                    {text: "Annehmen", icon: "md-alert", iconColor: "#444"},
-                    {text: "Entfernen", icon: "md-alert", iconColor: "#444"},
-                    {text: "Abbrechen", icon: "close", iconColor: "#25de5b"}
-                ],
-                cancelButtonIndex: 2,
-                destructiveButtonIndex: 1,
+    overflowRequestActionsConfig(isInvite) {
+        return {
+            config:
+                {
+                    options: isInvite ? [
+                        {text: "Entfernen", icon: "md-alert", iconColor: "#444"},
+                        {text: "Abbrechen", icon: "close", iconColor: "#25de5b"}
+                    ] : [
+                        {text: "Annehmen", icon: "md-alert", iconColor: "#444"},
+                        {text: "Entfernen", icon: "md-alert", iconColor: "#444"},
+                        {text: "Abbrechen", icon: "close", iconColor: "#25de5b"}
+                    ],
+                    cancelButtonIndex: 2,
+                    destructiveButtonIndex: 1,
+                },
+
+            callback: (buttonIndex) => {
+
+                let actions =  [
+                    //Annehmen
+                    () => {
+                        this.setState({showAddUserDialog: true})
+                    },
+                    //Entfernen
+                    () => {
+                        this.setState({showDeclineUserDialog: true})
+                    },
+                    //Abbrechen
+                    () => {
+                        console.log("action cancelled")
+                    },
+                ];
+                actions[buttonIndex]();
             },
-        callback: (buttonIndex) => {
-            this.overflowRequestActionsConfig.actions[buttonIndex]();
-        },
-        actions: [
-            //Annehmen
-            () => {
-                this.setState({showAddUserDialog: true})
-            },
-            //Entfernen
-            () => {
-                this.setState({showDeclineUserDialog: true})
-            },
-            //Abbrechen
-            () => {
-                console.log("action cancelled")
-            },
-        ],
-    };
+
+        };
+    }
 
     overflowAdminActionsConfig = {
         config:
@@ -476,8 +484,8 @@ class UserRow extends Component {
                                             this.overflowUserActionsConfig.config,
                                             this.overflowUserActionsConfig.callback
                                         ) : ActionSheet.show(
-                                            this.overflowRequestActionsConfig.config,
-                                            this.overflowRequestActionsConfig.callback
+                                            this.overflowRequestActionsConfig(!member.isAccepted).config,
+                                            this.overflowRequestActionsConfig(!member.isAccepted).callback
                                         )
                                     )
                                 } else if (ownStatus.isActive) {

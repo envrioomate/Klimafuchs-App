@@ -30,24 +30,10 @@ function BadgeNavigation() {
 export const BadgeScreen = () => {
     return (
         <Stack.Navigator
-            headerMode="screen"
+            headerMode="none"
         >
             <Stack.Screen name="Main" component={BadgeNavigation}
-                          options={{
-                              header: ({ scene, previous, navigation }) => {
-                                  const { options } = scene.descriptor;
-                                  const title =
-                                      options.headerTitle !== undefined
-                                          ? options.headerTitle
-                                          : options.title !== undefined
-                                          ? options.title
-                                          : scene.route.name;
 
-                                  return (
-                                      <PersistentScoreHeader options={options} navigation={navigation}/>
-                                  );
-                              }
-                          }}
             />
             <Stack.Screen name="BadgeDetails"
                           options={{

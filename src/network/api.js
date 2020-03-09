@@ -124,7 +124,7 @@ export default {
     },
 
     requestPasswordReset(email, onSuccess, onError) {
-        axios.get("/api/resetPassword", {
+        axios.get(baseUrl +"/api/resetPassword", {
             params: {username: email}
         }).then((res) => {
             if (verbose) console.log(res);

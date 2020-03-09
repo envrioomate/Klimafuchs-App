@@ -16,7 +16,7 @@ import {
 } from "native-base";
 import material from "../../../native-base-theme/variables/material";
 import {Mutation} from "react-apollo";
-import {CREATE_TEAM, INVITE_USER} from "../../network/Teams.gql";
+import {CREATE_TEAM, INVITE_USER, MY_MEMBERSHIPS} from "../../network/Teams.gql";
 import UploadImage from "../Common/UploadImage";
 import {ValidatingTextField} from "../Common/ValidatingTextInput";
 import PropTypes from 'prop-types';
@@ -115,7 +115,9 @@ export class CreateTeamScreen extends Component {
                                     <Button transparent onPress={() => requestModalClose()}>
                                         <Text>{L.get("create_team_view_cancel")}</Text>
                                     </Button>
-                                    <Mutation mutation={CREATE_TEAM} errorPolicy="all">
+                                    <Mutation mutation={CREATE_TEAM} errorPolicy="all" refetchQueries={[{
+                                        query: MY_MEMBERSHIPS
+                                    }]}>
                                         {(createTeam) => {
                                             return (
                                                 <Button transparent

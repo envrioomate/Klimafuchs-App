@@ -19,7 +19,7 @@ import material from "../../../native-base-theme/variables/material";
 import UploadImage from "../Common/UploadImage";
 import {ValidatingTextField} from "../Common/ValidatingTextInput";
 import {Mutation} from "react-apollo";
-import {CREATE_TEAM, MOD_TEAM} from "../../network/Teams.gql";
+import {CREATE_TEAM, GET_TEAM, MOD_TEAM} from "../../network/Teams.gql";
 import {Util} from "../../util";
 import SafeAreaView from 'react-native-safe-area-view';
 
@@ -121,7 +121,12 @@ export class EditTeamScreen extends Component {
                                     <Button transparent onPress={() => this.props.navigation.navigate('Main')}>
                                         <Text>Abbrechen</Text>
                                     </Button>
-                                    <Mutation mutation={MOD_TEAM} errorPolicy="all">
+                                    <Mutation mutation={MOD_TEAM} errorPolicy="all" refetchQueries={[{
+                                        query: GET_TEAM,
+                                        variables: {
+                                            teamId: teamId
+                                        }
+                                    }]}>
                                         {(updateTeam) => {
                                             return (
                                                 <Button transparent
