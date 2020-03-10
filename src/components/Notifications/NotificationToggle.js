@@ -136,8 +136,7 @@ export class NotificationToggle extends Component {
                                     {this.toggleSubscription(data && data.isSubscribed, pushToken, refetch)}
                                 </Right>
                             </CardItem>
-                            {data && data.isSubscribed &&
-                            <CardItem>
+                            {data && data.isSubscribed && __DEV__ && <CardItem>
                                 <Mutation  mutation={TEST_NOTIFICATION}>
                                     {(testNotification) => (
                                         <Body>

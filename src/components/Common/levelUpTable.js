@@ -5,9 +5,9 @@ export const LevelUpTable = {
       name: "Ameise",
       icon: {
         type: "local",
-        path: require("../../../assets/playerLevels/snail.png") //TODO ant icon missing
+        path: require("../../../assets/playerLevels/ant.png") //TODO ant icon missing
       },
-      maxScore: 50
+      maxScore: 700
     },
     {
       index: 1,
@@ -16,7 +16,7 @@ export const LevelUpTable = {
         type: "local",
         path: require("../../../assets/playerLevels/bee.png")
       },
-      maxScore: 700
+      maxScore: 1400
     },
     {
       index: 2,
@@ -25,7 +25,7 @@ export const LevelUpTable = {
         type: "local",
         path: require("../../../assets/playerLevels/butterfly.png")
       },
-      maxScore: 1400
+      maxScore: 2100
     },
     {
       index: 3,
@@ -34,7 +34,7 @@ export const LevelUpTable = {
         type: "local",
         path: require("../../../assets/playerLevels/cricket.png")
       },
-      maxScore: 2100
+      maxScore: 2800
     },
     {
       index: 4,
@@ -43,7 +43,7 @@ export const LevelUpTable = {
         type: "local",
         path: require("../../../assets/playerLevels/dragonfly.png")
       },
-      maxScore: 2800
+      maxScore: 3500
     },
     {
       index: 5,
@@ -52,7 +52,7 @@ export const LevelUpTable = {
         type: "local",
         path: require("../../../assets/playerLevels/snail.png")
       },
-      maxScore: 3500
+      maxScore: 4300
     },
     {
       index: 6,
@@ -61,7 +61,7 @@ export const LevelUpTable = {
         type: "local",
         path: require("../../../assets/playerLevels/seahorse.png")
       },
-      maxScore: 4300
+      maxScore: 99999
     }
   ]
 };

@@ -209,7 +209,7 @@
   },
   "tab_achievements": {
     "default": "Achievements",
-    "de": "Geschafft"
+    "de": "Aktivitäten"
   },
   "tab_thema": {
     "default": "Thema",
@@ -229,7 +229,7 @@
   },
   "hint_dismiss_all_notifications": {
     "default": "Alle Mitteilungen löschen?",
-    "de": "Alle Mitteilungen löschen?"
+    "de": "Alle Mitteilungen löschen? (Einzelne Mitteinlungen können durch nach links wischen gelöscht werden)"
   },
   "enable_notifications_now": {
     "default": "Mitteilungen jetzt einschalten?",

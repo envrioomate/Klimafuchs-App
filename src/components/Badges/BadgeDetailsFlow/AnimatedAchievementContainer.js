@@ -169,9 +169,9 @@ export class AnimatedAchievementContainer extends Component {
                     <Body style={{
                         width: "100%",
                     }}>
-                        <H1 style={{
+                        <Text style={{
                             width: "100%",
-                        }}>{achievement.title}</H1>
+                        }}>{achievement.title}</Text>
                     </Body>
 
                 </AnimatedCardItem>
@@ -188,18 +188,7 @@ export class AnimatedAchievementContainer extends Component {
                         width: "100%",
                         overflow: "hidden"
                     }}>
-                        <AnimatedCardItem style={{backgroundColor: this.getAnimatedColor(), width: "100%"}}>
-                            <Body style={{
-                                width: "100%"
-                            }}>
-                                <Text style={{
-                                    width: "100%"
-                                }}>{achievement.text}</Text>
-                            </Body>
-                            <Right>
-                                {achievement.externalLink ? <ExternalLinkButton url={achievement.externalLink}/> : null }
-                            </Right>
-                        </AnimatedCardItem>
+
 
 
                         <AnimatedCardItem style={{backgroundColor: this.getAnimatedColor(), width: "100%"}}>

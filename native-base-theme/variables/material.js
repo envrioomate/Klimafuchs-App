@@ -31,6 +31,9 @@ export default {
     badgeColor: "#fff",
     badgePadding: 0,
 
+    //Header
+    levelIconBackground: "#c31726",
+
     // Button
     btnFontFamily: "Roboto",
     btnDisabledBg: "#b5b5b5",

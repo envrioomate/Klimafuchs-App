@@ -11,7 +11,7 @@ import getTheme from './native-base-theme/components';
 import material from './native-base-theme/variables/material';
 import {persistor, store} from "./src/persistence/store"
 import {PersistGate} from 'redux-persist/integration/react'
-
+import * as Font from 'expo-font';
 import {AppNav} from "./src/components/LoggedInScreen";
 import {ForgotPasswordScreen} from "./src/components/PreLogin/ForgotPasswordScreen";
 import {Notifications} from "expo";
@@ -50,11 +50,10 @@ export default class AppRoot extends Component {
     }
 
     async componentWillMount() {
-//        await Font.loadAsync({
-//            Roboto: require("native-base/Fonts/Roboto.ttf"),
-//            Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
-//            Ionicons: require("react-native-vector-icons/Fonts/Ionicons.ttf")
-//       });
+        await Font.loadAsync({
+            Roboto: require("native-base/Fonts/Roboto.ttf"),
+            Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
+       });
         await client.resetStore();
         this.setState({loading: false})
     }

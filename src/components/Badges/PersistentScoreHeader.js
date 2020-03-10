@@ -6,7 +6,7 @@ import {GET_SCORE} from "../../network/Badges.gql";
 import AnimateNumber from 'react-native-countup';
 import RNTooltips from 'react-native-tooltips'
 import * as Progress from 'react-native-progress';
-import {StyleSheet, View, Animated, TouchableOpacity, Image} from "react-native";
+import {StyleSheet, View, Animated, TouchableOpacity, Image, Platform} from "react-native";
 import {Score} from "../Common/Score";
 import {Dimensions} from "react-native";
 import {LevelUpTable} from "../Common/levelUpTable"
@@ -39,8 +39,6 @@ class ScoreContainer extends Component {
             <View style={{flex: 1, flexDirection: "row"}}>
 
                 <Title>
-                    <Score pt={20}/>
-                    <Text> </Text>
                     <AnimateNumber
                         value={score}
                         initial={prevScore}
@@ -48,6 +46,10 @@ class ScoreContainer extends Component {
                             return parseFloat(val).toFixed(0)
                         }}
                     />
+                    <Text> </Text>
+
+                    <Score pt={20}/>
+
                 </Title>
 
             </View>
@@ -59,21 +61,30 @@ class CurrentLevelContainer extends Component {
     render() {
         const {score} = this.props;
         let currentLevel = getCurrentLevel(score);
-        let size = 20 * 1.33;
+        let size = 36 * 1.33;
         return (
 
             <View style={{
-                backgroundColor: material.brandLight,
+                backgroundColor: material.levelIconBackground,
+                borderColor: '#000',
+                borderWidth: 3,
                 borderRadius: 5,
-                overflow: "hidden"
+                overflow: "hidden",
+                marginLeft: 5,
+                bottom: 0,
+                flex:1,
+                justifyContent: "center",
+                alignItems: "center",
+                width: size,
+                height: size
             }}>
                 <Image
                     resizeMode="contain"
                     source={currentLevel.icon.path}
                     fadeDuration={0}
                     style={{
-                        height: size,
-                        width: size
+                        height: size-4,
+                        width: size-4,
                     }}
 
                 />
@@ -94,6 +105,8 @@ const getCurrentLevel = (score) => {
     }
     return levelUpTable.levels[levelUpTable.levels.length - 1]
 };
+
+
 
 const getProgressInLevel = (score, level) => {
     let lowerBound = 0;
@@ -133,7 +146,7 @@ class XPBar extends Component {
         return (
             <Progress.Bar
                 progress={progress}
-                width={screenWidth + 2}
+                width={null}
                 borderRadius={0}
                 color={material.brandSuccess}
                 unfilledColor={material.brandLight}
@@ -152,34 +165,50 @@ export class PersistentScoreHeader extends Component {
 
     render() {
         let {options, navigation} = this.props;
+        let topPadding = Platform.OS === 'ios' ? 20 : 5;
         return (
-            <Header transparent style={{backgroundColor: material.brandInfo}}>
+            <Header transparent style={{backgroundColor: material.brandInfo, height: 75+topPadding}}>
 
                 <Query query={GET_SCORE}>
                     {({loading, error, data, startPolling, stopPolling}) => {
                         if (loading) return (
                             <Fragment>
                                 <Left/>
-                            <Body>
-                                <Spinner/>
-                            </Body>
+                                <Body>
+                                    <Spinner/>
+                                </Body>
                                 <Left/>
                             </Fragment>
                         );
                         if (error) return <Text>Error {error.message}</Text>;
                         console.log(data.score);
+                        let {score} = data;
+                        let currentLevel = getCurrentLevel(score);
+                        let lastLevel = currentLevel.index > 1 ? LevelUpTable.levels[currentLevel.index -1] : null;
+
                         return (
-                            <View style={{paddingTop: 5}}>
+                            <View style={{paddingTop: topPadding, flex: 1, flexDirection: "row"}}>
+                                <View style={{flex: 6, paddingBottom: 2, flexDirection: "column"}}>
+                                    <View style={{
+                                        flex: 1,
+                                        flexDirection: "row",
+                                        justifyContent: "space-around",
+                                        alignItems: "baseline",
+                                        paddingLeft: 10,
+                                        paddingRight: 10
+                                    }}>
+                                        <ScoreContainer score={score}/>
 
-                                <View style={{flex: 1, flexDirection: "row", justifyContent: "space-around", alignItems: "baseline", paddingLeft: 10, paddingRight: 10}}>
-                                    <Left/>
 
-                                    <ScoreContainer score={data.score}/>
-                                    <CurrentLevelContainer score={data.score}/>
-                                    <Left/>
-
+                                        <Title style={{top: 10}}>
+                                            {score}/{currentLevel.maxScore }
+                                        </Title>
+                                    </View>
+                                    <XPBar score={score}/>
                                 </View>
-                                <XPBar score={data.score}/>
+                                <View style={{flex: 1, flexDirection: "column"}}>
+                                    <CurrentLevelContainer score={score}/>
+                                </View>
                             </View>
                         )
                     }}

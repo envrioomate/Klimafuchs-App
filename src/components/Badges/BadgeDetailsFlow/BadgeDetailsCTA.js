@@ -97,7 +97,7 @@ export class BadgeDetailsCTA extends Component {
         } = badgeGoals;
 
 
-        quantity = parseFloat(quantity.replace(',', '.'));
+        quantity = parseFloat(quantity.toString().replace(',', '.'));
 
         let minCompleted = levelCompleted(badgeGoalType, Number.NEGATIVE_INFINITY, medQuantity,  medQuantity, Number.POSITIVE_INFINITY,quantity);
         let medCompleted = levelCompleted(badgeGoalType, medQuantity, goodQuantity, goodQuantity, medQuantity,  quantity);
@@ -111,7 +111,7 @@ export class BadgeDetailsCTA extends Component {
                         maxCompleted ? ChallengeGoalCompletionLevel.MAX : null;
 
         this.setState({
-            enteredQuantity: quantity,
+            enteredQuantity: quantity.toString(),
             completionState: {
                 minCompleted, medCompleted, goodCompleted, maxCompleted
             },

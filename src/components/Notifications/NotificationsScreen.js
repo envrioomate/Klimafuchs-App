@@ -108,8 +108,6 @@ class NotificationsScreen extends Component {
                                     </Card>
                             </Container>
                         </Fragment>}
-
-
                 </Container>
             </SafeAreaView>
         );
