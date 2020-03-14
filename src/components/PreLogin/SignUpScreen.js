@@ -1,12 +1,27 @@
 import React, {Component, Fragment} from 'react';
-import {AsyncStorage, KeyboardAvoidingView, StyleSheet, View} from 'react-native'
-import {Body, Button, Container, Content, Form, Header, Icon, Left, Right, Title} from "native-base";
+import {AsyncStorage, KeyboardAvoidingView, StyleSheet, ScrollView, Keyboard} from 'react-native'
+import CheckBox from '@react-native-community/checkbox';
+import {
+    Body,
+    Button,
+    Container,
+    Content,
+    Form,
+    Header,
+    Icon,
+    Left,
+    Right,
+    Title,
+    Card,
+    CardItem,
+    Text,
+    Input
+} from "native-base";
 import Api from "../../network/api";
 import material from '../../../native-base-theme/variables/material';
 import {ValidatingTextField} from "../Common/ValidatingTextInput";
 import {LocalizationProvider as L} from "../../localization/LocalizationProvider";
 import Constants from 'expo-constants'
-
 
 class SignUpScreen extends Component {
     state = {
@@ -75,7 +90,6 @@ class SignUpScreen extends Component {
             });
     };
 
-
     render() {
         return (
             <Fragment>
@@ -92,9 +106,16 @@ class SignUpScreen extends Component {
                     <Right/>
                 </Header>
                 <Container>
-                    <Content style={{flex: 1}}>
-                            <Form style={styles.form}>
-                                <KeyboardAvoidingView behavior="position" >
+                    <KeyboardAvoidingView
+                        keyboardVerticalOffset={100}
+                        style={{flex:1 }}
+                        behavior="padding"
+                        keyboardDismissMode="interactive"
+                        keyboardShouldPersistTaps="always"
+                        getTextInputRefs={() => { return [this.emailInput,this.screenNameInput, this.passwordInput, this.password2Input];}}
+                    >
+                    <ScrollView ref={(ref) => this.scrollView = ref}>
+                    <Form style={styles.form}>
 
                                 <ValidatingTextField
                                     name='userName'
@@ -105,8 +126,14 @@ class SignUpScreen extends Component {
                                     externalError={this.state.userNameError}
                                     ref={(ref) => this.emailInput = ref}
                                     onBlur={(error) => {
-                                        this.setState({userNameError: error})
+                                        this.setState({userNameError: error});
                                     }}
+                                    onSubmitEditing={ () => {
+                                        this.screenNameInput.focusInput();
+                                        this.scrollView.scrollTo({y:100, animated: true})
+                                    }}
+                                    blurOnSubmit={false}
+
                                 />
 
                                 <ValidatingTextField
@@ -118,8 +145,13 @@ class SignUpScreen extends Component {
                                     externalError={this.state.screenNameError}
                                     ref={(ref) => this.screenNameInput = ref}
                                     onBlur={(error) => {
-                                        this.setState({screeNameError: error})
+                                        this.setState({screeNameError: error});
                                     }}
+                                    onSubmitEditing={ () => {
+                                        this.passwordInput.focusInput();
+                                        this.scrollView.scrollTo({y:200, animated: true})
+                                    }}
+                                    blurOnSubmit={false}
 
                                 />
 
@@ -133,9 +165,14 @@ class SignUpScreen extends Component {
                                     externalError={this.state.passwordError}
                                     ref={(ref) => this.passwordInput = ref}
                                     onBlur={(error) => {
-                                        this.setState({passwordError: error})
+                                        this.setState({passwordError: error});
+                                    }}
+                                    onSubmitEditing={ () => {
+                                        this.password2Input.focusInput();
+                                        this.scrollView.scrollTo({y:300, animated: true})
                                     }}
 
+                                    blurOnSubmit={false}
                                 />
 
                                 <ValidatingTextField
@@ -150,19 +187,40 @@ class SignUpScreen extends Component {
                                     onBlur={(error) => {
                                         this.checkPasswords();
                                     }}
+
                                 />
 
+                                <Card>
+                                    <CardItem>
+                                        <Left>
+                                             <CheckBox value={this.state.gdprAccept}
+                                                       onValueChange={() => this.setState({ gdprAccept: !this.state.gdprAccept })}
+                                             />
+                                        </Left>
+                                        <Body style={{flex:4}}>
+                                            <Text
+                                                  onPress={() => {
+                                                      console.log(`${this.constructor.name}: privacy clicked!`);
+                                                      this.props.navigation.navigate("PrivacyPolicyScreen");
+                                                  }}>
+                                                Ich habe die <Text style={{color: "blue", textDecorationLine: 'underline', fontWeight: 'bold'}}>Datenschutzerklärung</Text> gelesen und stimme ihr zu
+                                            </Text>
+                                        </Body>
+
+                                    </CardItem>
+                                </Card>
+
                                 <Button
-                                    disabled={!!(this.state.screenNameError || this.state.userNameError || this.state.passwordError)}
+                                    disabled={!!(this.state.screenNameError || this.state.userNameError || this.state.passwordError || !this.state.gdprAccept)}
                                     full primary rounded style={{paddingBottom: 4, marginTop: 20,}}
                                         onPress={() => this.register()}>
                                     <Icon name="md-arrow-round-forward"/>
                                 </Button>
-                                </KeyboardAvoidingView>
 
-                            </Form>
+                        </Form>
+                    </ScrollView>
 
-                    </Content>
+                    </KeyboardAvoidingView>
                 </Container>
             </Fragment>
 

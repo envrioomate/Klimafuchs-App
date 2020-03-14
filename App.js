@@ -21,6 +21,7 @@ import Api from "./src/network/api";
 import {SafeAreaProvider} from "react-native-safe-area-context";
 import { Linking } from 'expo';
 import {PersistentScoreHeader} from "./src/components/Badges/PersistentScoreHeader";
+import {PrivacyPolicyScreen} from "./src/components/PreLogin/PrivacyPolicyScreen";
 
 const prefix = Linking.makeUrl('/');
 const Tab = createMaterialBottomTabNavigator();
@@ -125,6 +126,8 @@ const AuthNav = () => {
             <Stack.Screen name="LoginScreen" component={LoginScreen}/>
             <Stack.Screen name="SignUpScreen" component={SignUpScreen}/>
             <Stack.Screen name="ForgotPasswordScreen" component={ForgotPasswordScreen}/>
+            <Stack.Screen name="PrivacyPolicyScreen" component={PrivacyPolicyScreen}/>
+
         </Stack.Navigator>
     )
 };

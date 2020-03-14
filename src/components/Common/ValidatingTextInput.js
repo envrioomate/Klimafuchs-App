@@ -18,7 +18,9 @@ export class ValidatingTextField extends Component {
         externalError: PropTypes.string,
         secureTextEntry: PropTypes.bool,
         onBlur: PropTypes.func,
-        alwaysShowErrors: PropTypes.bool
+        onSubmitEditing: PropTypes.func,
+        alwaysShowErrors: PropTypes.bool,
+        blurOnSubmit: PropTypes.bool
     };
 
     state = {
@@ -38,8 +40,13 @@ export class ValidatingTextField extends Component {
         return error;
     };
 
+
+    focusInput = () => {
+        this.input._root.focus()
+    };
+
     render() {
-        let {label, name, onChangeText, secureTextEntry, externalError, onBlur, alwaysShowErrors} = this.props;
+        let {label, name, onChangeText, secureTextEntry, externalError, onBlur, alwaysShowErrors, onSubmitEditing, blurOnSubmit} = this.props;
         let {error} = this.state;
         let showsErrors = (error || externalError);
         return (
@@ -47,6 +54,7 @@ export class ValidatingTextField extends Component {
                 <Item regular style={showsErrors ? styles.formTextboxError : styles.formTextbox}>
                     <Input name={name}
                            secureTextEntry={secureTextEntry}
+                           autoCapitalize={secureTextEntry?"none":"sentences"}
                            onChangeText={(text) => {
                                this.setState({
                                    value: text,
@@ -66,7 +74,11 @@ export class ValidatingTextField extends Component {
                                });
                                if (onBlur) onBlur(error);
                            }}
-                           value={this.state.value}/>
+                           value={this.state.value}
+                           ref={(ref) => this.input = ref}
+                           onSubmitEditing={onSubmitEditing}
+                           blurOnSubmit={blurOnSubmit}
+                    />
                 </Item>
                 <Label style={showsErrors ? styles.formLabelError : styles.formLabel}>{label}</Label>
 
