@@ -6,7 +6,7 @@ import {GET_SCORE} from "../../network/Badges.gql";
 import AnimateNumber from 'react-native-countup';
 import RNTooltips from 'react-native-tooltips'
 import * as Progress from 'react-native-progress';
-import {StyleSheet, View, Animated, TouchableOpacity, Image, Platform} from "react-native";
+import {StyleSheet, View, Animated, TouchableOpacity, Image, StatusBar, Platform} from "react-native";
 import {Score} from "../Common/Score";
 import {Dimensions} from "react-native";
 import {LevelUpTable} from "../Common/levelUpTable"
@@ -185,6 +185,12 @@ export class PersistentScoreHeader extends Component {
                         let {score} = data;
                         let currentLevel = getCurrentLevel(score);
                         let lastLevel = currentLevel.index > 1 ? LevelUpTable.levels[currentLevel.index -1] : null;
+                        let lastLevelMaxScore = lastLevel ? lastLevel.maxScore : 0;
+                        let nextLevelScore = currentLevel.maxScore - lastLevelMaxScore;
+                        let currentLevelScore = score - lastLevelMaxScore;
+                        let currentLevelProgress = `${currentLevelScore}/${nextLevelScore}`;
+
+                            const hasNotch = Platform.OS === 'android' &&  StatusBar.currentHeight > 24;
 
                         return (
                             <View style={{paddingTop: topPadding, flex: 1, flexDirection: "row"}}>
@@ -200,8 +206,8 @@ export class PersistentScoreHeader extends Component {
                                         <ScoreContainer score={score}/>
 
 
-                                        <Title style={{top: 10}}>
-                                            {score}/{currentLevel.maxScore }
+                                        <Title style={{top: hasNotch?0:10}}>
+                                            {currentLevelProgress}
                                         </Title>
                                     </View>
                                     <XPBar score={score}/>

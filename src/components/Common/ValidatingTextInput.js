@@ -46,7 +46,7 @@ export class ValidatingTextField extends Component {
     };
 
     render() {
-        let {label, name, onChangeText, secureTextEntry, externalError, onBlur, alwaysShowErrors, onSubmitEditing, blurOnSubmit} = this.props;
+        let {label, name, onChangeText, secureTextEntry, externalError, onBlur, alwaysShowErrors, onSubmitEditing, blurOnSubmit, onFocus} = this.props;
         let {error} = this.state;
         let showsErrors = (error || externalError);
         return (
@@ -78,6 +78,7 @@ export class ValidatingTextField extends Component {
                            ref={(ref) => this.input = ref}
                            onSubmitEditing={onSubmitEditing}
                            blurOnSubmit={blurOnSubmit}
+                           onFocus={onFocus}
                     />
                 </Item>
                 <Label style={showsErrors ? styles.formLabelError : styles.formLabel}>{label}</Label>

@@ -14,7 +14,7 @@ import {
     Form,
     Textarea, Label, Right
 } from "native-base";
-import {StyleSheet, Switch, View} from "react-native";
+import {KeyboardAvoidingView, ScrollView, StyleSheet, Switch, View} from "react-native";
 import material from "../../../native-base-theme/variables/material";
 import UploadImage from "../Common/UploadImage";
 import {ValidatingTextField} from "../Common/ValidatingTextInput";
@@ -64,8 +64,15 @@ export class EditTeamScreen extends Component {
                         </Body>
                     </Header>
 
-                    <Content style={{flex: 1}}>
-
+                    <KeyboardAvoidingView
+                        keyboardVerticalOffset={100}
+                        style={{flex:1 }}
+                        behavior="padding"
+                        keyboardDismissMode="interactive"
+                        keyboardShouldPersistTaps="always"
+                        getTextInputRefs={() => { return [this.teamNameInput,this.teamDescriptionInput];}}
+                    >
+                        <ScrollView ref={(ref) => this.scrollView = ref}>
 
                         <Card transparent style={{
                             margin: '10%',
@@ -91,6 +98,15 @@ export class EditTeamScreen extends Component {
                                         showErrors={this.state.showErrors}
                                         externalError={this.state.nameError}
                                         ref={(ref) => this.teamNameInput = ref}
+                                        onSubmitEditing={ () => {
+                                            this.teamDescriptionInput._root.focus();
+                                            this.scrollView.scrollTo({y:300, animated: true})
+                                        }}
+                                        blurOnSubmit={false}
+                                        onFocus={() => {
+                                            this.scrollView.scrollTo({y:200, animated: true})
+                                        }}
+
                                     />
                                 </Form>
                             </CardItem>
@@ -100,9 +116,10 @@ export class EditTeamScreen extends Component {
                                     <Textarea rowSpan={5} bordered
                                               name='teamDescription'
                                               onChangeText={(text) => this.setState({teamDescription: text})}
+                                              ref={(ref) => this.teamDescriptionInput = ref}
+
                                               value={this.state.teamDescription || description} style={{
                                         borderColor: material.textColor,
-
                                     }}
                                     />
                                     <Label style={{
@@ -169,9 +186,8 @@ export class EditTeamScreen extends Component {
                                 </Right>
                             </CardItem>
                         </Card>
-
-
-                    </Content>
+                        </ScrollView>
+                    </KeyboardAvoidingView>
                 </Container>
             </SafeAreaView>)
     };

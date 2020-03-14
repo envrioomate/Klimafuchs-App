@@ -20,7 +20,7 @@ import {CREATE_TEAM, INVITE_USER, MY_MEMBERSHIPS} from "../../network/Teams.gql"
 import UploadImage from "../Common/UploadImage";
 import {ValidatingTextField} from "../Common/ValidatingTextInput";
 import PropTypes from 'prop-types';
-import {StyleSheet, View, Switch} from "react-native";
+import {StyleSheet, View, Switch, KeyboardAvoidingView, ScrollView} from "react-native";
 import {LocalizationProvider as L} from "../../localization/LocalizationProvider";
 import SafeAreaView from 'react-native-safe-area-view';
 import {createStackNavigator} from "@react-navigation/stack";
@@ -59,9 +59,15 @@ export class CreateTeamScreen extends Component {
                         </Body>
                     </Header>
 
-                    <Content style={{flex: 1}}>
-
-
+                    <KeyboardAvoidingView
+                        keyboardVerticalOffset={100}
+                        style={{flex:1 }}
+                        behavior="padding"
+                        keyboardDismissMode="interactive"
+                        keyboardShouldPersistTaps="always"
+                        getTextInputRefs={() => { return [this.teamNameInput,this.teamDescriptionInput];}}
+                    >
+                        <ScrollView ref={(ref) => this.scrollView = ref}>
                         <Card transparent style={{
                             margin: '10%',
                             flex: 1,
@@ -86,6 +92,14 @@ export class CreateTeamScreen extends Component {
                                         showErrors={this.state.showErrors}
                                         externalError={this.state.nameError}
                                         ref={(ref) => this.teamNameInput = ref}
+                                        onSubmitEditing={ () => {
+                                            this.teamDescriptionInput._root.focus();
+                                            this.scrollView.scrollTo({y:300, animated: true})
+                                        }}
+                                        blurOnSubmit={false}
+                                        onFocus={() => {
+                                            this.scrollView.scrollTo({y:200, animated: true})
+                                        }}
                                     />
                                 </Form>
                             </CardItem>
@@ -95,6 +109,8 @@ export class CreateTeamScreen extends Component {
                                     <Textarea rowSpan={5} bordered
                                               name='teamDescription'
                                               onChangeText={(text) => this.setState({teamDescription: text})}
+                                              ref={(ref) => this.teamDescriptionInput = ref}
+
                                               value={this.state.teamDescription} style={{
                                         borderColor: material.textColor,
 
@@ -157,10 +173,9 @@ export class CreateTeamScreen extends Component {
                                 </Right>
                             </CardItem>
                         </Card>
-
-
-                    </Content>
-                </Container>
+                        </ScrollView>
+                    </KeyboardAvoidingView>
+                        </Container>
             </SafeAreaView>)
     };
 }
