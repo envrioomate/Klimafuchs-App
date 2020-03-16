@@ -142,7 +142,6 @@ class XPBar extends Component {
         const {score} = this.props;
         let currentLevel = getCurrentLevel(score);
         let progress = getProgressInLevel(score, currentLevel);
-        console.log({currentLevel, score, progress});
         return (
             <Progress.Bar
                 progress={progress}
@@ -181,7 +180,6 @@ export class PersistentScoreHeader extends Component {
                             </Fragment>
                         );
                         if (error) return <Text>Error {error.message}</Text>;
-                        console.log(data.score);
                         let {score} = data;
                         let currentLevel = getCurrentLevel(score);
                         let lastLevel = currentLevel.index > 1 ? LevelUpTable.levels[currentLevel.index -1] : null;

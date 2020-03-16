@@ -47,13 +47,13 @@ export class TeamDetailsModalContent extends FSModalContentBase {
         this.setState({uId});
     }
 
-    getOwnStatus = (members) => {
+    getOwnStatus = (members, currentTeamId) => {
         let {uId} = this.state;
         let myMembership = members.filter((membership) => membership.user.id == uId)[0];
         if (!myMembership) {
             console.log(members, myMembership, uId)
         }
-        return myMembership;
+        return {...myMembership, teamId: currentTeamId};
     };
 
     cardContent = (team, myMembership, refetch, editMode, requestModalClose, loading, standalone) => {
@@ -115,7 +115,7 @@ export class TeamDetailsModalContent extends FSModalContentBase {
                         {this.renderAdmins(team.members, myMembership, editMode, refetch)}
                         <CardItem style={{width: '100%', backgroundColor: '#ECECEC'}}/>
                         {this.renderUsers(team.members, myMembership, editMode, refetch)}
-                        {editMode &&
+                        {editMode && !isInvite &&
                         <Fragment>
                             <CardItem style={{width: '100%', backgroundColor: '#ECECEC'}}/>
                             {this.renderJoinRequests(team.members, myMembership, editMode, refetch)}
@@ -145,8 +145,8 @@ export class TeamDetailsModalContent extends FSModalContentBase {
                         width: '100%',
                         backgroundColor: '#ECECEC'
                     }}>
-                        <Mutation mutation={REJECT_INVITE} refetchQueries={[{query:MY_MEMBERSHIPS}]}>
-                            {(rejectInvite, { data, loading, error}) => (
+                        <Mutation mutation={REJECT_INVITE} refetchQueries={[{query: MY_MEMBERSHIPS}]}>
+                            {(rejectInvite, {data, loading, error}) => (
                                 <Button primary onPress={() => {
                                     requestModalClose();
                                     rejectInvite({
@@ -157,10 +157,10 @@ export class TeamDetailsModalContent extends FSModalContentBase {
                                 }}>
                                     <Text>{L.get("team_details_decline_invite")}</Text>
                                 </Button>
-                                )}
+                            )}
                         </Mutation>
-                        <Mutation mutation={ACCEPT_INVITE} refetchQueries={[{query:MY_MEMBERSHIPS}]}>
-                            {(acceptInvite, { data, loading, error}) => (
+                        <Mutation mutation={ACCEPT_INVITE} refetchQueries={[{query: MY_MEMBERSHIPS}]}>
+                            {(acceptInvite, {data, loading, error}) => (
                                 <Button primary onPress={() => {
                                     requestModalClose();
                                     acceptInvite({
@@ -251,7 +251,7 @@ export class TeamDetailsModalContent extends FSModalContentBase {
             }}>
                 {({loading, error, data, refetch}) => {
                     if (loading) return this.renderPlaceholder(requestModalClose);
-                    const ownStatus = this.getOwnStatus(data.getTeam.members);
+                    const ownStatus = this.getOwnStatus(data.getTeam.members,teamId);
                     return (
                         <Card transparent={standalone} style={{
                             margin: '10%',
@@ -261,39 +261,39 @@ export class TeamDetailsModalContent extends FSModalContentBase {
                             backgroundColor: material.containerBgColor,
                         }}
                         >
-                            { standalone ?<CardItem>
-                                <Left>
-                                <H1>
-                                    {data ? data.getTeam.name : 'error'}
-                                </H1>
-                                </Left>
-                                <Right>
-                                    {editMode && <Button style={{right: 0}} info onPress={() => {
-                                        requestModalClose();
-                                        editMode(teamId, false, data.getTeam)
-                                    }}>
-                                        <Icon style={{color: material.brandLight}} name="md-create"/>
-                                        <Text>{L.get("teams_screen_edit_team_button_label")}</Text>
-                                    </Button>}
-                                </Right>
+                            {standalone ? <CardItem>
+                                    <Left>
+                                        <H1>
+                                            {data ? data.getTeam.name : 'error'}
+                                        </H1>
+                                    </Left>
+                                    <Right>
+                                        {editMode && <Button style={{right: 0}} info onPress={() => {
+                                            requestModalClose();
+                                            editMode(teamId, false, data.getTeam)
+                                        }}>
+                                            <Icon style={{color: material.brandLight}} name="md-create"/>
+                                            <Text>{L.get("teams_screen_edit_team_button_label")}</Text>
+                                        </Button>}
+                                    </Right>
                                 </CardItem>
                                 : <CardItem header style={
-                                {
-                                    backgroundColor: (ownStatus && ownStatus.isActive) ? material.brandInfo : material.brandPrimary,
-                                }}>
-                                <Button transparent dark onPress={() => requestModalClose()}>
-                                    <Icon style={{fontSize: 30}} name="close"/>
-                                </Button>
-                                <H3 style={{
-                                    color: 'white',
-                                    flex: 1,
-                                    flexDirection: 'row',
-                                    justifyContent: 'center',
-                                    alignItems: 'stretch',
-                                    marginLeft: 10,
+                                    {
+                                        backgroundColor: (ownStatus && ownStatus.isActive) ? material.brandInfo : material.brandPrimary,
+                                    }}>
+                                    <Button transparent dark onPress={() => requestModalClose()}>
+                                        <Icon style={{fontSize: 30}} name="close"/>
+                                    </Button>
+                                    <H3 style={{
+                                        color: 'white',
+                                        flex: 1,
+                                        flexDirection: 'row',
+                                        justifyContent: 'center',
+                                        alignItems: 'stretch',
+                                        marginLeft: 10,
 
-                                }}>{data ? data.getTeam.name : 'error'}</H3>
-                            </CardItem> }
+                                    }}>{data ? data.getTeam.name : 'error'}</H3>
+                                </CardItem>}
 
                             {error ?
                                 <Content><Text>{JSON.stringify(error)}</Text></Content>
@@ -370,7 +370,15 @@ class UserRow extends Component {
 
             callback: (buttonIndex) => {
 
-                let actions =  [
+                let actions = isInvite ? [
+                    () => {
+                        this.setState({showDeclineUserDialog: true})
+                    },
+                    //Abbrechen
+                    () => {
+                        console.log("action cancelled")
+                    },
+                ] : [
                     //Annehmen
                     () => {
                         this.setState({showAddUserDialog: true})
@@ -446,7 +454,7 @@ class UserRow extends Component {
     render() {
         let {member, ownStatus, editMode, refetch} = this.props;
         const {isAdmin, isActive} = member;
-        console.log(editMode)
+        console.log("Ownstatus: ", {ownStatus: ownStatus})
         return (
             <CardItem style={{
                 width: '100%',
@@ -503,11 +511,15 @@ class UserRow extends Component {
                             refetchQueries={[
                                 {
                                     query: GET_TEAM,
-                                    variables: ownStatus.teamId
+                                    variables: {
+                                        teamId: ownStatus.teamId
+                                    }
                                 },
                                 {
                                     query: GET_MY_TEAM,
-                                    variables: ownStatus.teamId
+                                    variables: {
+                                        teamId: ownStatus.teamId
+                                    }
                                 },
                                 {
                                     query: MY_MEMBERSHIPS,
@@ -541,11 +553,15 @@ class UserRow extends Component {
                                   refetchQueries={[
                                       {
                                           query: GET_TEAM,
-                                          variables: ownStatus.teamId
+                                          variables: {
+                                              teamId: ownStatus.teamId
+                                          }
                                       },
                                       {
                                           query: GET_MY_TEAM,
-                                          variables: ownStatus.teamId
+                                          variables: {
+                                              teamId: ownStatus.teamId
+                                          }
                                       },
                                       {
                                           query: MY_MEMBERSHIPS,
@@ -581,11 +597,15 @@ class UserRow extends Component {
                                   refetchQueries={[
                                       {
                                           query: GET_TEAM,
-                                          variables: ownStatus.teamId
+                                          variables: {
+                                              teamId: ownStatus.teamId
+                                          }
                                       },
                                       {
                                           query: GET_MY_TEAM,
-                                          variables: ownStatus.teamId
+                                          variables: {
+                                              teamId: ownStatus.teamId
+                                          }
                                       },
                                       {
                                           query: MY_MEMBERSHIPS,
@@ -619,11 +639,15 @@ class UserRow extends Component {
                                   refetchQueries={[
                                       {
                                           query: GET_TEAM,
-                                          variables: ownStatus.teamId
+                                          variables: {
+                                              teamId: ownStatus.teamId
+                                          }
                                       },
                                       {
                                           query: GET_MY_TEAM,
-                                          variables: ownStatus.teamId
+                                          variables: {
+                                              teamId: ownStatus.teamId
+                                          }
                                       },
                                       {
                                           query: MY_MEMBERSHIPS,
@@ -657,11 +681,15 @@ class UserRow extends Component {
                                   refetchQueries={[
                                       {
                                           query: GET_TEAM,
-                                          variables: ownStatus.teamId
+                                          variables: {
+                                              teamId: ownStatus.teamId
+                                          }
                                       },
                                       {
                                           query: GET_MY_TEAM,
-                                          variables: ownStatus.teamId
+                                          variables: {
+                                              teamId: ownStatus.teamId
+                                          }
                                       },
                                       {
                                           query: MY_MEMBERSHIPS,
@@ -695,11 +723,15 @@ class UserRow extends Component {
                                   refetchQueries={[
                                       {
                                           query: GET_TEAM,
-                                          variables: ownStatus.teamId
+                                          variables: {
+                                              teamId: ownStatus.teamId
+                                          }
                                       },
                                       {
                                           query: GET_MY_TEAM,
-                                          variables: ownStatus.teamId
+                                          variables: {
+                                              teamId: ownStatus.teamId
+                                          }
                                       },
                                       {
                                           query: MY_MEMBERSHIPS,

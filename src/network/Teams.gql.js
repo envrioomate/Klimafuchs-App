@@ -132,6 +132,7 @@ export const GET_TEAM = gql`
                 isActive
                 isAdmin
                 isAccepted
+                team {id}
             }
             avatar {
                 filename
@@ -180,7 +181,7 @@ export const UNMOD_USER = gql`
 export const DEL_USER = gql`
     mutation delMember($membershipId:Int!) {
         delMember(membershipId:$membershipId) {
-            id
+            dateCreated
         }
     }
 `;

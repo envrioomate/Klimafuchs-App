@@ -16,7 +16,7 @@ import {
 } from "native-base";
 import material from "../../../native-base-theme/variables/material";
 import {Mutation} from "react-apollo";
-import {CREATE_TEAM, INVITE_USER, MY_MEMBERSHIPS} from "../../network/Teams.gql";
+import {CREATE_TEAM, GET_TEAM, INVITE_USER, MY_MEMBERSHIPS} from "../../network/Teams.gql";
 import UploadImage from "../Common/UploadImage";
 import {ValidatingTextField} from "../Common/ValidatingTextInput";
 import PropTypes from 'prop-types';
@@ -256,7 +256,7 @@ export class InviteUsersScreen extends Component {
 
                             <CardItem>
                                 <Right style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
-                                    <Mutation mutation={INVITE_USER} errorPolicy="all">
+                                    <Mutation mutation={INVITE_USER} errorPolicy="all" refetchQueries={[{query: GET_TEAM, variables: {teamId}}]}>
                                         {(inviteUserToTeam, {loading, error}) => (
 
                                             <Button primary onPress={() => {

@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Image, StyleSheet, TextInput, View} from "react-native";
+import {Image, StyleSheet, TextInput, View, Platform} from "react-native";
 import {Body, Button, Card, CardItem, Container, Content, Icon, Footer, Left, Right, Spinner, Text} from "native-base";
 import material from "../../../../native-base-theme/variables/material";
 import {ChallengeGoalCompletionLevel} from "../BadgePreviewListComponent";
@@ -148,7 +148,7 @@ export class BadgeDetailsCTA extends Component {
                             onFocus={e => this.setState({inputFocused: true})}
                             onBlur={e => this.setState({inputFocused: false})}
                             value={this.state.enteredQuantity}
-                            keyboardType="number-pad"
+                            keyboardType={ Platform.OS === "android" ? "number-pad" : "numbers-and-punctuation" }
                             textAlign="right"
                             paddingHorizontal={10}
                         />
