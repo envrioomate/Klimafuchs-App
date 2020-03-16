@@ -5,8 +5,7 @@ import {COMPLETE_ACHIEVEMENT, CURRENTLY_SELECTED_ACHIEVEMENTS, GET_SCORE} from "
 import {FlatList, StyleSheet} from "react-native";
 import material from "../../../native-base-theme/variables/material";
 import {AnimatedAchievementContainer} from "./BadgeDetailsFlow/AnimatedAchievementContainer";
-
-
+import {HintPopUp} from "../Common/HintPopUp";
 
 
 export default class AchievementComponent extends Component {
@@ -50,7 +49,7 @@ export default class AchievementComponent extends Component {
             this.styles.completed
             : this.styles.default;
         return (
-           <AnimatedAchievementContainer achievementSelection={achievementSelection}/>
+            <AnimatedAchievementContainer achievementSelection={achievementSelection}/>
         )
     }
 
@@ -77,7 +76,27 @@ export default class AchievementComponent extends Component {
                         )
                     }}
                 </Query>
+                {__DEV__ && <TestPopUp/>}
+
             </Container>
+        )
+    }
+}
+
+class TestPopUp extends Component {
+    render() {
+        let {} = this.props;
+        return (
+            <Button block info onPress={() => this.popUp.open()}>
+                <Text>
+                    Test PopUp
+                </Text>
+                <HintPopUp ref={(ref) => this.popUp = ref}>
+                    <Text>
+                        Test
+                    </Text>
+                </HintPopUp>
+            </Button>
         )
     }
 }

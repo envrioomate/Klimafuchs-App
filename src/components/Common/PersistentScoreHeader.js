@@ -7,9 +7,9 @@ import AnimateNumber from 'react-native-countup';
 import RNTooltips from 'react-native-tooltips'
 import * as Progress from 'react-native-progress';
 import {StyleSheet, View, Animated, TouchableOpacity, Image, StatusBar, Platform} from "react-native";
-import {Score} from "../Common/Score";
+import {Score} from "./Score";
 import {Dimensions} from "react-native";
-import {LevelUpTable} from "../Common/levelUpTable"
+import {LevelUpTable} from "./levelUpTable"
 
 class ScoreContainer extends Component {
 

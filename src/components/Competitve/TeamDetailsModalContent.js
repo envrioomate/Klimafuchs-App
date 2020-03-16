@@ -115,7 +115,7 @@ export class TeamDetailsModalContent extends FSModalContentBase {
                         {this.renderAdmins(team.members, myMembership, editMode, refetch)}
                         <CardItem style={{width: '100%', backgroundColor: '#ECECEC'}}/>
                         {this.renderUsers(team.members, myMembership, editMode, refetch)}
-                        {editMode && !isInvite &&
+                        {__DEV__ && editMode && !isInvite &&
                         <Fragment>
                             <CardItem style={{width: '100%', backgroundColor: '#ECECEC'}}/>
                             {this.renderJoinRequests(team.members, myMembership, editMode, refetch)}

@@ -20,7 +20,7 @@ import client from "./src/network/client"
 import Api from "./src/network/api";
 import {SafeAreaProvider} from "react-native-safe-area-context";
 import { Linking } from 'expo';
-import {PersistentScoreHeader} from "./src/components/Badges/PersistentScoreHeader";
+import {PersistentScoreHeader} from "./src/components/Common/PersistentScoreHeader";
 import {PrivacyPolicyScreen} from "./src/components/PreLogin/PrivacyPolicyScreen";
 
 const prefix = Linking.makeUrl('/');

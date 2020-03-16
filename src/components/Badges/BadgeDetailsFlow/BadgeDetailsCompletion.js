@@ -16,11 +16,12 @@ export class BadgeDetailsCompletion extends Component {
         let {options, navigation, route} = this.props;
         let {badge, completion} = route.params; //
 
+
         return (
             <Fragment>
                 <Container transparent >
-                    <Body style={{flex:1}}>
-                        <Image style={{width: screenWidth - screenWidth/10, height: screenWidth - screenWidth/10, backgroundColor: completionLevelToColor(completion)}}
+                    <Body style={{flex:1, margin:10}}>
+                        <Image style={{width: screenWidth/3 - screenWidth/10, height: screenWidth/3 - screenWidth/10, margin: 20, backgroundColor: completionLevelToColor(completion)}}
                                source={badge.challenge.icon ? {uri: badge.challenge.icon.url + '?date=' + (new Date()).getHours()} : require('../../../../assets/image_select.png')}
                                resizeMode="contain"
                         />

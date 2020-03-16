@@ -4,7 +4,7 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import AchievementComponent from "./AchievementComponent";
 import CurrentBadgesComponent from "./CurrentBadgesComponent";
 import BadgeCollectionComponent from "./BadgeCollectionComponent";
-import {PersistentScoreHeader} from "./PersistentScoreHeader";
+import {PersistentScoreHeader} from "../Common/PersistentScoreHeader";
 import BadgeDetailsScreen from "./BadgeDetailsFlow/BadgeDetailsScreen";
 import {SeasonProgressComponent} from "./Tree/SeasonProgressComponent";
 import {LocalizationProvider as L} from "../../localization/LocalizationProvider";

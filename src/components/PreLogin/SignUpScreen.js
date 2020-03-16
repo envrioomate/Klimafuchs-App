@@ -1,6 +1,5 @@
 import React, {Component, Fragment} from 'react';
-import {AsyncStorage, KeyboardAvoidingView, StyleSheet, ScrollView, Keyboard} from 'react-native'
-import CheckBox from '@react-native-community/checkbox';
+import {AsyncStorage, KeyboardAvoidingView, StyleSheet, ScrollView, Keyboard, Platform} from 'react-native'
 import {
     Body,
     Button,
@@ -15,7 +14,8 @@ import {
     Card,
     CardItem,
     Text,
-    Input
+    Input,
+    CheckBox
 } from "native-base";
 import Api from "../../network/api";
 import material from '../../../native-base-theme/variables/material';
@@ -91,6 +91,7 @@ class SignUpScreen extends Component {
     };
 
     render() {
+        const isIphone = Platform.OS === 'ios';
         return (
             <Fragment>
                 <Header style={{paddingTop: Constants.statusBarHeight}}>
@@ -193,8 +194,10 @@ class SignUpScreen extends Component {
                                 <Card>
                                     <CardItem>
                                         <Left>
-                                             <CheckBox value={this.state.gdprAccept}
-                                                       onValueChange={() => this.setState({ gdprAccept: !this.state.gdprAccept })}
+                                             <CheckBox
+                                                 checked={this.state.gdprAccept}
+                                                 onPress={() => this.setState({ gdprAccept: !this.state.gdprAccept})}
+                                                 style={{color: '#fff'}}
                                              />
                                         </Left>
                                         <Body style={{flex:4}}>
@@ -203,10 +206,9 @@ class SignUpScreen extends Component {
                                                       console.log(`${this.constructor.name}: privacy clicked!`);
                                                       this.props.navigation.navigate("PrivacyPolicyScreen");
                                                   }}>
-                                                Ich habe die <Text style={{color: "blue", textDecorationLine: 'underline', fontWeight: 'bold'}}>Datenschutzerklärung</Text> gelesen und stimme ihr zu
+                                                Ich habe die <Text style={{color: "blue", textDecorationLine: 'underline', fontWeight: 'bold'}}>Datenschutzerklärung</Text> gelesen und stimme dieser zu
                                             </Text>
                                         </Body>
-
                                     </CardItem>
                                 </Card>
 
