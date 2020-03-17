@@ -76,8 +76,6 @@ export default class AchievementComponent extends Component {
                         )
                     }}
                 </Query>
-                {__DEV__ && <TestPopUp/>}
-
             </Container>
         )
     }
@@ -91,11 +89,6 @@ class TestPopUp extends Component {
                 <Text>
                     Test PopUp
                 </Text>
-                <HintPopUp ref={(ref) => this.popUp = ref}>
-                    <Text>
-                        Test
-                    </Text>
-                </HintPopUp>
             </Button>
         )
     }

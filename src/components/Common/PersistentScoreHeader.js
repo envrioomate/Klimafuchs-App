@@ -85,6 +85,8 @@ class CurrentLevelContainer extends Component {
                     style={{
                         height: size-4,
                         width: size-4,
+                        backgroundColor: "transparent",
+
                     }}
 
                 />
@@ -103,7 +105,7 @@ const getCurrentLevel = (score) => {
             return l;
         }
     }
-    return levelUpTable.levels[levelUpTable.levels.length - 1]
+    return LevelUpTable.levels[LevelUpTable.levels.length - 1]
 };
 
 

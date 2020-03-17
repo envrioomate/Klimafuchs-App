@@ -22,6 +22,7 @@ import {SafeAreaProvider} from "react-native-safe-area-context";
 import { Linking } from 'expo';
 import {PersistentScoreHeader} from "./src/components/Common/PersistentScoreHeader";
 import {PrivacyPolicyScreen} from "./src/components/PreLogin/PrivacyPolicyScreen";
+import {HintPopUpProvider} from "./src/components/Common/HintPopUp";
 
 const prefix = Linking.makeUrl('/');
 const Tab = createMaterialBottomTabNavigator();
@@ -73,9 +74,9 @@ export default class AppRoot extends Component {
                 <ApolloProvider client={client}>
                     <StyleProvider style={getTheme(material)}>
                         <SafeAreaProvider forceInset={{ bottom: 'never' }} style={styles.safeArea}>
-                            <Root style={styles.container}>
-                                    <RootContainer uriPrefix='/app'/>
-                            </Root>
+                                <Root style={styles.container}>
+                                        <RootContainer uriPrefix='/app'/>
+                                </Root>
                         </SafeAreaProvider>
                     </StyleProvider>
                 </ApolloProvider>

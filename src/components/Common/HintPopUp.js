@@ -1,39 +1,70 @@
-import React, { Component } from "react";
-import { View, Text, StyleSheet, TouchableWithoutFeedback} from "react-native";
+import React, {Component, createContext, Fragment} from "react";
+import {StyleSheet, Text, TouchableWithoutFeedback, View} from "react-native";
 
-export class HintPopUp extends Component {
+//TODO Consumer
+const HintPopUpContext = createContext();
+
+
+export class HintPopUpProvider extends Component {
 
     state = {
-        visible: false
+        visible: false,
+        content: null
     };
 
     dismiss = () => {
         this.setState({visible: false})
     };
 
-    open = () => {
+    open = ({content}) => {
         this.setState({visible: true})
     };
 
-    render() {
-
-        const {visible} = this.state;
-
-        if (!visible) return null;
-
+    render () {
+        const {children} = this.props;
         return (
-            <TouchableWithoutFeedback style={styles.overlay} onPress={() => {
-                this.dismiss()
-            }}>
-                <View style={{flex:1, alignItems: "center", justifyContent: "center"}}>
-                    <Text>
-                        Hint Popup
-                    </Text>
-                </View>
-            </TouchableWithoutFeedback>
+            <HintPopUpContext.Provider
+                value={{
+                    state: this.state,
+
+                }}
+                >
+                <Fragment>
+                    {children}
+
+                </Fragment>
+            </HintPopUpContext.Provider>
         )
     }
 
+
+}
+
+
+export function HintPopUp() {
+    return (
+        <HintPopUpContext.Consumer>
+            {context => {
+                const {visible, content} = context.state;
+
+                if (!visible) return null;
+
+                return (
+                    <TouchableWithoutFeedback style={styles.overlay} onPress={() => {
+                        context.dismiss()
+                    }}>
+                        <View style={{flex: 1, alignItems: "center", justifyContent: "center"}}>
+                            {context.content ||
+                            <Text>Hint Pop Up</Text>
+                            }
+                        </View>
+                    </TouchableWithoutFeedback>
+                )
+            }}
+
+        </HintPopUpContext.Consumer>
+
+    )
 }
 
 export const styles = StyleSheet.create({
