@@ -160,6 +160,7 @@ export const CURRENTLY_SELECTED_ACHIEVEMENTS = gql`
             achievementCompletions {
                 id
             }
+            createdAt
         }
     }
 `;

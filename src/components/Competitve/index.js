@@ -2,7 +2,7 @@ import React, {Fragment} from 'react';
 
 import {Body, Header, Icon, Left, Right, Title} from "native-base";
 import material from "../../../native-base-theme/variables/material";
-import { TeamsScreen} from "./TeamsScreen";
+import TeamsScreen from "./TeamsScreen";
 import {LeaderBoardScreen} from "./LeaderBoardScreen";
 import CreateTeamScreen, {InviteUsersScreen} from "./CreateTeamScreen";
 import {EditTeamScreen} from "./EditTeamScreen";

@@ -35,8 +35,9 @@ import {MaterialDialog} from "react-native-material-dialog";
 import {LocalizationProvider as L} from "../../localization/LocalizationProvider";
 import {LinearGradient} from "expo-linear-gradient";
 import * as env from "../../../env";
+import {connect} from "react-redux";
 
-export class TeamDetailsModalContent extends FSModalContentBase {
+class TeamDetails extends FSModalContentBase {
 
     state = {
         uId: -1,
@@ -45,6 +46,7 @@ export class TeamDetailsModalContent extends FSModalContentBase {
     async componentWillMount() {
         let uId = await AsyncStorage.getItem('uId');
         this.setState({uId});
+        this.fetchTeam(this.props)
     }
 
     getOwnStatus = (members, currentTeamId) => {
@@ -57,11 +59,11 @@ export class TeamDetailsModalContent extends FSModalContentBase {
     };
 
     cardContent = (team, myMembership, refetch, editMode, requestModalClose, loading, standalone) => {
-        let showUsers = team.closed ? (myMembership && myMembership.isActive) : true;
+        let showUsers = !team.closed;
         let showRequests = myMembership && myMembership.isAdmin && !standalone;
-        let isInvite = myMembership ? !myMembership.isAccepted : false;
+        let isInvite = myMembership ? !myMembership.isAccepted && myMembership.isAccepted !== undefined : false;
 
-        let teamSize = team.members.filter(m => m.isActive).length
+        let teamSize = team.members.filter(m => m ? m.isActive: false).length
 
         const teamAvatarUrl =
             team.avatar
@@ -225,9 +227,7 @@ export class TeamDetailsModalContent extends FSModalContentBase {
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
         backgroundColor: material.containerBgColor,
-    }}
-    >
-
+    }}>
         <CardItem header style={
             {
                 backgroundColor: material.brandInfo,
@@ -241,6 +241,16 @@ export class TeamDetailsModalContent extends FSModalContentBase {
         </CardItem>
     </Card>;
 
+    fetchTeam(props) {
+        const {ownStatus} = props;
+        if(!ownStatus) return;
+        console.log("Setting Team Id: ", {ownStatus});
+        if(ownStatus.isActive) {
+            this.props.dispatch( {type:"USER/SETTEAM", teamId: ownStatus.team.id});
+
+        }
+    }
+
     render() {
         let {requestModalClose, teamId, editMode, standalone} = this.props;
         if (this.state.uId < 0) return this.renderPlaceholder(requestModalClose);
@@ -248,10 +258,12 @@ export class TeamDetailsModalContent extends FSModalContentBase {
         return (
             <Query query={GET_TEAM} variables={{
                 teamId
-            }}>
+            }} >
                 {({loading, error, data, refetch}) => {
                     if (loading) return this.renderPlaceholder(requestModalClose);
-                    const ownStatus = this.getOwnStatus(data.getTeam.members,teamId);
+
+                    if (!data) console.log("Error in: ", teamId)
+                    const ownStatus = this.getOwnStatus(data.getTeam.members, teamId);
                     return (
                         <Card transparent={standalone} style={{
                             margin: '10%',
@@ -454,7 +466,6 @@ class UserRow extends Component {
     render() {
         let {member, ownStatus, editMode, refetch} = this.props;
         const {isAdmin, isActive} = member;
-        console.log("Ownstatus: ", {ownStatus: ownStatus})
         return (
             <CardItem style={{
                 width: '100%',
@@ -767,3 +778,9 @@ class UserRow extends Component {
         )
     }
 }
+
+
+const mapStateToProps = (state) => ({reduxTeamId: state.teamId});
+
+
+export const TeamDetailsModalContent = connect(mapStateToProps)(TeamDetails)

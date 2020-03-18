@@ -23,13 +23,14 @@ import material from "../../../native-base-theme/variables/material";
 import {CreateTeamScreen} from "./CreateTeamScreen";
 import env from "../../../env";
 import {FSModal} from "../Common/FSModal";
-import {TeamDetailsModalContent} from "./TeamDetailsModalContent";
+import {TeamDetailsModalContent} from "./TeamDetails";
 import {createStackNavigator} from "@react-navigation/stack";
+import {connect} from "react-redux";
 
 const Stack = createStackNavigator();
 
 
-export class TeamsScreen extends Component {
+class TeamsScreen extends Component {
     state = {
         refreshing: false,
     };
@@ -102,6 +103,8 @@ export class TeamsScreen extends Component {
         if (!hasActiveTeam) return this.__renderTeamsOld(memberships, refetch);
 
         let mainTeam = memberships[0];
+
+
         let editMode = mainTeam.isAdmin;
         return (
             <TeamDetailsModalContent
@@ -286,3 +289,10 @@ const styles = StyleSheet.create({
         marginRight: '20%',
     },
 });
+
+const mapStateToProps = (state) => {
+    const {teamId} = state;
+    return {teamId};
+};
+
+export default connect(mapStateToProps)(TeamsScreen)

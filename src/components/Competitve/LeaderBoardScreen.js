@@ -7,7 +7,7 @@ import * as env from "../../../env"
 import {MaterialDialog} from 'react-native-material-dialog';
 import { BlurView } from 'expo-blur';
 import material from "../../../native-base-theme/variables/material";
-import {TeamDetailsModalContent} from "./TeamDetailsModalContent";
+import {TeamDetailsModalContent} from "./TeamDetails";
 import {FSModal} from "../Common/FSModal";
 import {LocalizationProvider as L} from "../../localization/LocalizationProvider";
 
@@ -51,7 +51,6 @@ export class LeaderBoardScreen extends Component {
                                     }
                                     if (error) return <Text>{error.message}</Text>;
                                     if (data.getLeaderBoard) {
-                                        console.log(data)
                                         if (data.getLeaderBoard.page.edges.length > 0) {
                                             return (
                                                 <Fragment>

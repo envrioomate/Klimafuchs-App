@@ -12,6 +12,8 @@ import {
 } from "../../../network/Badges.gql";
 import {LocalizationProvider as L} from "../../../localization/LocalizationProvider";
 import {badgeScreenStyles} from "../BadgeUtils";
+import {GET_TEAM, MY_MEMBERSHIPS} from "../../../network/Teams.gql";
+import {connect} from "react-redux";
 
 const inRange = (x, min, max) => {
     return x > min && x <= max;
@@ -45,7 +47,6 @@ export class BadgeDetailsCTA extends Component {
     RenderCompletionOption = ({optionText, optionQuantity, autoCompleted, icon, iconTint, quantityName, orderASC, completionLevel}) => {
         let isCompleted = completionLevel === this.state.completionLevel;
         return (
-            <Card transparent>
                 <CardItem style={autoCompleted ? {backgroundColor: '#b5c5b5'} : {}}
                           button={!optionQuantity}
                           onPress={() => {
@@ -83,7 +84,6 @@ export class BadgeDetailsCTA extends Component {
 
                     </Right>
                 </CardItem>
-            </Card>
         )
     };
 
@@ -159,6 +159,7 @@ export class BadgeDetailsCTA extends Component {
                     </Right>
                     </CardItem>
                 </Card>
+                <Card transparent>
                 <this.RenderCompletionOption optionText={minCompletion} optionQuantity={minQuantity}
                                              autoCompleted={minCompleted} icon={challenge.icon}
                                              iconTint={this.iconMinColor}
@@ -187,6 +188,7 @@ export class BadgeDetailsCTA extends Component {
 
                                              completionLevel={ChallengeGoalCompletionLevel.MAX}
                 />
+                </Card>
             </Content>
 
         )
@@ -246,10 +248,23 @@ export class BadgeDetailsCTA extends Component {
 
 
     render() {
-        let {options, navigation, route} = this.props;
+        let {options, navigation, route, teamId} = this.props;
+        let ownTeamId = false
         let {badge} = route.params; //
         let {completionLevel, enteredQuantity} = this.state;
         let isFilledOut = completionLevel !== null;
+
+        let  refetechQueries =
+            [
+                {query: GET_SCORE},
+                 {query: COMPLETED_BADGES},
+                  {query: CURRENT_BADGES},
+        {query: MY_MEMBERSHIPS },
+                ]
+
+        if(teamId) refetechQueries.push({query: GET_TEAM, variables: {teamId}})
+
+
         return (
             <Container transparent style={{flex: 1, justifyContent: 'space-between'}}>
                 <Body style={{flex: 1, width: "100%", justifyContent: 'space-between', alignItems: 'center'}}>
@@ -261,11 +276,7 @@ export class BadgeDetailsCTA extends Component {
                 </Body>
                 <View style={{backgroundColor: '#fff', width: "100%", height: 64}}>
                     <Mutation mutation={COMPLETE_CHALLENGE}
-                              refetchQueries={[
-                                  {query: GET_SCORE},
-                                  {query: COMPLETED_BADGES},
-                                  {query: CURRENT_BADGES}
-                              ]}>
+                              refetchQueries={refetechQueries}>
                         {(completeChallenge, {loading, error, refetch}) => (
 
                             <Button disabled={!isFilledOut}
@@ -285,11 +296,6 @@ export class BadgeDetailsCTA extends Component {
                                             navigation.navigate("BadgeDetailsCompletion", {badge: badge, completion: badge.challengeCompletion});
                                         }
 
-                                        console.log({variables: {
-                                                challengeId: badge.id,
-                                                challengeGoalCompletionLevel: completionLevel,
-                                                challengeCompletionQuantity: Number.parseFloat(enteredQuantity)
-                                            }});
                                         let completion = await completeChallenge({
                                             variables: {
                                                 challengeId: badge.id,
@@ -317,3 +323,14 @@ export class BadgeDetailsCTA extends Component {
         )
     }
 }
+
+const mapStateToProps = (state) => {
+
+    console.log({teamId: state.user.teamId})
+
+    return {
+        teamId: state.user.teamId
+    }
+};
+
+export default connect(mapStateToProps)(BadgeDetailsCTA)

@@ -5,7 +5,7 @@ import {createStackNavigator} from "@react-navigation/stack";
 import {BadgeDetailsSelectAchievements} from "./BadgeDetailsSelectAchievements";
 import {BadgeDetailsCompletion} from "./BadgeDetailsCompletion";
 import {BadgeDetailsText} from "./BadgeDetailsText";
-import {BadgeDetailsCTA} from "./BadgeDetailsCTA";
+import BadgeDetailsCTA from "./BadgeDetailsCTA";
 import {badgeScreenStyles, completionLevelToColor} from "../BadgeUtils";
 
 const Stack = createStackNavigator();

@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import {Body, Button, Card, CardItem, Container, Icon, Left, Right, Spinner, Text} from 'native-base';
 import {Mutation, Query} from "react-apollo";
-import {COMPLETE_ACHIEVEMENT, CURRENTLY_SELECTED_ACHIEVEMENTS, GET_SCORE} from "../../network/Badges.gql";
+import {COMPLETE_ACHIEVEMENT, CURRENTLY_SELECTED_ACHIEVEMENTS, GET_SCORE} from "../../../network/Badges.gql";
 import {FlatList, StyleSheet} from "react-native";
-import material from "../../../native-base-theme/variables/material";
-import {AnimatedAchievementContainer} from "./BadgeDetailsFlow/AnimatedAchievementContainer";
-import {HintPopUp} from "../Common/HintPopUp";
+import material from "../../../../native-base-theme/variables/material";
+import {AnimatedAchievementContainer} from "./AnimatedAchievementContainer";
+import {HintPopUp} from "../../Common/HintPopUp";
 
 
 export default class AchievementComponent extends Component {
@@ -64,6 +64,11 @@ export default class AchievementComponent extends Component {
                             </Container>
                         );
                         if (error) return <Text>Error {error.message}</Text>;
+
+                        let currentAchievements = data.currentlySelectedAchievements;
+
+                        console.log(currentAchievements)
+
                         return (
                             <FlatList style={{flex: 1}}
                                       data={data.currentlySelectedAchievements}
