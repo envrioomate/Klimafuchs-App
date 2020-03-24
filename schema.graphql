@@ -48,6 +48,7 @@ type AchievementSelection {
     createdAt: DateTime!
     id: Int
     owner: User!
+    timeOutDate: DateTime
     updatedAt: DateTime!
 }
 
@@ -200,7 +201,7 @@ type Media {
 type Membership {
     activationDate: DateTime
     dateCreated: DateTime!
-    id: Int!
+    id: Int
     isAccepted: Boolean!
     isActive: Boolean!
     isAdmin: Boolean!
@@ -214,6 +215,7 @@ type Mutation {
     addPost(post: FeedPostInput!): FeedPost!
     changePassword(newPassword: String!, oldPassword: String!): User!
     changeUser(user: UserInput!): User
+    checkStartingAchievement: [AchievementCompletion!]!
     completeAchievement(achievementSelectionId: Int!): AchievementCompletion
     completeChallenge(challengeCompletionQuantity: Float, challengeGoalCompletionLevel: Int, challengeId: Int!): ChallengeCompletion
     confirmMember(membershipId: Int!): Membership!
@@ -226,6 +228,7 @@ type Mutation {
     likePost(postId: Int!): FeedPost!
     modMember(membershipId: Int!): Membership!
     rejectInvite(membershipId: Int!): Membership!
+    remindAchievements: [Notification!]
     removeComment(CommentId: Int!): FeedComment!
     removeOwnComment(CommentId: Int!): Boolean!
     removeOwnPost(postId: Int!): Boolean!
@@ -244,6 +247,8 @@ type Mutation {
     unlikePost(postId: Int!): FeedPost!
     unmodMember(membershipId: Int!): Membership!
     unsubscribe: Subscription
+    updateAchievementTimeout: [AchievementSelection!]
+    updateAllAchievements: [AchievementCompletion!]
     updateProfile(avatarId: Int, screenName: String, userName: String): User!
     updateSeason(season: SeasonInput!): Season
     updateSeasonPlan(seasonPlan: SeasonPlanInput!): SeasonPlan
@@ -365,6 +370,7 @@ type SeasonPlanChallenge implements IUserChallenge {
 
 type Subscription {
     id: Int
+    notifications: [Notification!]
     pushToken: String
     user: User
 }
@@ -379,7 +385,7 @@ type Team {
     name: String!
     place: Int
     score: Int!
-    scorePerUser: Int!
+    scorePerUser: Float!
     teamSize: TeamSize!
 }
 

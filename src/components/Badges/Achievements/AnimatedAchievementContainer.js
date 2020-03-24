@@ -1,12 +1,19 @@
 import React, {Component} from "react";
 import {Animated, StyleSheet, View} from "react-native";
-import {Body, Button, Card, CardItem, H1, Text, Right} from "native-base";
+import {Body, Button, Card, CardItem, H1, Title,Text, Left, Right, Icon} from "native-base";
 import Svg, {Path} from 'react-native-svg';
 import {COMPLETE_ACHIEVEMENT, CURRENTLY_SELECTED_ACHIEVEMENTS, GET_SCORE} from "../../../network/Badges.gql";
 import {Mutation} from "react-apollo";
 import {ExternalLinkButton} from "../ExternalLinkButton";
+import {CompleteAchievementButton} from "./CompleteAchievementButton";
+import {Score} from "../../Common/Score";
+
+import moment from 'moment/min/moment-with-locales';
+import de from 'moment/locale/de';
+moment.locale('de');
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
+const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
 const AnimatedCard = Animated.createAnimatedComponent(Card)
 const AnimatedCardItem = Animated.createAnimatedComponent(CardItem)
@@ -29,7 +36,8 @@ export class AnimatedAchievementContainer extends Component {
         colors: ['rgba(108,156,46,0)', 'rgba(108,156,46,0.12)'],
         duration: 2000,
         loading: false,
-        collapsed: true
+        collapsed: true,
+        animatingHeight: false
     };
 
     async componentDidMount() {
@@ -83,23 +91,45 @@ export class AnimatedAchievementContainer extends Component {
 
     setExpandedHeight(e) {
         this.setState({
-            expandedHeight: e.nativeEvent.layout.height
+            expandedHeight:  e.nativeEvent.layout.height + 100
         });
     }
 
 
     toggleExpand = () => {
-        let initialHeight = this.state.collapsed ? this.state.collapsedHeight : this.state.expandedHeight;
-        let finalHeight = this.state.collapsed ? this.state.expandedHeight : this.state.collapsedHeight;
+        if(this.state.animatingHeight) return;
+        this.setState({animatingHeight: true})
+        let initialHeight = this.state.collapsed ? 0 : 1;
+        let finalHeight = this.state.collapsed ? 1 : 0;
 
         this.state.currentHeight.setValue(initialHeight);
-        Animated.spring(this.state.currentHeight, {
-            to: finalHeight,
-            duration: 1000,
+        Animated.timing(this.state.currentHeight, {
+            toValue: finalHeight,
+            duration: 200,
 
-        }).start();
+        }).start( () => {
+            this.setState({collapsed: !this.state.collapsed, animatingHeight: false})
+        });
+    };
 
-    }
+    getHeight = () => {
+        let currentHeight = this.state.currentHeight.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, this.state.expandedHeight]
+        });
+        return {height: currentHeight};
+    };
+
+    getIconRotation = () => {
+        let currentRot = this.state.currentHeight.interpolate({
+            inputRange: [0, 1],
+            outputRange: ['0deg', '90deg']
+        });
+        return {transform: [
+                { rotate: currentRot},
+            ]};
+    };
+
 
 
     getProgressStyles = () => {
@@ -148,11 +178,15 @@ export class AnimatedAchievementContainer extends Component {
     };
 
 
+
     render() {
         const {achievementSelection} = this.props;
 
-        let {id, achievement, achievementCompletions} = achievementSelection;
+        let {id, achievement, achievementCompletions, timeOutDate} = achievementSelection;
         let achievementWasCompleted = achievementCompletions.length > 0;
+
+        console.log(timeOutDate)
+        let timeOutDateString = `Läuft ab ${moment(timeOutDate).fromNow()} (${moment(timeOutDate).format("Do MMMM YYYY")})`
 
         const {hasCompleted, hasCompletedText, duration} = this.state;
 
@@ -166,14 +200,48 @@ export class AnimatedAchievementContainer extends Component {
             }}>
 
                 <AnimatedCardItem style={{backgroundColor: this.getAnimatedColor(),}}>
+                    <Left>
+                        <Button transparent light onPress={this.toggleExpand}>
+                            <Animated.View style={{...this.getIconRotation()}} >
+
+                            <Icon name={ "md-arrow-dropright"}
+                                  style={{fontSize: 36, padding: 10, top: -3, right: -3, color: 'gray', width: "100%", height: "100%"}}/>
+                            </Animated.View>
+                        </Button>
+                    </Left>
                     <Body style={{
                         width: "100%",
+                        flex: 5
                     }}>
                         <Text style={{
                             width: "100%",
+                            fontWeight: "bold"
                         }}>{achievement.title}</Text>
                     </Body>
-
+                </AnimatedCardItem>
+                <AnimatedCardItem style={{backgroundColor: this.getAnimatedColor(),}}>
+                    <Left>
+                        <Text> {achievement.score} <Score/></Text>
+                    </Left>
+                    <Right style={{flex: 4}}>
+                        {achievementWasCompleted ?
+                            <View style={{width: 40, height: 40, paddingTop: 3}}>
+                                <Svg height="100%" width="100%" viewBox="0 0 100 100">
+                                    <Path
+                                        d="m 29.410237,56.996918 16.57928,15.8369 c 0,0 29.82778,-28.77264 34.49357,-33.85312 9.42404,-10.26167 7.34158,-23.81988 -7.36094,-30.7410004 -6.42571,-2.79588 -13.8325,-4.12227 -21.15042,-4.12227 -26.17114,0 -47.3870494,21.2159004 -47.3870394,47.3870604 0,26.17112 21.2158994,47.38702 47.3870394,47.38702 26.17113,4e-5 47.38704,-21.2159 47.38704,-47.38702 0,-3.99803 -0.49512,-7.88045 -1.42739,-11.58928"
+                                        strokeWidth="10"
+                                        stroke={achievementWasCompleted ? 'rgba(108,156,46,0.98)' : '#d5d5d5'}
+                                        fill="none"
+                                        strokeLinecap="round"
+                                        strokeDasharray={[400, 400]}
+                                        strokeDashoffset={this.getStrokeOffset()}
+                                        scale={0.85}
+                                    />
+                                </Svg>
+                            </View>
+                            : <Text> {timeOutDateString}</Text>
+                        }
+                    </Right>
                 </AnimatedCardItem>
 
                 <Animated.View
@@ -181,16 +249,18 @@ export class AnimatedAchievementContainer extends Component {
                     style={{
                         width: "100%",
                         overflow: "hidden",
-                        height: this.currentHeightValue
+                        ...this.getHeight(),
                     }}
                 >
-                    <View onLayout={(e) => this.setExpandedHeight(e)} style={{
-                        width: "100%",
-                        overflow: "hidden"
+                    <View  style={{
+                        width: "100%", height: "100%"
                     }}>
+                        <AnimatedCardItem style={{backgroundColor: this.getAnimatedColor(), width: "100%"}}>
 
-
-
+                        <Text onLayout={(e) => this.setExpandedHeight(e)} >
+                            {achievement.text}
+                        </Text>
+                        </AnimatedCardItem>
                         <AnimatedCardItem style={{backgroundColor: this.getAnimatedColor(), width: "100%"}}>
                             <Mutation
                                 mutation={COMPLETE_ACHIEVEMENT}

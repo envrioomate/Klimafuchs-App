@@ -53,6 +53,14 @@ export default class AchievementComponent extends Component {
         )
     }
 
+    sortCompletedness = (a,b) => {
+        return a.achievementCompletions.length - b.achievementCompletions.length
+    };
+
+    sortSelectedAt = (a,b) => {
+        return new Date(a.createdAt) - new Date(b.createdAt)
+    };
+
     render() {
         return (
             <Container transparent>
@@ -68,6 +76,8 @@ export default class AchievementComponent extends Component {
                         let currentAchievements = data.currentlySelectedAchievements;
 
                         console.log(currentAchievements)
+                        currentAchievements.sort(this.sortSelectedAt);
+                        currentAchievements.sort(this.sortCompletedness);
 
                         return (
                             <FlatList style={{flex: 1}}

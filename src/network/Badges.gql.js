@@ -161,6 +161,7 @@ export const CURRENTLY_SELECTED_ACHIEVEMENTS = gql`
                 id
             }
             createdAt
+            timeOutDate
         }
     }
 `;
