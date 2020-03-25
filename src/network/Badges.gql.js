@@ -131,6 +131,13 @@ export const SELECT_ACHIEVEMENT = gql`
     }
 `;
 
+export const DESELECT_ACHIEVEMENT = gql`
+    mutation deselectAchievement($selectionId: Int!) {
+        deselectAchievement(selectionId:$selectionId) {
+            updatedAt
+        }
+    }
+`
 
 export const COMPLETE_ACHIEVEMENT = gql`
     mutation completeAchievement($achievementSelectionId: Int!) {

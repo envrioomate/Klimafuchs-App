@@ -185,7 +185,6 @@ export class AnimatedAchievementContainer extends Component {
         let {id, achievement, achievementCompletions, timeOutDate} = achievementSelection;
         let achievementWasCompleted = achievementCompletions.length > 0;
 
-        console.log(timeOutDate)
         let timeOutDateString = `Läuft ab ${moment(timeOutDate).fromNow()} (${moment(timeOutDate).format("Do MMMM YYYY")})`
 
         const {hasCompleted, hasCompletedText, duration} = this.state;
@@ -199,7 +198,7 @@ export class AnimatedAchievementContainer extends Component {
                 margin: 10, ...this.getCardBorderStyle(),
             }}>
 
-                <AnimatedCardItem style={{backgroundColor: this.getAnimatedColor(),}}>
+                <AnimatedCardItem style={{backgroundColor: this.getAnimatedColor(),padding: 0}} button onPress={this.toggleExpand} >
                     <Left>
                         <Button transparent light onPress={this.toggleExpand}>
                             <Animated.View style={{...this.getIconRotation()}} >
@@ -219,7 +218,7 @@ export class AnimatedAchievementContainer extends Component {
                         }}>{achievement.title}</Text>
                     </Body>
                 </AnimatedCardItem>
-                <AnimatedCardItem style={{backgroundColor: this.getAnimatedColor(),}}>
+                <AnimatedCardItem style={{backgroundColor: this.getAnimatedColor(), margin:0}}>
                     <Left>
                         <Text> {achievement.score} <Score/></Text>
                     </Left>

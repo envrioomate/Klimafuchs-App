@@ -222,6 +222,7 @@ type Mutation {
     createTeam(team: TeamInput!): Team!
     delMember(membershipId: Int!): Membership!
     delete(mediaId: Int!): Media!
+    deselectAchievement(selectionId: Int!): AchievementSelection
     inviteUserToTeam(screenName: String!, teamId: Int!): Membership!
     leaveTeam(membershipId: Int!): Membership!
     likeComment(commentId: Int!): FeedComment!

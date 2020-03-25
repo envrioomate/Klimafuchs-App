@@ -170,10 +170,6 @@ function RootContainer() {
     }, [getInitialState]);
 
     if (!isReady) {
-        return null;
-    }
-
-    if (!isReady) {
         return <Spinner/>
     }
     return (

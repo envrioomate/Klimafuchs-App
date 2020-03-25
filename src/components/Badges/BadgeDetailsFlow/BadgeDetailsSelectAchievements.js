@@ -2,7 +2,7 @@ import React, {Component, Fragment} from "react";
 import {Body, Button, Card, CardItem, Container, Icon, Left, Right, Spinner, Text} from "native-base";
 import {FlatList, StyleSheet, View} from "react-native";
 import {Mutation, Query} from "react-apollo";
-import {CURRENTLY_SELECTED_ACHIEVEMENTS, SELECT_ACHIEVEMENT} from "../../../network/Badges.gql";
+import {CURRENTLY_SELECTED_ACHIEVEMENTS, DESELECT_ACHIEVEMENT, SELECT_ACHIEVEMENT} from "../../../network/Badges.gql";
 import material from "../../../../native-base-theme/variables/material";
 
 export class BadgeDetailsSelectAchievements extends Component {
@@ -39,9 +39,9 @@ export class BadgeDetailsSelectAchievements extends Component {
 
     AchievementPreview = ({achievement, previousSelectedAchievements}) => {
 
-        const achievementSelecton = previousSelectedAchievements ? previousSelectedAchievements.filter(a => a.achievement.name === achievement.name) : null;
-        const achievementWasSelected = achievementSelecton.length > 0;
-        const achievementWasCompleted = achievementWasSelected ? achievementSelecton[0].achievementCompletions ? achievementSelecton[0].achievementCompletions.length > 0 : false : false; //TODO consider failed achievements
+        const achievementSelection = previousSelectedAchievements ? previousSelectedAchievements.filter(a => a.achievement.name === achievement.name) : null;
+        const achievementWasSelected = achievementSelection.length > 0;
+        const achievementWasCompleted = achievementWasSelected ? achievementSelection[0].achievementCompletions ? achievementSelection[0].achievementCompletions.length > 0 : false : false; //TODO consider failed achievements
 
         let cardStyle = achievementWasCompleted ?
             this.styles.completed
@@ -70,10 +70,49 @@ export class BadgeDetailsSelectAchievements extends Component {
                         </Text>
                     </Left>
                     <Right>
-                        {this.state.selectedAchievements.has(achievement) || achievementWasSelected ?
-                            <Button disabled>
-                                <Text><Icon name="md-checkmark" style={{color: '#fff', fontSize: 18}}/> Ausgewählt</Text>
-                            </Button>
+                        {(this.state.selectedAchievements.has(achievement) || achievementWasSelected) ?
+                            achievementWasCompleted ?
+                                <Button disabled>
+                                    <Text><Icon name="md-checkmark" style={{color: '#fff', fontSize: 18}}/> Ausgewählt</Text>
+                                </Button>
+                                :
+                                <Mutation
+                                    mutation={DESELECT_ACHIEVEMENT}
+                                    refetchQueries={[{
+                                        query: CURRENTLY_SELECTED_ACHIEVEMENTS
+                                    }]}
+                                >
+                                    {(deselectAchievement, {loading, error, refetch}) => (
+
+                                        <Button
+                                            warning
+                                            onPress={async () => {
+                                                this.setState({loading: true});
+                                                if (this.state.selectedAchievements.has(achievement)) {
+                                                    this.state.selectedAchievements.delete(achievement)
+                                                }
+
+                                                if (achievementWasSelected) {
+                                                    await deselectAchievement({
+                                                        variables: {
+                                                            selectionId: achievementSelection[0].id
+
+                                                        },
+                                                    }).catch(err => {
+                                                        this.setState({loading: false});
+
+                                                        console.log(err)
+                                                    });
+                                                    this.setState({
+                                                        loading: false,
+                                                    });
+                                                }
+                                            }}>
+                                            <Text>Abwählen!</Text>
+
+                                        </Button>
+                                    )}
+                                </Mutation>
                             :
                             <Mutation
                                 mutation={SELECT_ACHIEVEMENT}

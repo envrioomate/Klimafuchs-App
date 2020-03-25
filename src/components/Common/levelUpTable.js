@@ -5,8 +5,7 @@ export const LevelUpTable = {
       name: "Ameise",
       icon: {
         type: "local",
-        path: require("../../../assets/playerLevels/ant.png") //TODO ant icon missing
-      },
+        path: require("../../../assets/playerLevels/ant.png")},
       maxScore: 700
     },
     {
