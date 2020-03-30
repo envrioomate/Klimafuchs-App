@@ -3,7 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs'
 import AchievementComponent from "./Achievements/AchievementComponent";
 import CurrentBadgesComponent from "./CurrentBadgesComponent";
-import BadgeCollectionComponent from "./BadgeCollectionComponent";
+import BadgeCollectionComponent from "./BadgeCollection/BadgeCollectionComponent";
 import {PersistentScoreHeader} from "../Common/PersistentScoreHeader";
 import BadgeDetailsScreen from "./BadgeDetailsFlow/BadgeDetailsScreen";
 import {SeasonProgressComponent} from "./Tree/SeasonProgressComponent";

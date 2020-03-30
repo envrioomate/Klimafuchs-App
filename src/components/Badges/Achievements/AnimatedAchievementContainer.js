@@ -195,7 +195,7 @@ export class AnimatedAchievementContainer extends Component {
                 margin: 10, backgroundColor: 'rgba(108,156,46,0.12)'
             } : {
                 backgroundColor: this.getAnimatedColor(), width: "95%", borderRadius: 10, borderWidth: 1,
-                margin: 10, ...this.getCardBorderStyle(),
+                margin: 9, ...this.getCardBorderStyle(),
             }}>
 
                 <AnimatedCardItem style={{backgroundColor: this.getAnimatedColor(),padding: 0}} button onPress={this.toggleExpand} >

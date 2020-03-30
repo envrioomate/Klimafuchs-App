@@ -179,13 +179,16 @@ export const COMPLETED_BADGES = gql`
             id
             challengeCompletionQuantity
             challengeGoalCompletionLevel
+            
             seasonPlanChallenge {
+                
                 challenge {
                     name
                     icon {
                         url
                     }
                     title
+                    score
                 }
             }
         }

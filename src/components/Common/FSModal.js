@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react';
-import {StyleSheet} from 'react-native'
-import Modal from "react-native-modal";
+import {StyleSheet, View} from 'react-native'
+import ReactNativeModal from "react-native-modal";
 import PropTypes from 'prop-types';
 
 export class FSModal extends Component {
@@ -21,20 +21,27 @@ export class FSModal extends Component {
     };
 
     render() {
-        let {children, body, ...other} = this.props;
+        let {children, body, darken} = this.props;
         //body.props = Object.assign(body.props, ...other);
         return (
             <Fragment>
-                <Modal
-                    animationType="slide"
+                <ReactNativeModal
+                    animationType={darken ? "fade" : "slide"}
                     transparent={true}
+                    backdropColor="black"
+                    backdropOpacity={0.7}
                     visible={this.state.modalVisible}
                     style={styles.modal}
+                    onBackdropPress={() => {
+                        this.closeModal()
+                    }}
                     onRequestClose={() => {
                         this.closeModal()
                     }}>
+
                     {body}
-                </Modal>
+
+                </ReactNativeModal>
                 {children}
             </Fragment>
         )
@@ -43,8 +50,7 @@ export class FSModal extends Component {
 
 const styles = StyleSheet.create({
     modal: {
-        backgroundColor: 'rgba(0,0,0,0)',
-        margin: '5%',
+        flex: 1
     },
 });
 

@@ -370,5 +370,9 @@
   "team_details_decline_invite": {
     "default": "Ablehnen",
     "de": ""
+  },
+  "about": {
+    "default": "Klimaschutz For All App\n===================== \n\nVersion: {appVersion}\n\nHerausgegeben von: \n```\nKlimaschutz For All e. V.\nRitterhuder Str. 23\n28237 Bremen\n```\n[**Klimaschutz4all.com**](https://www.klimaschutz4all.com/)\n\nIn zusammenarbeit mit \n[**Klimafuchs.org**](https://www.klimafuchs.org/)\n\nLizenzen\n***Klimaschutz For All** verwendet tolle freie Software und Creative Commons Werke:*\n\n[Apollo GraphQL ](https://www.apollographql.com/)\nvon Meteor Development Group, Inc. unter *MIT License*\n\n[Axios](https://github.com/axios/axios)\nvon Matt Zabriskie unter *MIT License*\n\n[Expo](https://expo.io)\nvon 650 Industries, Inc unter *MIT License*\n\n[React Native](https://reactnative.dev/)\nvon Facebook, Inc. and its affiliates unter *MIT License*\n\n[Redux](https://redux.js.org/) \nvon Dan Abramov unter *MIT License*\n\n[Moment.js](https://momentjs.com/)\nvon JS Foundation unter *MIT License*\n\n[Native Base](https://nativebase.io/) \nvon GeekyAnts unter *Apache License 2.0*\n\n[Validate.js](http://validatejs.org/)\nvon Meniga Ltd unter *MIT License*",
+    "de": ""
   }
 }

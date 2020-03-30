@@ -39,6 +39,23 @@ export const completionLevelToFriendlyString = (completion) => {
     }
 };
 
+export const completionLevelToAbbreviatedString = (completion) => {
+    if (!completion) return L.get("badge_not_completed");
+    let level = completion.challengeGoalCompletionLevel;
+    switch (level) {
+        case("MIN"):
+            return "teilgenommen";
+        case("MED"):
+            return "Orange (guter Anfang)";
+        case("GOOD"):
+            return "gelb (gut)";
+        case("MAX"):
+            return "grün (ausgezeichnet) ";
+        default:
+            return L.get("badge_not_completed");
+    }
+};
+
 
 
 export const badgeScreenStyles = StyleSheet.create({
