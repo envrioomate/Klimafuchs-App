@@ -88,7 +88,6 @@ class CurrentLevelContainer extends Component {
                         backgroundColor: "transparent",
 
                     }}
-
                 />
             </View>
         )

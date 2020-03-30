@@ -21,10 +21,21 @@ export class BadgeDetailsCompletion extends Component {
             <Fragment>
                 <Container transparent >
                     <Body style={{flex:1, margin:10}}>
-                        <Image style={{width: screenWidth/3 - screenWidth/10, height: screenWidth/3 - screenWidth/10, margin: 20, backgroundColor: completionLevelToColor(completion)}}
+                        <View style={{
+                            width: screenWidth/3 - screenWidth/10 + 40,
+                            height: screenWidth/3 - screenWidth/10 + 40,
+                            borderRadius: 4,
+                            borderColor: completionLevelToColor(completion),
+                            borderWidth: 20,
+                            overflow: "hidden",
+                            margin: 20,
+                            backgroundColor: completionLevelToColor(completion)
+                        }}>
+                        <Image style={{width: screenWidth/3 - screenWidth/10, height: screenWidth/3 - screenWidth/10, backgroundColor: completionLevelToColor(completion)}}
                                source={badge.challenge.icon ? {uri: badge.challenge.icon.url + '?date=' + (new Date()).getHours()} : require('../../../../assets/image_select.png')}
                                resizeMode="contain"
                         />
+                        </View>
                         <Text>{L.get("badge_acquired_hint", {badgeTitle: badge.challenge.title, completionLevelFriendly: completionLevelToFriendlyString(completion)})}</Text>
 
                     </Body>

@@ -43,6 +43,7 @@ export default class AppRoot extends Component {
             console.log("received notification: " + JSON.stringify(notification))
 
         } else if (notification.origin === 'selected') {
+            store.dispatch({type: 'NOTIFICATIONS/RECEIVE', notification});
             if(notification.data.path) Linking.openURL(prefix + notification.data.path)
         }
     };

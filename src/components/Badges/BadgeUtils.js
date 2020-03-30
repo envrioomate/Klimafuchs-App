@@ -1,6 +1,7 @@
 import material from "../../../native-base-theme/variables/material";
-import {StyleSheet} from "react-native";
+import {Image, StyleSheet, View} from "react-native";
 import {LocalizationProvider as L} from "../../localization/LocalizationProvider";
+import React from "react";
 
 
 // TODO export a more complete style?
@@ -51,3 +52,21 @@ export const badgeScreenStyles = StyleSheet.create({
         padding: 20,
     },
 });
+export const BadgeIcon = ({badgeIcon, bgColor}) => {
+    return (
+        <View style={{
+            width: 52,
+            height: 52,
+            borderRadius: 4,
+            borderColor: bgColor,
+            borderWidth: 3,
+            overflow: "hidden",
+            backgroundColor: bgColor
+        }}>
+            <Image style={{backgroundColor: bgColor, ...badgeScreenStyles.iconPreview}}
+                   source={badgeIcon ? {uri: badgeIcon.url + '?date=' + (new Date()).getHours()} : require('../../../assets/image_select.png')}
+                   resizeMode="contain"
+            />
+        </View>
+    )
+};

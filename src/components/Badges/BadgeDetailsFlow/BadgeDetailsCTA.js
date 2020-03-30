@@ -11,7 +11,7 @@ import {
     GET_SCORE
 } from "../../../network/Badges.gql";
 import {LocalizationProvider as L} from "../../../localization/LocalizationProvider";
-import {badgeScreenStyles} from "../BadgeUtils";
+import {BadgeIcon, badgeScreenStyles, completionLevelToColor} from "../BadgeUtils";
 import {GET_TEAM, MY_MEMBERSHIPS} from "../../../network/Teams.gql";
 import {connect} from "react-redux";
 
@@ -77,11 +77,7 @@ export class BadgeDetailsCTA extends Component {
 
                     </Body>
                     <Right>
-                        <Image style={isCompleted ? {backgroundColor: iconTint, ...badgeScreenStyles.iconPreview} : {backgroundColor: '#aaa', ...badgeScreenStyles.iconPreview}}
-                               source={icon ? {uri: icon.url + '?date=' + (new Date()).getHours()} : require('../../../../assets/image_select.png')}
-                               resizeMode="contain"
-                        />
-
+                        <BadgeIcon bgColor={isCompleted ? iconTint : "#aaa"} badgeIcon={icon} />
                     </Right>
                 </CardItem>
         )

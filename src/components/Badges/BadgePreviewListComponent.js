@@ -1,9 +1,9 @@
 import React, {Component, Fragment} from 'react';
 import {Body, Card, CardItem, H3, Icon, Right, Text} from 'native-base';
-import {FlatList, Image, StyleSheet, View} from 'react-native'
+import {FlatList, StyleSheet, View} from 'react-native'
 import material from "../../../native-base-theme/variables/material";
 import {useNavigation} from '@react-navigation/native';
-import {badgeScreenStyles, completionLevelToColor} from "./BadgeUtils";
+import {BadgeIcon, completionLevelToColor} from "./BadgeUtils";
 
 export default class BadgePreviewListComponent extends Component {
     render() {
@@ -59,10 +59,8 @@ function BadgePreview(props) {
                         </Body>
                     </Body>
                     <Right>
-                        <Image style={{backgroundColor: completionLevelToColor(badge.challengeCompletion), ...badgeScreenStyles.iconPreview}}
-                               source={badge.challenge.icon ? {uri: badge.challenge.icon.url + '?date=' + (new Date()).getHours()} : require('../../../assets/image_select.png')}
-                               resizeMode="contain"
-                        />
+                        <BadgeIcon badgeIcon={badge.challenge.icon} bgColor={completionLevelToColor(badge.challengeCompletion)}/>
+
                     </Right>
                 </CardItem>
             </Card>
