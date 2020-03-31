@@ -198,7 +198,10 @@ export class AnimatedAchievementContainer extends Component {
                 margin: 9, ...this.getCardBorderStyle(),
             }}>
 
-                <AnimatedCardItem style={{backgroundColor: this.getAnimatedColor(),padding: 0}} button onPress={this.toggleExpand} >
+                <AnimatedCardItem header style={{backgroundColor: this.getAnimatedColor(),padding: 0, marginBottom: 0}} button onPress={this.toggleExpand} >
+                    <View style={{flex: 1, flexDirection: "column"}}>
+
+                    <View style={{flex: 1, flexDirection: "row"}}>
                     <Left>
                         <Button transparent light onPress={this.toggleExpand}>
                             <Animated.View style={{...this.getIconRotation()}} >
@@ -217,12 +220,12 @@ export class AnimatedAchievementContainer extends Component {
                             fontWeight: "bold"
                         }}>{achievement.title}</Text>
                     </Body>
-                </AnimatedCardItem>
-                <AnimatedCardItem style={{backgroundColor: this.getAnimatedColor(), margin:0}}>
+                    </View>
+                    <View style={{flex: 1, flexDirection: "row"}}>
                     <Left>
                         <Text> {achievement.score} <Score/></Text>
                     </Left>
-                    <Right style={{flex: 4}}>
+                    <Right style={{flex: 4, alignItems: "center", justifyContent: "center"}}>
                         {achievementWasCompleted ?
                             <View style={{width: 40, height: 40, paddingTop: 3}}>
                                 <Svg height="100%" width="100%" viewBox="0 0 100 100">
@@ -238,9 +241,11 @@ export class AnimatedAchievementContainer extends Component {
                                     />
                                 </Svg>
                             </View>
-                            : <Text> {timeOutDateString}</Text>
+                            : <Text style={{fontSize: 14,alignItems: "center", justifyContent: "center"}}> {timeOutDateString}</Text>
                         }
                     </Right>
+                    </View>
+                    </View>
                 </AnimatedCardItem>
 
                 <Animated.View

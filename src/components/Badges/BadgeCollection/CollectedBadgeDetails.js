@@ -69,7 +69,7 @@ export class CollectedBadgeDetails extends FSModalContentBase {
                             {'\n'}
                             {name}
                             {'\n'}
-                            in {level}
+                            in {level}{completion.seasonPlanChallenge.challenge.quantityName ? ` (mit ${completion.challengeCompletionQuantity} ${completion.seasonPlanChallenge.challenge.quantityName})`: ""}
                             {'\n'}
                             für {score} <Score/>
                             {'\n'}

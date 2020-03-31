@@ -17,6 +17,7 @@ export const actions = createActions({
     NOTIFICATIONS: {
         RECEIVE: notification => notification,
         DELETE: notificationId => notificationId,
+        DELETEALL: () => {},
     },
     USER: {
         SETTEAM: teamId => teamId,

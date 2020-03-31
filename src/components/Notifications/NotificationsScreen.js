@@ -38,9 +38,7 @@ class NotificationsScreen extends Component {
 
     deleteAllNotifications = () => {
         let {notifications} = this.props;
-        notifications.forEach((notification) => {
-            this.props.dispatch({type: 'NOTIFICATIONS/DELETE', notificationId: notification.notificationId});
-        })
+        this.props.dispatch({type: 'NOTIFICATIONS/DELETEALL'});
         Notifications.dismissAllNotificationsAsync();
     };
 
