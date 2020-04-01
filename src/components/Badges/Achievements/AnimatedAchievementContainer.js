@@ -10,13 +10,37 @@ import {Score} from "../../Common/Score";
 
 import moment from 'moment/min/moment-with-locales';
 import de from 'moment/locale/de';
-moment.locale('de');
+import * as Animatable from 'react-native-animatable';
 
+moment.locale('de');
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
 const AnimatedCard = Animated.createAnimatedComponent(Card)
 const AnimatedCardItem = Animated.createAnimatedComponent(CardItem)
+
+const HoldButtonHint = ({top}) => {
+    return (
+        <Animatable.View  animation="fadeInUp" duration={800} style={{
+            position: "absolute",
+            top: top,
+            left: "10%",
+            width: "80%",
+            height: "20%",
+            backgroundColor: "white",
+            borderRadius: 5,
+            borderWidth: 1,
+            borderColor: 'black',
+            flex:1,
+            alignItems: "center",
+            justifyContent: "center"
+        }}>
+            <Text>
+                Halt mich!
+            </Text>
+        </Animatable.View>
+    )
+}
 
 export class AnimatedAchievementContainer extends Component {
 
@@ -37,7 +61,9 @@ export class AnimatedAchievementContainer extends Component {
         duration: 2000,
         loading: false,
         collapsed: true,
-        animatingHeight: false
+        animatingHeight: false,
+        showHint: false,
+        reshowHint: true
     };
 
     async componentDidMount() {
@@ -59,6 +85,10 @@ export class AnimatedAchievementContainer extends Component {
     onPressOut = (e, duration) => {
         console.log("Press stopped!");
         if (this.state.hasCompleted) return;
+        this.setState({showHint: this.state.reshowHint, reshowHint: false});
+        setTimeout(() => {
+            this.setState({showHint: false, reshowHint: true});
+        }, 2500)
         Animated.timing(this.state.heldActionProgress, {
             duration: this.heldActionValue * duration,
             toValue: 0
@@ -328,6 +358,8 @@ export class AnimatedAchievementContainer extends Component {
                             </Mutation>
 
                         </AnimatedCardItem>
+                        {this.state.showHint &&<HoldButtonHint top={this.state.expandedHeight - 110}/>}
+
                     </View>
                 </Animated.View>
             </Animated.View>
