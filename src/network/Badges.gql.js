@@ -200,3 +200,28 @@ export const GET_SCORE = gql`
         score
     }
 `;
+
+export const PLAYER_PROGRESS = gql`
+    query {
+        playerProgress {
+            score
+            currentLevel
+            levelData {
+                index
+                name
+                maxScore
+                icon {
+                    path
+                }
+            }
+            team {
+                name
+                place
+                avatar {
+                    filename
+                    path
+                }
+            }
+        }
+    }
+`;

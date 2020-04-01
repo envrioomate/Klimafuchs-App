@@ -90,6 +90,7 @@ type ChallengeCompletion {
     owner: User!
     replacementChallenge: ChallengeReplacement
     seasonPlanChallenge: SeasonPlanChallenge
+    teamNotified: Boolean
     updatedAt: DateTime!
 }
 
@@ -250,6 +251,7 @@ type Mutation {
     unsubscribe: Subscription
     updateAchievementTimeout: [AchievementSelection!]
     updateAllAchievements: [AchievementCompletion!]
+    updatePlayerLevels: [User!]!
     updateProfile(avatarId: Int, screenName: String, userName: String): User!
     updateSeason(season: SeasonInput!): Season
     updateSeasonPlan(seasonPlan: SeasonPlanInput!): SeasonPlan
@@ -290,6 +292,13 @@ type PasswordResetToken {
     user: User!
 }
 
+type PlayerLevel {
+    icon: RemoteIcon!
+    index: Int!
+    maxScore: Int!
+    name: String!
+}
+
 type Props {
     createdAt: DateTime!
     pageid: Int!
@@ -318,6 +327,7 @@ type Query {
     getCompletedChallenges: [ChallengeCompletion!]
     getCurrentUser: User!
     getLeaderBoard(connectionArgs: ConnectionArgs!, teamSize: TeamSize): LeaderBoardEntryPage
+    getLevelData(levelIndex: Int!): PlayerLevel
     getMyTeam(teamId: Int!): Team!
     getPageProps(pageId: Int!): Props
     getTeam(teamId: Int!): Team!
@@ -326,6 +336,7 @@ type Query {
     myMedia: [Media!]!
     myMemberships: [Membership!]!
     paginatedPosts(connectionArgs: ConnectionArgs!): FeedPostPage!
+    playerProgress: UserProgress!
     post(postId: Int!): FeedPost
     posts: [FeedPost!]!
     score: Float!
@@ -338,6 +349,11 @@ type Query {
     themenwoches: [Thema!]
     user(userId: Int!): User
     users: [User!]
+}
+
+type RemoteIcon {
+    path: String!
+    type: String!
 }
 
 type Season {
@@ -417,12 +433,20 @@ type User {
     media: [Media!]
     notifications: [Notification!]
     passwordResetToken: PasswordResetToken
+    playerLevel: Int!
     posts: [FeedPost!]
     role: Int!
     score: Int!
     screenName: String!
     subscription: Subscription
     userName: String!
+}
+
+type UserProgress {
+    currentLevel: Int!
+    levelData: PlayerLevel!
+    score: Int!
+    team: Team
 }
 
 type WikiImage {

@@ -2,14 +2,27 @@ import React, {Component, Fragment} from "react";
 import {Body, Button, Container, Header, Icon, Left, Right, Spinner, Text, Title} from "native-base";
 import material from "../../../native-base-theme/variables/material";
 import {Query} from "react-apollo";
-import {GET_SCORE} from "../../network/Badges.gql";
+import {GET_SCORE, PLAYER_PROGRESS} from "../../network/Badges.gql";
 import AnimateNumber from 'react-native-countup';
 import RNTooltips from 'react-native-tooltips'
 import * as Progress from 'react-native-progress';
-import {StyleSheet, View, Animated, TouchableOpacity, Image, StatusBar, Platform} from "react-native";
+import {
+    StyleSheet,
+    View,
+    Animated,
+    TouchableOpacity,
+    Image,
+    StatusBar,
+    Platform,
+    TouchableWithoutFeedback
+} from "react-native";
 import {Score} from "./Score";
 import {Dimensions} from "react-native";
 import {LevelUpTable} from "./levelUpTable"
+import {Util} from "../../util";
+import {FSModal} from "./FSModal";
+import {CollectedBadgeDetails} from "../Badges/BadgeCollection/CollectedBadgeDetails";
+import {NextLevelDetails} from "./NextLevelDetails";
 
 class ScoreContainer extends Component {
 
@@ -58,38 +71,145 @@ class ScoreContainer extends Component {
 }
 
 class CurrentLevelContainer extends Component {
+    state = {
+        showHint: false,
+        prevLevel: null,
+        hasUpdated: true,
+        showLevelUpModal: false
+    };
+
+    componentDidMount() {
+        let {score, levelData} = this.props;
+        this.setState({levelData: levelData})
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.levelData !== prevProps.levelData) {
+            this.setState({levelData: this.props.levelData, hasUpdated: true})
+            if(this.props.levelData.index > prevProps.levelData.index)
+                this.nextLevelDetails.openModal()
+
+        }
+    }
+
+
     render() {
-        const {score} = this.props;
+        const {score, levelData} = this.props;
         let currentLevel = getCurrentLevel(score);
         let size = 36 * 1.33;
         return (
-
-            <View style={{
-                backgroundColor: material.levelIconBackground,
-                borderColor: '#000',
-                borderWidth: 3,
-                borderRadius: 5,
-                overflow: "hidden",
-                marginLeft: 5,
-                bottom: 0,
-                flex:1,
-                justifyContent: "center",
-                alignItems: "center",
-                width: size,
-                height: size
-            }}>
-                <Image
-                    resizeMode="contain"
-                    source={currentLevel.icon.path}
-                    fadeDuration={0}
-                    style={{
-                        height: size-4,
-                        width: size-4,
-                        backgroundColor: "transparent",
-
+            <Fragment>
+                <FSModal
+                    ref={(ref) => this.nextLevelDetails = ref}
+                    body={<NextLevelDetails requestModalClose={() => this.nextLevelDetails.closeModal()} score={score} levelData={levelData}/>}
+                    darken
+                >
+                <TouchableWithoutFeedback
+                    onPress={() => {
+                        console.log("flap");
+                        //this.nextLevelDetails.openModal()
                     }}
-                />
-            </View>
+                >
+
+                    <View style={{
+                        backgroundColor: material.levelIconBackground,
+                        borderColor: '#000',
+                        borderWidth: 3,
+                        borderRadius: 5,
+                        overflow: "hidden",
+                        marginLeft: 5,
+                        bottom: 0,
+                        flex: 1,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        width: size,
+                        height: size
+                    }}>
+                        <Image
+                            resizeMode="contain"
+                            source={currentLevel.icon.path}
+                            fadeDuration={0}
+                            style={{
+                                height: size - 4,
+                                width: size - 4,
+                                backgroundColor: "transparent",
+
+                            }}
+                        />
+                    </View>
+
+
+                </TouchableWithoutFeedback>
+                </FSModal>
+            </Fragment>
+        )
+    }
+}
+
+class TeamPlaccementContainer extends Component {
+    state = {
+        showHint: false
+    }
+
+    render() {
+        const {team} = this.props;
+
+        const {place} = team;
+
+        let borderColor = (function(place) {
+            switch (place) {
+                case (1):
+                    return 'gold';
+                case (2):
+                    return 'silver';
+                case(3):
+                    return 'sienna';
+                default:
+                    return '#aaa'
+            }
+        })(place);
+
+        let size = 36 * 1.33;
+        return (
+            <Fragment>
+                <TouchableWithoutFeedback
+                    onPress={() => {
+                        console.log("flap");
+                        this.setState({showHint: !this.state.showHint})
+                    }}
+                >
+
+                    <View style={{
+                        backgroundColor: borderColor,
+                        borderColor: borderColor,
+                        borderWidth: 3,
+                        borderRadius: 5,
+                        overflow: "hidden",
+                        marginLeft: 5,
+                        bottom: 0,
+                        flex: 1,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        width: size,
+                        height: size
+                    }}>
+                        <Image
+                            resizeMode="contain"
+                            source={{uri: Util.AvatarToUri(team.avatar)}}
+                            fadeDuration={0}
+                            style={{
+                                height: size - 4,
+                                width: size - 4,
+                                backgroundColor: "transparent",
+
+                            }}
+                        />
+                    </View>
+
+
+                </TouchableWithoutFeedback>
+
+            </Fragment>
         )
     }
 }
@@ -106,7 +226,6 @@ const getCurrentLevel = (score) => {
     }
     return LevelUpTable.levels[LevelUpTable.levels.length - 1]
 };
-
 
 
 const getProgressInLevel = (score, level) => {
@@ -160,16 +279,16 @@ export class PersistentScoreHeader extends Component {
 
     state = {
         scoreToolTipVisible: false,
-        lastScore: null
+        lastScore: null,
     };
 
     render() {
         let {options, navigation} = this.props;
         let topPadding = Platform.OS === 'ios' ? 20 : 5;
         return (
-            <Header transparent style={{backgroundColor: material.brandInfo, height: 75+topPadding}}>
+            <Header transparent style={{backgroundColor: material.brandInfo, height: 75 + topPadding}}>
 
-                <Query query={GET_SCORE}>
+                <Query query={PLAYER_PROGRESS}>
                     {({loading, error, data, startPolling, stopPolling}) => {
                         if (loading) return (
                             <Fragment>
@@ -181,15 +300,17 @@ export class PersistentScoreHeader extends Component {
                             </Fragment>
                         );
                         if (error) return <Text>Error {error.message}</Text>;
-                        let {score} = data;
-                        let currentLevel = getCurrentLevel(score);
-                        let lastLevel = currentLevel.index > 1 ? LevelUpTable.levels[currentLevel.index -1] : null;
+                        let {score, currentLevel, levelData, team} = data.playerProgress;
+                        console.log({pp: data.playerProgress})
+                        let lastLevel = currentLevel > 1 ? LevelUpTable.levels[currentLevel - 1] : null;
                         let lastLevelMaxScore = lastLevel ? lastLevel.maxScore : 0;
-                        let nextLevelScore = currentLevel.maxScore - lastLevelMaxScore;
+                        let nextLevelScore = levelData.maxScore - lastLevelMaxScore;
                         let currentLevelScore = score - lastLevelMaxScore;
                         let currentLevelProgress = `${currentLevelScore}/${nextLevelScore}`;
+                        startPolling(100)
+                        setTimeout(stopPolling, 400)
 
-                            const hasNotch = Platform.OS === 'android' &&  StatusBar.currentHeight > 24;
+                        const hasNotch = Platform.OS === 'android' && StatusBar.currentHeight > 24;
 
                         return (
                             <View style={{paddingTop: topPadding, flex: 1, flexDirection: "row"}}>
@@ -205,14 +326,17 @@ export class PersistentScoreHeader extends Component {
                                         <ScoreContainer score={score}/>
 
 
-                                        <Title style={{top: hasNotch?0:10}}>
+                                        <Title style={{top: hasNotch ? 0 : 10}}>
                                             {currentLevelProgress}
                                         </Title>
                                     </View>
                                     <XPBar score={score}/>
                                 </View>
                                 <View style={{flex: 1, flexDirection: "column"}}>
-                                    <CurrentLevelContainer score={score}/>
+                                    <CurrentLevelContainer score={score} levelData={levelData}/>
+                                </View>
+                                <View style={{flex: 1, flexDirection: "column", marginLeft: 5}}>
+                                    <TeamPlaccementContainer team={team}/>
                                 </View>
                             </View>
                         )
