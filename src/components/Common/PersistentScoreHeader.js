@@ -6,6 +6,8 @@ import {GET_SCORE, PLAYER_PROGRESS} from "../../network/Badges.gql";
 import AnimateNumber from 'react-native-countup';
 import RNTooltips from 'react-native-tooltips'
 import * as Progress from 'react-native-progress';
+import {LinearGradient} from "expo-linear-gradient";
+
 import {
     StyleSheet,
     View,
@@ -86,7 +88,7 @@ class CurrentLevelContainer extends Component {
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.levelData !== prevProps.levelData) {
             this.setState({levelData: this.props.levelData, hasUpdated: true})
-            if(this.props.levelData.index > prevProps.levelData.index)
+            if (this.props.levelData.index > prevProps.levelData.index)
                 this.nextLevelDetails.openModal()
 
         }
@@ -101,45 +103,46 @@ class CurrentLevelContainer extends Component {
             <Fragment>
                 <FSModal
                     ref={(ref) => this.nextLevelDetails = ref}
-                    body={<NextLevelDetails requestModalClose={() => this.nextLevelDetails.closeModal()} score={score} levelData={levelData}/>}
+                    body={<NextLevelDetails requestModalClose={() => this.nextLevelDetails.closeModal()} score={score}
+                                            levelData={levelData}/>}
                     darken
                 >
-                <TouchableWithoutFeedback
-                    onPress={() => {
-                        console.log("flap");
-                        //this.nextLevelDetails.openModal()
-                    }}
-                >
+                    <TouchableWithoutFeedback
+                        onPress={() => {
+                            console.log("flap");
+                            //this.nextLevelDetails.openModal()
+                        }}
+                    >
 
-                    <View style={{
-                        backgroundColor: material.levelIconBackground,
-                        borderColor: '#000',
-                        borderWidth: 3,
-                        borderRadius: 5,
-                        overflow: "hidden",
-                        marginLeft: 5,
-                        bottom: 0,
-                        flex: 1,
-                        justifyContent: "center",
-                        alignItems: "center",
-                        width: size,
-                        height: size
-                    }}>
-                        <Image
-                            resizeMode="contain"
-                            source={currentLevel.icon.path}
-                            fadeDuration={0}
-                            style={{
-                                height: size - 4,
-                                width: size - 4,
-                                backgroundColor: "transparent",
+                        <View style={{
+                            backgroundColor: material.levelIconBackground,
+                            borderColor: '#000',
+                            borderWidth: 3,
+                            borderRadius: 5,
+                            overflow: "hidden",
+                            marginLeft: 5,
+                            bottom: 0,
+                            flex: 1,
+                            justifyContent: "center",
+                            alignItems: "center",
+                            width: size,
+                            height: size
+                        }}>
+                            <Image
+                                resizeMode="contain"
+                                source={currentLevel.icon.path}
+                                fadeDuration={0}
+                                style={{
+                                    height: size - 4,
+                                    width: size - 4,
+                                    backgroundColor: "transparent",
 
-                            }}
-                        />
-                    </View>
+                                }}
+                            />
+                        </View>
 
 
-                </TouchableWithoutFeedback>
+                    </TouchableWithoutFeedback>
                 </FSModal>
             </Fragment>
         )
@@ -154,18 +157,18 @@ class TeamPlaccementContainer extends Component {
     render() {
         const {team} = this.props;
 
-        const {place} = team;
+        const {place, avatar} = team;
 
-        let borderColor = (function(place) {
+        let borderColor = (function (place) {
             switch (place) {
                 case (1):
-                    return 'gold';
+                    return ['gold', 'gold'];
                 case (2):
-                    return 'silver';
+                    return ['silver', 'silver'];
                 case(3):
-                    return 'sienna';
+                    return ['sienna', 'sienna'];
                 default:
-                    return '#aaa'
+                    return ['orange', 'yellow', 'green', 'cyan', 'blue', 'violet'];
             }
         })(place);
 
@@ -179,10 +182,7 @@ class TeamPlaccementContainer extends Component {
                     }}
                 >
 
-                    <View style={{
-                        backgroundColor: borderColor,
-                        borderColor: borderColor,
-                        borderWidth: 3,
+                    <LinearGradient colors={borderColor} style={{
                         borderRadius: 5,
                         overflow: "hidden",
                         marginLeft: 5,
@@ -190,10 +190,11 @@ class TeamPlaccementContainer extends Component {
                         flex: 1,
                         justifyContent: "center",
                         alignItems: "center",
-                        width: size,
-                        height: size
+                        width: size + 3,
+                        height: size + 3
                     }}>
-                        <Image
+                        {avatar ? <Image
+                            name='md-group'
                             resizeMode="contain"
                             source={{uri: Util.AvatarToUri(team.avatar)}}
                             fadeDuration={0}
@@ -204,7 +205,8 @@ class TeamPlaccementContainer extends Component {
 
                             }}
                         />
-                    </View>
+                        : <Icon name="md-people"/>}
+                    </LinearGradient>
 
 
                 </TouchableWithoutFeedback>
@@ -335,9 +337,9 @@ export class PersistentScoreHeader extends Component {
                                 <View style={{flex: 1, flexDirection: "column"}}>
                                     <CurrentLevelContainer score={score} levelData={levelData}/>
                                 </View>
-                                <View style={{flex: 1, flexDirection: "column", marginLeft: 5}}>
+                                {team && <View style={{flex: 1, flexDirection: "column", marginLeft: 5}}>
                                     <TeamPlaccementContainer team={team}/>
-                                </View>
+                                </View>}
                             </View>
                         )
                     }}
