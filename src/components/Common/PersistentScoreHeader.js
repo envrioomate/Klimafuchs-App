@@ -109,7 +109,6 @@ class CurrentLevelContainer extends Component {
                 >
                     <TouchableWithoutFeedback
                         onPress={() => {
-                            console.log("flap");
                             //this.nextLevelDetails.openModal()
                         }}
                     >
@@ -162,11 +161,11 @@ class TeamPlaccementContainer extends Component {
         let borderColor = (function (place) {
             switch (place) {
                 case (1):
-                    return ['gold', 'gold'];
+                    return ['goldenrod', 'gold'];
                 case (2):
-                    return ['silver', 'silver'];
+                    return ['silver', 'snow'];
                 case(3):
-                    return ['sienna', 'sienna'];
+                    return ['sienna', 'peru'];
                 default:
                     return ['orange', 'yellow', 'green', 'cyan', 'blue', 'violet'];
             }
@@ -177,7 +176,6 @@ class TeamPlaccementContainer extends Component {
             <Fragment>
                 <TouchableWithoutFeedback
                     onPress={() => {
-                        console.log("flap");
                         this.setState({showHint: !this.state.showHint})
                     }}
                 >
@@ -303,7 +301,6 @@ export class PersistentScoreHeader extends Component {
                         );
                         if (error) return <Text>Error {error.message}</Text>;
                         let {score, currentLevel, levelData, team} = data.playerProgress;
-                        console.log({pp: data.playerProgress})
                         let lastLevel = currentLevel > 1 ? LevelUpTable.levels[currentLevel - 1] : null;
                         let lastLevelMaxScore = lastLevel ? lastLevel.maxScore : 0;
                         let nextLevelScore = levelData.maxScore - lastLevelMaxScore;

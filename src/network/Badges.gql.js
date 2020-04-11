@@ -166,12 +166,44 @@ export const CURRENTLY_SELECTED_ACHIEVEMENTS = gql`
             }
             achievementCompletions {
                 id
+                achievementCompletionType
+                createdAt
+                updatedAt
             }
             createdAt
             timeOutDate
         }
     }
 `;
+
+export const PAST_SELECTED_ACHIEVEMENTS = gql`
+    query pastSelectedAchievement{
+        pastSelectedAchievements {
+            id
+            achievement {
+                name
+                title
+                text
+                score
+                recurring
+                weekFrequency
+                weeks
+                externalLink
+                maxCompletion
+
+            }
+            achievementCompletions {
+                id
+                achievementCompletionType
+                createdAt
+                updatedAt
+            }
+            createdAt
+            timeOutDate
+        }
+    }
+`;
+
 
 export const COMPLETED_BADGES = gql`
     query completedBadges{

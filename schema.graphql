@@ -336,6 +336,7 @@ type Query {
     myMedia: [Media!]!
     myMemberships: [Membership!]!
     paginatedPosts(connectionArgs: ConnectionArgs!): FeedPostPage!
+    pastSelectedAchievements: [AchievementSelection!]
     playerProgress: UserProgress!
     post(postId: Int!): FeedPost
     posts: [FeedPost!]!
@@ -463,6 +464,7 @@ type WikiImage {
 
 type WikiWarning {
     createdAt: DateTime!
+    error: String
     id: Int!
     props: Props!
     updatedAt: DateTime!
