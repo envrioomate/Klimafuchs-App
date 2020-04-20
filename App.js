@@ -23,6 +23,7 @@ import { Linking } from 'expo';
 import {PersistentScoreHeader} from "./src/components/Common/PersistentScoreHeader";
 import {PrivacyPolicyScreen} from "./src/components/PreLogin/PrivacyPolicyScreen";
 import {HintPopUpProvider} from "./src/components/Common/HintPopUp";
+import {ServerMaintenanceScreen} from "./src/components/PreLogin/ServerMaintenanceScreen";
 
 const prefix = Linking.makeUrl('/');
 const Tab = createMaterialBottomTabNavigator();
@@ -89,33 +90,42 @@ export default class AppRoot extends Component {
 
 
 class AuthLoadingScreen extends Component {
-    constructor() {
-        super();
+    state = {
+        serverError: false
+    };
+
+    componentDidMount() {
         this._bootstrapAsync();
     }
 
     async _bootstrapAsync() {
-        console.log("Is logged in?");
+        this.setState({serverError: false});
         const userToken = await AsyncStorage.getItem('token');
         console.log(userToken);
         await Api.checkTokenValid(userToken, async (res) => {
-            console.log(`Token valid!`);
             this.props.navigation.navigate('App');
         }, async (err) => {
             console.log(err);
-            await AsyncStorage.removeItem('uId');
-            await AsyncStorage.removeItem('token');
-            await client.clearStore();
-            console.log(`Token invalid! Cleared token store, reauthenticating...`);
-            this.props.navigation.navigate('Auth');
+            if (err.response.status >= 400 && err.response.status < 500) {
+                await AsyncStorage.removeItem('uId');
+                await AsyncStorage.removeItem('token');
+                await client.clearStore();
+                console.log(`Token invalid! Cleared token store, reauthenticating...`);
+                this.props.navigation.navigate('Auth');
+            } else {
+                this.setState({serverError: true});
+            }
         })
 
     }
 
     render() {
+        let {serverError} = this.state;
         return (
             <View style={styles.container}>
-                <Spinner/>
+                {serverError ?
+                    <ServerMaintenanceScreen retryConnection={this._bootstrapAsync()}/>
+                    : <Spinner/>}
             </View>
         )
     }
