@@ -4,6 +4,8 @@ import {FlatList, StyleSheet, View} from "react-native";
 import {Mutation, Query} from "react-apollo";
 import {CURRENTLY_SELECTED_ACHIEVEMENTS, DESELECT_ACHIEVEMENT, SELECT_ACHIEVEMENT} from "../../../network/Badges.gql";
 import material from "../../../../native-base-theme/variables/material";
+import {Util} from "../../../util";
+import {LocalizationProvider as L} from "../../../localization/LocalizationProvider";
 
 export class BadgeDetailsSelectAchievements extends Component {
     state = {
@@ -159,13 +161,19 @@ export class BadgeDetailsSelectAchievements extends Component {
     render() {
         let {options, navigation, route} = this.props;
         let {badge, completion} = route.params; //
+        completion = completion || badge.challengeCompletion ;
         let achievements = badge.challenge.achievements;
         console.log(completion, route.params)
+        let currentCompletionLevel = Util.CompletionLevelToNumber(completion.challengeGoalCompletionLevel);
+
+        let eligebleAchievements = achievements.filter(value => {
+            let maxCompletion = Util.CompletionLevelToNumber(value.maxCompletion);
+            return maxCompletion > currentCompletionLevel;
+        });
          // TODO L.get
         return (
             <Fragment>
                 <Container transparent>
-                    <Text>Aktivitäten</Text>
                     <Query query={CURRENTLY_SELECTED_ACHIEVEMENTS}>
                         {({loading, error, data, refetch}) => {
                             if (loading) return (
@@ -173,10 +181,13 @@ export class BadgeDetailsSelectAchievements extends Component {
                                     <Spinner/>
                                 </Container>
                             );
+                            if(eligebleAchievements.length === 0) {
+                                return <Container><Text style={{margin: 10}}>{L.get("no_achievements_for_level")}</Text></Container>
+                            }
                             if (error) return <Text>Error {error.message}</Text>;
                             return (
                                 <FlatList style={{flex: 1}}
-                                          data={achievements}
+                                          data={eligebleAchievements}
                                           keyExtractor={(item, index) => item.name.toString()}
                                           renderItem={({item}) => {
                                               return <this.AchievementPreview key={item.name} achievement={item}

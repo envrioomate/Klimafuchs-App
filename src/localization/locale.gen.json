@@ -223,6 +223,10 @@
     "default": "Sammlung",
     "de": "Abzeichen"
   },
+  "no_achievements_for_level": {
+    "default": "Keine Aktivitäten",
+    "de": ""
+  },
   "notifications_list_empty": {
     "default": "Keine Mitteilungen",
     "de": "Keine Mitteilungen"

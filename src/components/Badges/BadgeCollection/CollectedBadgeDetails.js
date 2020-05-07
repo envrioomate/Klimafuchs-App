@@ -10,6 +10,7 @@ import {
     completionLevelToFriendlyString
 } from "../BadgeUtils";
 import {Score} from "../../Common/Score";
+import {ExternalLinkButton} from "../ExternalLinkButton";
 
 
 export class CollectedBadgeDetails extends FSModalContentBase {
@@ -18,7 +19,7 @@ export class CollectedBadgeDetails extends FSModalContentBase {
     render() {
         const {requestModalClose, completion} = this.props;
         console.log(completion)
-        const {icon, score} = completion.seasonPlanChallenge.challenge;
+        const {icon, score, externalLink} = completion.seasonPlanChallenge.challenge;
         const name = completion.seasonPlanChallenge.challenge.title || completion.seasonPlanChallenge.challenge.name;
         const level = completionLevelToAbbreviatedString(completion)
         const iconTint = completionLevelToColor(completion);
@@ -78,6 +79,11 @@ export class CollectedBadgeDetails extends FSModalContentBase {
                     </View>
                 </Body>
                 </CardItem>
+                { externalLink && <CardItem>
+                    <Body style={{flex: 1, flexDirection: 'row-reverse'}}>
+                        <ExternalLinkButton url={externalLink}/>
+                    </Body>
+                </CardItem> }
             </Card>
         );
     }

@@ -16,4 +16,15 @@ export class Util {
         )
         return `${Env.API_IMG_URL}${isTeam ? "avatar_default_team_alpha.png" : "avatar_default_alpha.png"}`
     }
+
+    static CompletionLevelToNumber(level) {
+        level = level.toLowerCase();
+        switch (level) {
+            case "max": return 3;
+            case "good": return 2;
+            case "med": return 1;
+            case "min": return 0;
+            default: return 0;
+        }
+    }
 }

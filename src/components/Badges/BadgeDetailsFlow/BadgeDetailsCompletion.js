@@ -53,7 +53,7 @@ export class BadgeDetailsCompletion extends Component {
                                 height: 200
                             }}
                             onPress={async () => {
-                                navigation.navigate("BadgeDetailsSelectAchievements", {badge: badge})
+                                navigation.navigate("BadgeDetailsSelectAchievements", route.params)
 
                             }}>
                             <Text>{L.get("select_achievements")}</Text>

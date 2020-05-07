@@ -222,6 +222,8 @@ export const COMPLETED_BADGES = gql`
                     title
                     score
                     quantityName
+                    externalLink
+                    
                 }
             }
         }
