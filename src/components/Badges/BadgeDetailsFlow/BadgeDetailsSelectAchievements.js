@@ -168,7 +168,7 @@ export class BadgeDetailsSelectAchievements extends Component {
 
         let eligebleAchievements = achievements.filter(value => {
             let maxCompletion = Util.CompletionLevelToNumber(value.maxCompletion);
-            return maxCompletion > currentCompletionLevel;
+            return currentCompletionLevel <= maxCompletion;
         });
          // TODO L.get
         return (

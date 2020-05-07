@@ -24,7 +24,7 @@ export class Util {
             case "good": return 2;
             case "med": return 1;
             case "min": return 0;
-            default: return 0;
+            default: return 3;
         }
     }
 }
