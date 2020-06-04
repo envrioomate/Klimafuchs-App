@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {AsyncStorage, StyleSheet, View} from 'react-native';
+import {AsyncStorage, StyleSheet, View, SafeAreaView} from 'react-native';
 import {NavigationContainer, useLinking} from "@react-navigation/native";
 import {createMaterialBottomTabNavigator} from "@react-navigation/material-bottom-tabs";
 import {createStackNavigator} from "@react-navigation/stack";
@@ -15,7 +15,7 @@ import * as Font from 'expo-font';
 import {AppNav} from "./src/components/LoggedInScreen";
 import {ForgotPasswordScreen} from "./src/components/PreLogin/ForgotPasswordScreen";
 import {Notifications} from "expo";
-import ApolloProvider from "react-apollo/ApolloProvider";
+import {ApolloProvider} from "react-apollo";
 import client from "./src/network/client"
 import Api from "./src/network/api";
 import {SafeAreaProvider} from "react-native-safe-area-context";
@@ -51,9 +51,10 @@ export default class AppRoot extends Component {
 
     componentDidMount() {
         this._notificationSubscription = Notifications.addListener(this.handleNotification);
+        this.initializeAssets();
     }
 
-    async componentWillMount() {
+    async initializeAssets() {
         await Font.loadAsync({
             Roboto: require("native-base/Fonts/Roboto.ttf"),
             Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
@@ -75,11 +76,11 @@ export default class AppRoot extends Component {
                 <PersistGate loading={<Spinner/>} persistor={persistor}>
                 <ApolloProvider client={client}>
                     <StyleProvider style={getTheme(material)}>
-                        <SafeAreaProvider forceInset={{ bottom: 'never' }} style={styles.safeArea}>
+                        <SafeAreaView forceInset={{ bottom: 'never' }} style={styles.safeArea}>
                                 <Root style={styles.container}>
                                         <RootContainer uriPrefix='/app'/>
                                 </Root>
-                        </SafeAreaProvider>
+                        </SafeAreaView>
                     </StyleProvider>
                 </ApolloProvider>
                 </PersistGate>

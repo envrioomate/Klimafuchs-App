@@ -8,6 +8,7 @@ import material from '../../../native-base-theme/variables/material';
 import PostComponent from "./PostComponent";
 import {LocalizationProvider as L} from "../../localization/LocalizationProvider";
 import SafeAreaView from 'react-native-safe-area-view';
+import Spinner from "../../../native-base-theme/components/Spinner";
 
 export default class FeedComponent extends Component {
     constructor(props) {
@@ -45,6 +46,34 @@ export default class FeedComponent extends Component {
         })
     }
 
+
+    _renderPosts = (data) => {
+
+        if(!data.paginatedPosts) return (<Spinner/>)
+
+        const posts = data.paginatedPosts.page.edges.map(item => {
+            const post = item.node;
+            return (
+                <PostComponent key={post.id} post={post}
+                               navigateToDetailedView={function (url) {
+                                   this.props.navigation.navigate("Post", {
+                                       type: "Navigate",
+                                       routeName: "Post",
+                                       params: {
+                                           postId: post.id,
+                                           postTitle: post.title
+                                       }
+                                   })
+                               }.bind(this)}/>
+            )
+        })
+
+        return (
+            posts
+        )
+    }
+
+
     render() {
         return (
             <SafeAreaView style={styles.container}>
@@ -56,12 +85,15 @@ export default class FeedComponent extends Component {
                     >
                         {({loading, error, data, refetch, fetchMore}) => {
                             let spinner;
-                            if (loading) {
+                            if (loading ) {
                                 spinner = <Text>{L.get("feed_loading")}</Text>
                             } else {
                                 spinner = <Text>{L.get("feed_load_more")}</Text>
                             }
                             if (error) return <Text>{L.get("error_gql", {error})}</Text>;
+                            if (!data) return (
+                                <Spinner/>
+                            )
                             return (
 
                                 <Content
@@ -75,27 +107,7 @@ export default class FeedComponent extends Component {
                                         }
                                     }}
                                 >
-                                    <FlatList
-                                        data={data.paginatedPosts ? data.paginatedPosts.page.edges : []}
-                                        keyExtractor={(item, index) => item.node.id.toString()}
-                                        renderItem={({item}) => {
-                                            const post = item.node;
-                                            console.log(post.title);
-                                            return (
-                                                <PostComponent key={post.id} post={post}
-                                                               navigateToDetailedView={function (url) {
-                                                                   this.props.navigation.navigate("Post", {
-                                                                       type: "Navigate",
-                                                                       routeName: "Post",
-                                                                       params: {
-                                                                           postId: post.id,
-                                                                           postTitle: post.title
-                                                                       }
-                                                                   })
-                                                               }.bind(this)}/>
-                                            )
-                                        }}
-                                    />
+                                    {this._renderPosts(data)}
                                     {data.paginatedPosts && this.state.endReached
                                         ? <Button full light disabled>
                                             <Text>{L.get("feed_end_reached")}</Text>
