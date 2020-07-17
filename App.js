@@ -28,7 +28,8 @@ import {ServerMaintenanceScreen} from "./src/components/PreLogin/ServerMaintenan
 const prefix = Linking.makeUrl('/');
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
-
+//TODO REMOVE THIS
+console.disableYellowBox = true;
 export default class AppRoot extends Component {
 
     constructor(props) {

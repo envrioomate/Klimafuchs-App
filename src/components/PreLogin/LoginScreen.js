@@ -83,7 +83,7 @@ class LoginScreen extends Component {
                                 <H1 style={{color: 'white', fontWeight: 'bold'}}>{L.get("app_title")}</H1>
                             </View>
 
-                            <KeyboardAvoidingView behavior="position" style={{flex:5}}>
+                            <KeyboardAvoidingView behavior="position">
                             <Card style={loginScreenStyles.loginCard}>
                                 <CardItem style={loginScreenStyles.loginCardItem}>
                                     <H1>{L.get("login_card_title")}</H1>

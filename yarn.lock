@@ -2112,11 +2112,6 @@ babel-plugin-react-native-web@^0.11.7:
   resolved "https://registry.yarnpkg.com/babel-plugin-react-native-web/-/babel-plugin-react-native-web-0.11.7.tgz#15b578c0731bd7d65d334f9c759d95e8e4a602e2"
   integrity sha512-CxE7uhhqkzAFkwV2X7+Mc/UVPujQQDtja/EGxCXRJvdYRi72QTmaJYKbK1lV9qgTZuB+TDguU89coaA9Z1BNbg==
 
-babel-plugin-syntax-async-functions@^6.8.0:
-  version "6.13.0"
-  resolved "https://registry.yarnpkg.com/babel-plugin-syntax-async-functions/-/babel-plugin-syntax-async-functions-6.13.0.tgz#cad9cad1191b5ad634bf30ae0872391e0647be95"
-  integrity sha1-ytnK0RkbWtY0vzCuCHI5HgZHvpU=
-
 babel-plugin-syntax-trailing-function-commas@^7.0.0-beta.0:
   version "7.0.0-beta.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-syntax-trailing-function-commas/-/babel-plugin-syntax-trailing-function-commas-7.0.0-beta.0.tgz#aa213c1435e2bffeb6fca842287ef534ad05d5cf"
@@ -5622,10 +5617,11 @@ react-native-animatable@1.3.3, react-native-animatable@^1.3.3:
   dependencies:
     prop-types "^15.7.2"
 
-react-native-animate-number@../react-native-animate-number:
+react-native-animate-number@^0.1.2:
   version "0.1.2"
+  resolved "https://registry.yarnpkg.com/react-native-animate-number/-/react-native-animate-number-0.1.2.tgz#d41c5a784e05f9d788dafbf7b158584c65e8cf47"
+  integrity sha1-1BxaeE4F+deI2vv3sVhYTGXoz0c=
   dependencies:
-    babel-plugin-syntax-async-functions "^6.8.0"
     react-timer-mixin "^0.13.3"
 
 react-native-countup@^0.0.2:
@@ -5657,8 +5653,10 @@ react-native-easy-grid@0.2.2, react-native-easy-grid@^0.2.0:
   dependencies:
     lodash "^4.17.15"
 
-react-native-easy-markdown@../react-native-easy-markdown:
+react-native-easy-markdown@^2.0.0:
   version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-easy-markdown/-/react-native-easy-markdown-2.0.0.tgz#d15f08520b07267ca0c617b059a4f5eb4ad67e9b"
+  integrity sha512-vGK41pZj/4lM9q8/Bqox/2qqfJVrSxLugBWDBNLuOqvxpBw/b3q4aUxCpP8nyBWv5BifrD8+OcdhC27bRvEFIw==
   dependencies:
     simple-markdown "^0.4.4"
 

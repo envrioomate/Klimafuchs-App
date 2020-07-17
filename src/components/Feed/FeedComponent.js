@@ -92,7 +92,7 @@ export default class FeedComponent extends Component {
                             }
                             if (error) return <Text>{L.get("error_gql", {error})}</Text>;
                             if (!data) return (
-                                <Spinner/>
+                                <Text>Lade News...</Text>
                             )
                             return (
 
