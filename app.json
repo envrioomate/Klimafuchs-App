@@ -25,7 +25,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.klimaschutz4all.app",
-      "buildNumber": "4"
+      "buildNumber": "6"
     },
     "android": {
       "package": "com.klimaschutz4all.app",

@@ -6,7 +6,6 @@ import CurrentBadgesComponent from "./CurrentBadgesComponent";
 import BadgeCollectionComponent from "./BadgeCollection/BadgeCollectionComponent";
 import {PersistentScoreHeader} from "../Common/PersistentScoreHeader";
 import BadgeDetailsScreen from "./BadgeDetailsFlow/BadgeDetailsScreen";
-import {SeasonProgressComponent} from "./Tree/SeasonProgressComponent";
 import {LocalizationProvider as L} from "../../localization/LocalizationProvider";
 
 

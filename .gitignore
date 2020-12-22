@@ -378,3 +378,4 @@ buck-out/
 
 # End of https://www.gitignore.io/api/node,intellij,reactnative
 /@tvolk/k4all-app.jks
+web-build
